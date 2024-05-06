@@ -32,7 +32,7 @@
         playsinline
       >
         <source
-          src="https://res.cloudinary.com/dznuj3hia/video/upload/v1705509771/ELLANCE_VIDEO_ANIMATION_FOR_WEBSITE_xhl6yr.mp4"
+          src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
           type="video/mp4"
         />
         Your browser does not support the video tag.
