@@ -1,16 +1,29 @@
 <template>
   <main>
     <div
-      class="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[100vh]"
+      class="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[700px] h-[100vh]"
     >
-      <div class="hidden bg-muted lg:block">
+      <div
+        style="
+          background-image: url('/images/sign-up-bg.svg');
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        "
+        class="hidden relative cover lg:block max-w-[100%]"
+      >
         <img
+          src="/images/logos/greep-green.svg"
+          alt="Logo"
+          class="absolute top-[47px] left-[59px]"
+        />
+        <!-- <img
           src="/images/auth-bg.svg"
           alt="Image"
-          width="1920"
-          height="1080"
-          class="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-        />
+          width="100%"
+          height="100%"
+          class="h-full w-full object-cover"
+        /> -->
       </div>
       <div class="flex items-center justify-center py-12">
         <slot />

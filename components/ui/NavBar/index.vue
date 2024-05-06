@@ -22,7 +22,11 @@
           >
         </div>
       </div>
-      <Button variant="withIcon" size="lg" rounded="lg"
+      <Button
+        variant="withIcon"
+        size="lg"
+        rounded="lg"
+        @click="router.push('/login')"
         >Get Started
         <div class="bg-[#000E18] rounded-full p-[14px] ml-[10px] mr-[-20px]">
           <img
@@ -37,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+const router = useRouter();
 const navLinks = [
   {
     name: "Home",

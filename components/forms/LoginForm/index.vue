@@ -45,12 +45,17 @@
             required
           />
         </div>
-        <Button type="submit" class="w-full py-6 rounded-[12px] mt-4" size="lg">
+        <Button
+          @click="router.push('/admin')"
+          type="submit"
+          class="w-full py-6 rounded-[12px] mt-4"
+          size="lg"
+        >
           Login
         </Button>
       </div>
       <nuxt-link
-        to="forgot-password"
+        to="/"
         class="text-[#0250C6] text-center text-[16px] leading-[24px]"
       >
         Forgot password?
@@ -63,6 +68,8 @@
   </form>
 </template>
 
-<script></script>
+<script setup lang="ts">
+const router = useRouter();
+</script>
 
 <style></style>
