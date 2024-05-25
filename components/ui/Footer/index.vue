@@ -1,10 +1,16 @@
 <template>
-  <footer class="relative py-[80px]">
-    <div class="container flex justify-between py-[48px]">
+  <footer class="relative py-[40px] md:py-[80px]">
+    <div
+      class="container flex flex-col gap-[30px] lg:gap-[0px] lg:flex-row justify-between pt-[0px] md:pt-[48px] py-[48px]"
+    >
       <div class="grow">
         <img src="/images/logos/greep-full.svg" alt="Greep" />
       </div>
-      <div v-for="(footerItem, i) in footerLinks" :key="i" class="grow">
+      <div
+        v-for="(footerItem, i) in footerLinks"
+        :key="i"
+        class="grow hidden lg:block"
+      >
         <h6 class="text-[16px] font-semibold mb-[16px]">
           {{ footerItem.name }}
         </h6>
@@ -17,7 +23,7 @@
           {{ link.name }}
         </nuxt-link>
       </div>
-      <div class="max-w-[500px]">
+      <div class="lg:max-w-[500px] w-full">
         <h6 class="text-[16px] font-semibold mb-[16px]">Subscribe</h6>
         <p class="text-[#001726] text-[16px]">
           We'll send you an update notification for you to know we are now live
@@ -38,9 +44,26 @@
           receive updates from our company.
         </small>
       </div>
+      <div class="grid lg:hidden grid-cols-2 gap-[30px] lg:gap-[0px] w-full">
+        <div v-for="(footerItem, i) in footerLinks" :key="i" class="grow">
+          <h6 class="text-[16px] font-semibold mb-[16px]">
+            {{ footerItem.name }}
+          </h6>
+          <nuxt-link
+            v-for="link in footerItem.sublinks"
+            :key="link.name"
+            :to="link.to"
+            class="py-2 text-[14px] text-[#001726] block"
+          >
+            {{ link.name }}
+          </nuxt-link>
+        </div>
+      </div>
     </div>
-    <div class="container flex justify-between items-center">
-      <div class="flex text-[14px] align-center gap-6">
+    <div
+      class="container flex flex-col lg:flex-row gap-[30px] justify-between items-center"
+    >
+      <div class="flex text-[14px] flex-wrap align-center gap-6">
         <p>© {{ new Date().getFullYear() }} Greep. All rights reserved.</p>
         <nuxt-link class="underline" to="/"> Privacy Policy </nuxt-link>
         <nuxt-link class="underline" to="/"> Terms of Service </nuxt-link>

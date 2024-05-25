@@ -6,21 +6,23 @@
           <CursiveTitle> Features </CursiveTitle>
         </div>
         <h2
-          class="text-[64px] text-center max-w-[534px] mx-auto mb-[55px] font-semibold leading-[75px] mt-[15px]"
+          class="text-[32px] md:text-[48px] lg:text-[68px] text-center max-w-[534px] mx-auto mb-[55px] font-semibold leading-[48px] md:leading-[60px] lg:leading-[81.6px] mt-[15px]"
         >
           Our Logistics Services
         </h2>
-        <div class="grid grid-cols-3 gap-x-[130px] gap-y-[53px]">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 text-center md:text-left lg:grid-cols-3 gap-x-[130px] gap-y-[53px]"
+        >
           <div v-for="(item, i) in items" :key="i">
             <img
               :src="item.icon"
               :alt="item.title"
-              class="mb-[22px] h-[56px] w-auto"
+              class="mb-[22px] h-[56px] w-auto mx-auto md:mx-0"
             />
-            <h6 class="text-[25px] leading-[29px] mb-[13px]">
+            <h6 class="text-[20px] md:text-[25px] leading-[29px] mb-[13px]">
               {{ item.title }}
             </h6>
-            <p class="text-[16px] leading-24 max-w-[270px]">
+            <p class="text-[14px] md:text-[16px] leading-24 lg:max-w-[270px]">
               {{ item.details }}
             </p>
           </div>

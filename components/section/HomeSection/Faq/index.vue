@@ -1,9 +1,13 @@
 <template>
   <section class="bg-[#F4F4F4] py-[83px]">
-    <div class="container flex gap-[50px] justify-between">
-      <div class="w-full max-w-[681px]">
+    <div
+      class="container flex flex-col w-full lg:flex-row gap-[50px] justify-between"
+    >
+      <div class="w-full max-w-[100%] lg:max-w-[681px]">
         <CursiveTitle> FAQs </CursiveTitle>
-        <h2 class="mb-[50px] font-semibold text-[48px] max-w-[423px]">
+        <h2
+          class="mb-[50px] font-semibold text-[24px] md:text-[32px] lg:text-[48px] max-w-[423px]"
+        >
           Frequently Asked Questions
         </h2>
         <client-only>
@@ -13,7 +17,9 @@
               :key="i"
               :value="`item-${i}`"
             >
-              <AccordionTrigger>{{ item.question }}</AccordionTrigger>
+              <AccordionTrigger class="text-left">{{
+                item.question
+              }}</AccordionTrigger>
               <AccordionContent>
                 {{ item.answer }}
               </AccordionContent>
@@ -21,9 +27,9 @@
           </Accordion>
         </client-only>
       </div>
-      <div class="relative">
+      <div class="relative md:min-w-[550px] w-full lg:pl-[100px]">
         <div
-          class="absolute py-[52px] px-[45px] bg-[#000E18] text-[#fff] max-w-[448px] rounded-[6px] top-[150px]"
+          class="absolute py-[37px] md:py-[52px] left-0 px-[29px] md:px-[45px] bg-[#000E18] text-[#fff] w-full lg:max-w-[448px] rounded-[6px] bottom-0 lg:bottom-auto lg:top-[150px]"
         >
           <p class="text-[20px] font-medium mb-[21px]">
             You need any help? get free consultation
@@ -50,7 +56,7 @@
         <img
           src="/images/faq-image.jpg"
           alt="Frequently asked questions"
-          class="h-[539px] ml-[100px] block"
+          class="h-[539px] w-full rounded-[6px] block object-cover"
         />
       </div>
     </div>
@@ -84,11 +90,4 @@ const faqItems = [
 ];
 </script>
 
-<style>
-.element {
-  clip-path: url(#svgPath);
-  width: 100%;
-  background-position: center;
-  min-height: 841px;
-}
-</style>
+<style></style>

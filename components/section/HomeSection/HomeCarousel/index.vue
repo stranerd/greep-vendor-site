@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex align-center justify-center overflow-hidden">
     <svg height="0" width="0">
       <defs>
         <clipPath id="svgPath" clipPathUnits="objectBoundingBox">
@@ -11,13 +11,13 @@
       </defs>
     </svg>
     <div
-      class="flex gap-[31px] mt-[60px] align-center justify-center w-full overflow-hidden w-full element"
+      class="flex gap-[11px] md:gap-[31px] mt-[60px] align-center justify-center overflow-hidden w-full element"
     >
       <img
         v-for="(img, i) in images"
         :key="i"
         :src="img"
-        class="min-h-[851px] cover min-w-[500px] max-w-[500px]"
+        class="min-h-[300px] h-[300px] md:min-h-[500px] lg:min-h-[851px] cover md:min-w-[300px] md:max-w-[300px] lg:min-w-[500px] lg:max-w-[500px]"
         alt="Carousel"
       />
     </div>
@@ -39,6 +39,20 @@ const images = ref([
   clip-path: url(#svgPath);
   width: 100%;
   background-position: center;
-  min-height: 841px;
+  min-height: 300px;
+  min-width: 700px;
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .element {
+    min-width: 1200px;
+    min-height: 400px;
+  }
+}
+@media (min-width: 1024px) {
+  .element {
+    min-width: 1600px;
+    min-height: 850px;
+  }
 }
 </style>

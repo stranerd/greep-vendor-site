@@ -21,48 +21,76 @@
           <span class="bg-background px-2 text-muted-foreground"> Or </span>
         </div>
       </div>
-      <div class="grid gap-4">
-        <div class="grid gap-2">
-          <Label for="email" class="text-[16px] font-light">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            class="py-[24px] rounded-[12px]"
-            placeholder="m@example.com"
-            required
-          />
-        </div>
-        <div class="grid gap-2">
-          <div class="flex items-center">
-            <Label for="password" class="text-[16px] font-light"
-              >Password</Label
-            >
+      <form class="space-y-8" @submit="onSubmit">
+        <div class="grid gap-4">
+          <div class="grid gap-2">
+            <FormField v-slot="{ componentField }" name="email">
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder="m@example.com"
+                    class="py-[24px] rounded-[12px]"
+                    v-bind="componentField"
+                  />
+                </FormControl>
+                <!-- <FormDescription>
+                  This is your public display name.
+                </FormDescription> -->
+                <FormMessage />
+              </FormItem>
+            </FormField>
           </div>
-          <Input
-            id="password"
-            type="password"
-            class="py-[24px] rounded-[12px]"
-            required
-          />
+          <div class="grid gap-2">
+            <FormField v-slot="{ componentField }" name="password">
+              <FormItem>
+                <FormLabel class="font-normal">Password</FormLabel>
+                <FormControl>
+                  <div class="relative">
+                    <Input
+                      :type="showPassword ? 'text' : 'password'"
+                      placeholder="m@example.com"
+                      class="py-[24px] rounded-[12px]"
+                      v-bind="componentField"
+                    />
+                    <div
+                      class="absolute right-[16px] top-[50%] translate-y-[-50%] cursor-pointer"
+                      @click="showPassword = !showPassword"
+                    >
+                      <Eye v-if="!showPassword" />
+                      <EyeOff v-else />
+                    </div>
+                  </div>
+                </FormControl>
+                <!-- <FormDescription>
+                  This is your public display name.
+                </FormDescription> -->
+                <FormMessage />
+              </FormItem>
+            </FormField>
+          </div>
+          <Button
+            type="submit"
+            class="w-full py-6 rounded-[12px] mt-4"
+            size="lg"
+            :loading="apiLoadingStates.login === API_STATES.LOADING"
+          >
+            Login
+          </Button>
         </div>
-        <Button
-          @click="router.push('/admin')"
-          type="submit"
-          class="w-full py-6 rounded-[12px] mt-4"
-          size="lg"
-        >
-          Login
-        </Button>
-      </div>
+      </form>
       <nuxt-link
-        to="/"
+        to="/forgot-password"
         class="text-[#0250C6] text-center text-[16px] leading-[24px]"
       >
         Forgot password?
       </nuxt-link>
       <div class="text-center text-[16px]">
         Don’t have an account?
-        <nuxt-link to="/" class="text-[#0250C6]"> Create account </nuxt-link>
+        <nuxt-link to="/signup" class="text-[#0250C6]">
+          Create account
+        </nuxt-link>
       </div>
     </div>
   </form>
@@ -70,6 +98,63 @@
 
 <script setup lang="ts">
 const router = useRouter();
+import * as z from "zod";
+import { toTypedSchema } from "@vee-validate/zod";
+import { useForm } from "vee-validate";
+import { Eye, EyeOff } from "lucide-vue-next";
+import { API_STATES } from "~/services/constants";
+import { useAuthStore } from "@/store/useAuthStore";
+
+const showPassword = ref(false);
+const authStore = useAuthStore();
+const { apiLoadingStates } = storeToRefs(authStore);
+const { loginUser } = authStore;
+
+const formSchema = toTypedSchema(
+  z.object({
+    password: z.string().min(6, {
+      message: "Password cannot be less than 6 characters",
+    }),
+    email: z
+      .string({
+        required_error: "Email cannot be empty",
+      })
+      .email(),
+  })
+);
+
+const { handleSubmit, resetForm } = useForm({
+  validationSchema: formSchema,
+});
+
+const onSubmit = handleSubmit((values: any) => {
+  console.log("Form submitted!", values);
+  loginUser(values);
+});
+
+const accountFormSchema = toTypedSchema(
+  z.object({
+    name: z
+      .string({
+        required_error: "Required.",
+      })
+      .min(2, {
+        message: "Name must be at least 2 characters.",
+      })
+      .max(30, {
+        message: "Name must not be longer than 30 characters.",
+      }),
+    dob: z
+      .string()
+      .datetime()
+      .optional()
+      .refine(
+        (date: Date) => date !== undefined,
+        "Please select a valid date."
+      ),
+    language: z.string().min(1, "Please select a language."),
+  })
+);
 </script>
 
 <style></style>

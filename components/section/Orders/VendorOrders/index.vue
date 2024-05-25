@@ -71,6 +71,17 @@
 
 <script lang="ts" setup>
 import { Search, CirclePlus } from "lucide-vue-next";
+
+import { useMarketPlaceStore } from "~/store/useMarketplace";
+const marketPlaceStore = useMarketPlaceStore();
+
+const { getVendorOrders } = useMarketPlaceStore();
+
+onMounted(() => {
+  console.log({ marketPlaceStore });
+
+  getVendorOrders({});
+});
 </script>
 
 <style></style>

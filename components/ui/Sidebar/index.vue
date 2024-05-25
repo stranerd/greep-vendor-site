@@ -67,27 +67,27 @@ const router = useRouter();
 
 const navLinks = ref([
   {
-    to: "/admin",
+    to: "/vendor",
     name: "Sales",
     icon: LineChart,
   },
   {
-    to: "/admin/orders",
+    to: "/vendor/orders",
     name: "Orders",
     icon: ClipboardList,
   },
   {
-    to: "/admin/item-manager",
+    to: "/vendor/item-manager",
     name: "Item Manager",
     icon: BookmarkMinus,
   },
   {
-    to: "/admin/settings",
+    to: "/vendor/settings",
     name: "Settings",
     icon: Settings,
   },
   {
-    to: "/admin/support",
+    to: "/vendor/support",
     name: "Sales",
     icon: MessageCircleQuestion,
   },

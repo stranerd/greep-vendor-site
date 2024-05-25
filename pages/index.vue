@@ -1,9 +1,19 @@
 <template>
+  <img
+    class="absolute hidden md:block top-0 left-0 w-full h-auto z-[-1]"
+    src="/images/hero-illustration.svg"
+    alt="Background"
+  />
+  <img
+    class="absolute md:hidden top-[0px] left-0 w-full h-auto z-[-1]"
+    src="/images/mobile-hero-bg.png"
+    alt="Background"
+  />
   <Hero />
   <HomeCarousel />
   <HomePartners />
   <HomeFeatures />
-  <HomeCompany />
+  <!-- <HomeCompany /> -->
   <HomeReview />
   <Faq />
   <AppDownload />

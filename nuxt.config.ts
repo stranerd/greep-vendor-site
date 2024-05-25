@@ -1,7 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ["@nuxtjs/tailwindcss", "shadcn-nuxt"],
+  modules: ["@nuxtjs/tailwindcss", "shadcn-nuxt", "@pinia/nuxt"],
+  runtimeConfig: {
+    public: {
+      baseURL: process.env.BASE_URL,
+    },
+  },
+  ssr: false,
   shadcn: {
     /**
      * Prefix for all the imported component
@@ -19,4 +25,13 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
+  // loadingIndicator: {
+  //   name: "circle",
+  //   color: "purple",
+  //   background: "green",
+  // },
+  routeRules: {
+    "/vendor": { ssr: false },
+    "/vendor/orders": { ssr: false },
+  },
 });

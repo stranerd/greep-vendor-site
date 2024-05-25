@@ -34,7 +34,7 @@
     </Card>
   </div>
   <div class="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-    <VendorLineChart />
+    <client-only> <VendorLineChart /></client-only>
     <Card class="bg-[#FBFBFB] border-[0px]">
       <CardHeader>
         <CardTitle class="text-[14px]">Most sold</CardTitle>
@@ -87,6 +87,12 @@
 
 <script setup lang="ts">
 const date = ref("today");
+import { useAuthStore } from "~/store/useAuthStore";
+import { storeToRefs } from "#imports";
+
+const authStore = useAuthStore();
+
+const { user } = storeToRefs(authStore);
 
 const overview = computed(() => [
   {

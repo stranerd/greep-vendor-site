@@ -59,7 +59,9 @@
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                  <DropdownMenuItem>Edit</DropdownMenuItem>
+                  <DropdownMenuItem @click="router.push(`/vendor/orders/${i}`)"
+                    >Edit</DropdownMenuItem
+                  >
                   <DropdownMenuItem>Delete</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -80,6 +82,8 @@ const props = defineProps({
     default: "recent",
   },
 });
+
+const router = useRouter();
 </script>
 
 <style></style>

@@ -1,14 +1,17 @@
 <template>
   <div class="flex items-center">
-    <h1 class="text-lg font-semibold md:text-2xl">Orders</h1>
+    <h1 class="text-lg font-semibold md:text-2xl">Sales Overview</h1>
   </div>
-  <VendorOrders />
+  <VendorDashboard />
 </template>
 
 <script setup lang="ts">
 definePageMeta({
   layout: "dashboard",
+  middleware: ["authenticated"],
 });
+
+const date = ref("today");
 </script>
 
 <style></style>

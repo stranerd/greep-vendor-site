@@ -1,10 +1,10 @@
 <template>
-  <div>Settings</div>
+  <SignupForm />
 </template>
 
 <script setup lang="ts">
 definePageMeta({
-  layout: "dashboard",
+  layout: "auth",
 });
 </script>
 
