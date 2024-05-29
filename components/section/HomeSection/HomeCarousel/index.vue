@@ -22,7 +22,7 @@
         :modules="modules"
         :loop="true"
         :autoplay="{
-          delay: 6500,
+          delay: 1500,
           disableOnInteraction: true,
         }"
         @swiper="onSwiper"
