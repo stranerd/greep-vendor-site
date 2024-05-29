@@ -292,7 +292,9 @@ const profileDetails = computed(() => {
       },
       {
         title: "Contact Info",
-        value: `${user.value.phone?.code}${user.value.phone?.number}`,
+        value: `${user.value?.phone?.code || ""}${
+          user.value?.phone?.number || ""
+        }`,
       },
       {
         title: "Email Info",
