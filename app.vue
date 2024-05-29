@@ -1,7 +1,7 @@
 <template>
   <Toaster />
   <NuxtLayout>
-    <NuxtLoadingIndicator />
+    <!-- <NuxtLoadingIndicator /> -->
     <NuxtPage />
   </NuxtLayout>
 </template>

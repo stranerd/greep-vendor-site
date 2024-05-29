@@ -3,7 +3,6 @@
     <div
       class="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[700px] h-[100vh]"
     >
-      <NuxtLoadingIndicator color="#009260" :throttle="100" />
       <div
         style="
           background-image: url('/images/sign-up-bg.svg');

@@ -13,7 +13,6 @@ console.log({ route });
   <div
     class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]"
   >
-    <NuxtLoadingIndicator color="#009260" :throttle="100" />
     <Sidebar />
     <div class="max-h-[100vh] overflow-y-scroll">
       <div class="flex flex-col">
