@@ -2,7 +2,7 @@
   <div class="hidden border-r bg-[#FFFFFF] md:block">
     <div class="flex h-full max-h-screen flex-col gap-2">
       <div class="flex h-14 items-center border-b px-4 lg:h-[76px] lg:px-6">
-        <nuxt-link to="/admin" class="">
+        <nuxt-link to="/vendor" class="">
           <img
             src="/images/logos/logo-full-black.svg"
             alt="Greep"

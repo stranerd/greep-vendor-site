@@ -11,27 +11,77 @@
       </defs>
     </svg>
     <div
-      class="flex gap-[11px] md:gap-[31px] mt-[60px] align-center justify-center overflow-hidden w-full element"
+      class="flex mt-[60px] align-center justify-center overflow-hidden w-full element"
     >
-      <img
-        v-for="(img, i) in images"
-        :key="i"
-        :src="img"
-        class="min-h-[300px] h-[300px] md:min-h-[500px] lg:min-h-[851px] cover md:min-w-[300px] md:max-w-[300px] lg:min-w-[500px] lg:max-w-[500px]"
-        alt="Carousel"
-      />
+      <swiper
+        items
+        :slides-per-view="'auto'"
+        class="team-slider"
+        :space-between="20"
+        :navigation="true"
+        :modules="modules"
+        :loop="true"
+        :autoplay="{
+          delay: 6500,
+          disableOnInteraction: true,
+        }"
+        @swiper="onSwiper"
+        @slideChange="onSlideChange"
+      >
+        <swiper-slide
+          v-for="(img, i) in images"
+          :key="i"
+          class="w-auto md:min-w-[300px] max-w-[200px] md:max-w-[300px] lg:min-w-[500px] lg:max-w-[500px]"
+        >
+          <img
+            :src="img"
+            class="object-cover w-full md:min-w-[300px] md:max-w-[300px] lg:min-w-[500px] lg:max-w-[500px] min-h-[300px] h-[300px] md:min-h-[500px] lg:min-h-[811px]"
+            alt="Carousel"
+          />
+        </swiper-slide>
+      </swiper>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-const images = ref([
-  "/images/carousel-0.jpg",
-  "/images/carousel-1.jpg",
-  "/images/carousel-2.jpg",
-  "/images/carousel-3.jpg",
-  "/images/carousel-4.jpg",
-]);
+<script lang="ts">
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
+export default {
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
+  setup() {
+    const swiperInstance = ref<any>(null);
+    const onSwiper = (swiper: any) => {
+      console.log(swiper);
+      swiperInstance.value = swiper;
+    };
+    const onSlideChange = (swiper: any) => {
+      console.log("slide change", { swiper });
+      swiperInstance.value = swiper;
+    };
+    const images = ref([
+      "/images/carousel-0.jpg",
+      "/images/carousel-1.jpg",
+      "/images/carousel-2.jpg",
+      "/images/carousel-3.jpg",
+      "/images/carousel-4.jpg",
+    ]);
+    return {
+      images,
+      onSlideChange,
+      onSwiper,
+      modules: [Navigation, Pagination, Autoplay],
+      swiperInstance,
+    };
+  },
+};
 </script>
 
 <style>
@@ -51,8 +101,8 @@ const images = ref([
 }
 @media (min-width: 1024px) {
   .element {
-    min-width: 1600px;
-    min-height: 850px;
+    min-width: 2200px;
+    min-height: 800px;
   }
 }
 </style>
