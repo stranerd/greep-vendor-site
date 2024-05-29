@@ -18,20 +18,19 @@ export default () => {
     },
     getProducts(query: any) {
       return useCustomFetch(`${resource}/products`, {
-        body: payload,
-        method: "POST",
+        query,
+        method: "GET",
       });
     },
     getSingleProduct(query: any) {
       return useCustomFetch(`${resource}/products`, {
-        body: payload,
+        query,
         method: "POST",
       });
     },
     deleteProduct(id: string) {
       return useCustomFetch(`${resource}/products/${id}`, {
-        body: payload,
-        method: "POST",
+        method: "DELETE",
       });
     },
     // ORDERS

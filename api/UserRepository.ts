@@ -13,7 +13,7 @@ export default () => {
       });
     },
     updateVendorDetails(payload: any) {
-      return useCustomFetch(`${resource}/products`, {
+      return useCustomFetch(`${resource}/vendor`, {
         body: payload,
         method: "POST",
       });

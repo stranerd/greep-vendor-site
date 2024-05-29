@@ -316,6 +316,8 @@ const toggleFramework = (framework: Framework) => {
   }
 };
 
+const emits = defineEmits(["completed"]);
+
 const onSubmit = handleSubmit(async (values: any) => {
   console.log("Form submitted!", values);
   const form = new FormData();
@@ -332,6 +334,7 @@ const onSubmit = handleSubmit(async (values: any) => {
     }
   });
   await createProduct(form);
+  emits("completed");
   // loginUser(values);
 });
 

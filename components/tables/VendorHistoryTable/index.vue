@@ -19,21 +19,30 @@
           </TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody v-for="(_, i) in 10" :key="i">
+      <TableBody v-for="(order, i) in items" :key="i">
         <TableRow>
-          <TableCell class="text-[12px]"> #670944 </TableCell>
-          <TableCell class="text-[12px]"> Jan 18, 1:30 PM </TableCell>
-          <TableCell class="text-[12px]"> Albert Wilson </TableCell>
-          <TableCell class="text-[12px]"> 11 Orkun Tibsoba, Lefkosa </TableCell>
+          <TableCell class="text-[12px]">
+            #{{ order?.id.slice(0, 9) }}
+          </TableCell>
+          <TableCell class="text-[12px]"
+            >{{ $moment(order.createdAt).format("MMM DD, h:mm a") }}
+          </TableCell>
+          <TableCell class="text-[12px]">
+            {{ order.users?.[0]?.publicName }}
+          </TableCell>
+          <TableCell class="text-[12px]"> {{ order?.to?.location }} </TableCell>
           <TableCell>
             <Badge
               variant="outline"
               class="rounded-[8px] font-normal text-[12px] py-1"
             >
               <div
-                class="bg-[#B91010] w-[9px] h-[9px] rounded-[3px] mr-2"
+                class="w-[9px] h-[9px] rounded-[3px] mr-2"
+                :class="
+                  order?.status?.paid?.at ? 'bg-[#1F8F69] ' : 'bg-[#B91010] '
+                "
               ></div>
-              Await Cash
+              {{ order?.status?.paid?.at ? "Paid" : "Await cash" }}
             </Badge>
           </TableCell>
           <TableCell>
@@ -42,12 +51,15 @@
               class="rounded-[8px] font-normal text-[12px] py-1"
             >
               <div
-                class="bg-[#B91010] w-[9px] h-[9px] rounded-[3px] mr-2"
+                class="w-[9px] h-[9px] rounded-[3px] mr-2"
+                :class="order?.done ? 'bg-[#1F8F69] ' : 'bg-[#B91010] '"
               ></div>
-              Pending
+              {{ order?.done ? "Completed" : "Pending" }}
             </Badge>
           </TableCell>
-          <TableCell class="text-[12px]"> ₺150 </TableCell>
+          <TableCell class="text-[12px]">
+            {{ order?.fee?.currency }} {{ order?.fee?.payable?.toFixed(3) }}
+          </TableCell>
           <TableCell>
             <client-only>
               <DropdownMenu>
@@ -70,16 +82,29 @@
         </TableRow>
       </TableBody>
     </Table>
+    <DisplayState
+      :message="
+        source === 'recent'
+          ? 'No recent history to display. Come back soon and we`ll show you what you`ve been up to!'
+          : 'You haven`t received any orders yet. Keep an eye on this space for new order'
+      "
+      hideButton
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { MoreHorizontal } from "lucide-vue-next";
+const { $moment } = useNuxtApp();
 
 const props = defineProps({
   source: {
     type: String,
     default: "recent",
+  },
+  items: {
+    type: Array,
+    default: () => [],
   },
 });
 

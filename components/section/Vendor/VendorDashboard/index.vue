@@ -7,71 +7,110 @@
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Date Range</SelectLabel>
-          <SelectItem value="today"> Today </SelectItem>
           <SelectItem value="month"> This Month </SelectItem>
+          <SelectItem value="lastMonth"> Last Month </SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
   </div>
-  <div class="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-    <Card v-for="(card, i) in overview" :key="i">
-      <CardHeader
-        class="flex flex-row items-center justify-between space-y-0 pb-[10px]"
-      >
-        <CardTitle
-          class="text-[14px] text-[#6F727A] font-medium"
-          :class="card.titleColor"
-        >
-          {{ card.title }}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div class="text-[#000000] text-[32px] font-semibold">
-          {{ card.value }}
-        </div>
-        <!-- <p class="text-xs text-muted-foreground">+20.1% from last month</p> -->
-      </CardContent>
-    </Card>
+  <div
+    v-if="marketplaceLoadingStates.dashBoardData === API_STATES.LOADING"
+    class=""
+  >
+    <div class="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+      <Skeleton v-for="(_, i) in 4" :key="i" class="h-[130px]" />
+    </div>
+    <div class="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 mt-[28px]">
+      <Skeleton class="w-full h-[348px] xl:col-span-2" />
+      <Skeleton class="w-full h-[348px]" />
+    </div>
   </div>
-  <div class="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-    <client-only> <VendorLineChart /></client-only>
-    <Card class="bg-[#FBFBFB] border-[0px]">
-      <CardHeader>
-        <CardTitle class="text-[14px]">Most sold</CardTitle>
-      </CardHeader>
-      <CardContent class="grid gap-3 max-h-[280px] overflow-y-scroll">
-        <div
-          v-for="(_, i) in 7"
-          :key="i"
-          class="border-[#F1F3F7] rounded-[12px] flex items-center justify-between border-[2px] py-3 px-4"
+  <div v-else class="">
+    <div class="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+      <Card v-for="(card, i) in overview" :key="i">
+        <CardHeader
+          class="flex flex-row items-center justify-between space-y-0 pb-[10px]"
         >
-          <div class="flex items-center">
-            <h6 class="text-[16px] mr-3 font-semibold">{{ i + 1 }}</h6>
-            <Avatar class="mr-3">
-              <AvatarImage
-                src="/images/avatar/article-writer.png"
-                alt="Product"
-              />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <div>
-              <h6 class="text-[14px] font-semibold leading-[21px]">Yam</h6>
-              <p class="text-[#999999] leading-[21px] font-light">Tuber</p>
+          <CardTitle
+            class="text-[14px] text-[#6F727A] font-medium"
+            :class="card.titleColor"
+          >
+            {{ card.title }}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div class="text-[#000000] text-[32px] font-semibold">
+            {{ card.value }}
+          </div>
+          <!-- <p class="text-xs text-muted-foreground">+20.1% from last month</p> -->
+        </CardContent>
+      </Card>
+    </div>
+    <div class="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 mt-[28px]">
+      <client-only> <VendorLineChart /></client-only>
+      <Card class="bg-[#FBFBFB] border-[0px]">
+        <CardHeader>
+          <CardTitle class="text-[14px]">Most sold</CardTitle>
+        </CardHeader>
+        <CardContent class="grid gap-3 max-h-[280px] overflow-y-scroll">
+          <div v-if="dashBoardData.products.length > 0">
+            <div
+              v-for="(product, i) in dashBoardData.products"
+              :key="i"
+              class="border-[#F1F3F7] rounded-[12px] flex items-center justify-between border-[2px] py-3 px-4"
+            >
+              <div class="flex items-center">
+                <h6 class="text-[16px] mr-3 font-semibold">{{ i + 1 }}</h6>
+                <Avatar class="mr-3">
+                  <AvatarImage :src="product?.banner?.link" alt="Product" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <div>
+                  <h6 class="text-[14px] font-semibold leading-[21px]">
+                    {{ product.title }}
+                  </h6>
+                  <p class="text-[#999999] leading-[21px] font-light">
+                    {{ product?.description?.slice(0, 15) }}...
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <p class="text-right text-[#001726] leading-[21px] text-[14px]">
+                  {{ product?.meta?.orders }}
+                </p>
+                <img
+                  src="/images/icons/arrow-up.svg"
+                  alt="Arrow"
+                  class="ml-auto"
+                />
+              </div>
             </div>
           </div>
-
-          <div>
-            <p class="text-right text-[#001726] leading-[21px] text-[14px]">
-              30 items
-            </p>
-            <img src="/images/icons/arrow-up.svg" alt="Arrow" class="ml-auto" />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+          <DisplayState
+            v-else
+            message="Nothing's hot off the press yet! Check back soon for our best-sellers"
+            hide-button
+          />
+        </CardContent>
+      </Card>
+    </div>
   </div>
-  <VendorHistoryTable />
+  <Skeleton
+    v-if="marketplaceLoadingStates.recentOrders === API_STATES.LOADING"
+    class="h-[300px] w-full"
+  />
 
+  <VendorHistoryTable
+    v-else-if="marketplaceLoadingStates.recentOrders === API_STATES.SUCCESS"
+    :items="recentOrders"
+  />
+  <DisplayState
+    v-else
+    message="Something went wrong, Please retry"
+    button-text="Get Recent Orders"
+    @action="getRecentOrders()"
+  />
   <!-- <div
       class="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm"
     >
@@ -86,34 +125,48 @@
 </template>
 
 <script setup lang="ts">
-const date = ref("today");
+const date = ref("month");
+import { API_STATES } from "~/services/constants";
 import { useAuthStore } from "~/store/useAuthStore";
-import { storeToRefs } from "#imports";
+import { useMarketPlaceStore } from "~/store/useMarketplace";
+const { $moment } = useNuxtApp();
 
 const authStore = useAuthStore();
+const marketPlaceStore = useMarketPlaceStore();
 
 const { user } = storeToRefs(authStore);
+const { recentOrders, dashBoardData, marketplaceLoadingStates } =
+  storeToRefs(marketPlaceStore);
+const { getRecentOrders, getDashboardData } = marketPlaceStore;
 
 const overview = computed(() => [
   {
     title: "Total Sales",
-    value: "₺ 15,456.78",
+    value: "₺ 0",
   },
   {
-    title: "Total Orders > 80%",
-    value: "785",
+    title: "Total Orders > 0%",
+    value: "0",
     titleColor: "text-[#249F5D]",
   },
   {
-    title: "Total Visits > 60%",
-    value: "1,442",
+    title: "Total Visits > 0%",
+    value: "0",
     titleColor: "text-[#FFB545]",
   },
   {
-    title: "Total Canceled > 60%",
-    value: "542",
+    title: "Total Canceled > 0%",
+    value: "0",
   },
 ]);
+
+onMounted(() => {
+  getDashboardData({
+    start: new Date($moment().startOf("M")),
+    end: new Date($moment().endOf("M")),
+  });
+  getRecentOrders();
+});
 </script>
 
 <style></style>

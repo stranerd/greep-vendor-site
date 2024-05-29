@@ -10,7 +10,11 @@
         <h1 class="text-[22px] font-semibold">Welcome!</h1>
         <p class="text-balance text-muted-foreground">Login to continue</p>
       </div>
-      <Button variant="outline" class="w-full py-6 rounded-[12px] mt-4">
+      <Button
+        variant="outline"
+        class="w-full py-6 rounded-[12px] mt-4"
+        disabled
+      >
         Continue with Google
       </Button>
       <div class="relative mt-2">

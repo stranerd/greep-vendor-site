@@ -1,136 +1,147 @@
 <template>
-  <form>
-    <div class="mx-auto grid w-[402px] gap-4">
-      <img
-        src="/images/logos/greep.svg"
-        alt="Greep"
-        class="mx-auto w-[45.45px] h-[45.45px] object-contain mb-2"
-      />
-      <div class="grid gap-2">
-        <h1 class="text-[22px] text-center font-semibold">Reset Password</h1>
-        <p class="text-left text-[14px] text-muted-foreground">
-          We have sent an email with password reset token to
-          {{ maskEmail(userEmail || "user@email.com") }}
-        </p>
-      </div>
-
-      <form class="space-y-8" @submit="onSubmit">
-        <div class="grid gap-4">
-          <div class="grid gap-2">
-            <FormField v-slot="{ componentField, value }" name="token">
-              <FormItem>
-                <FormLabel>OTP</FormLabel>
-                <FormControl>
-                  <PinInput
-                    id="pin-input"
-                    v-model="value!"
-                    placeholder="-"
-                    class="flex gap-2 items-center mt-1"
-                    otp
-                    type="number"
-                    :name="componentField.name"
-                    @update:model-value="
-                      (arrStr) => {
-                        setFieldValue('token', arrStr.filter(Boolean));
-                      }
-                    "
-                  >
-                    <PinInputGroup>
-                      <PinInputInput
-                        v-for="(id, index) in 6"
-                        :key="id"
-                        :index="index"
-                      />
-                    </PinInputGroup>
-                  </PinInput>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            </FormField>
-          </div>
-          <div class="grid gap-2">
-            <FormField v-slot="{ componentField }" name="password">
-              <FormItem>
-                <FormLabel>New Password</FormLabel>
-                <FormControl>
-                  <div class="relative">
-                    <Input
-                      :type="showPassword ? 'text' : 'password'"
-                      class="py-[24px] rounded-[12px]"
-                      v-bind="componentField"
-                    />
-                    <div
-                      class="absolute right-[16px] top-[50%] translate-y-[-50%] cursor-pointer"
-                      @click="showPassword = !showPassword"
-                    >
-                      <Eye v-if="!showPassword" />
-                      <EyeOff v-else />
-                    </div>
-                  </div>
-                </FormControl>
-                <!-- <FormDescription>
-                      This is your public display name.
-                    </FormDescription> -->
-                <FormMessage />
-              </FormItem>
-            </FormField>
-          </div>
-          <div class="grid gap-2">
-            <FormField v-slot="{ componentField }" name="confirmPassword">
-              <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl>
-                  <div class="relative">
-                    <Input
-                      :type="showConfirmPassword ? 'text' : 'password'"
-                      class="py-[24px] rounded-[12px]"
-                      v-bind="componentField"
-                    />
-                    <div
-                      class="absolute right-[16px] top-[50%] translate-y-[-50%] cursor-pointer"
-                      @click="showConfirmPassword = !showConfirmPassword"
-                    >
-                      <Eye v-if="!showConfirmPassword" />
-                      <EyeOff v-else />
-                    </div>
-                  </div>
-                </FormControl>
-                <!-- <FormDescription>
-                      This is your public display name.
-                    </FormDescription> -->
-                <FormMessage />
-              </FormItem>
-            </FormField>
-          </div>
-          <Button
-            type="submit"
-            class="w-full py-6 rounded-[12px] mt-4"
-            size="lg"
-            :loading="apiLoadingStates.resetPassword === API_STATES.LOADING"
-          >
-            Send
-          </Button>
+  <div>
+    <form>
+      <div class="mx-auto grid w-[402px] gap-4">
+        <img
+          src="/images/logos/greep.svg"
+          alt="Greep"
+          class="mx-auto w-[45.45px] h-[45.45px] object-contain mb-2"
+        />
+        <div class="grid gap-2">
+          <h1 class="text-[22px] text-center font-semibold">Reset Password</h1>
+          <p class="text-left text-[14px] text-muted-foreground">
+            We have sent an email with password reset token to
+            {{ maskEmail(userEmail || "user@email.com") }}
+          </p>
         </div>
-      </form>
-      <hr />
-      <div class="grid gap-2">
-        <p class="text-left text-[14px]">
-          Didn’t receive an email? Check your spam or promotion folder or resend
-          mail
-        </p>
-        <Button variant="secondary" class="w-full py-6 rounded-[12px] mt-4">
-          Resend Email
-        </Button>
+
+        <form class="space-y-8" @submit="onSubmit">
+          <div class="grid gap-4">
+            <div class="grid gap-2">
+              <FormField v-slot="{ componentField, value }" name="token">
+                <FormItem>
+                  <FormLabel>OTP</FormLabel>
+                  <FormControl>
+                    <PinInput
+                      id="pin-input"
+                      v-model="value!"
+                      placeholder="-"
+                      class="flex gap-2 items-center mt-1"
+                      otp
+                      type="number"
+                      :name="componentField.name"
+                      @update:model-value="
+                        (arrStr) => {
+                          setFieldValue('token', arrStr.filter(Boolean));
+                        }
+                      "
+                    >
+                      <PinInputGroup>
+                        <PinInputInput
+                          v-for="(id, index) in 6"
+                          :key="id"
+                          :index="index"
+                        />
+                      </PinInputGroup>
+                    </PinInput>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              </FormField>
+            </div>
+            <div class="grid gap-2">
+              <FormField v-slot="{ componentField }" name="password">
+                <FormItem>
+                  <FormLabel>New Password</FormLabel>
+                  <FormControl>
+                    <div class="relative">
+                      <Input
+                        :type="showPassword ? 'text' : 'password'"
+                        class="py-[24px] rounded-[12px]"
+                        v-bind="componentField"
+                      />
+                      <div
+                        class="absolute right-[16px] top-[50%] translate-y-[-50%] cursor-pointer"
+                        @click="showPassword = !showPassword"
+                      >
+                        <Eye v-if="!showPassword" />
+                        <EyeOff v-else />
+                      </div>
+                    </div>
+                  </FormControl>
+                  <!-- <FormDescription>
+                      This is your public display name.
+                    </FormDescription> -->
+                  <FormMessage />
+                </FormItem>
+              </FormField>
+            </div>
+            <div class="grid gap-2">
+              <FormField v-slot="{ componentField }" name="confirmPassword">
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <div class="relative">
+                      <Input
+                        :type="showConfirmPassword ? 'text' : 'password'"
+                        class="py-[24px] rounded-[12px]"
+                        v-bind="componentField"
+                      />
+                      <div
+                        class="absolute right-[16px] top-[50%] translate-y-[-50%] cursor-pointer"
+                        @click="showConfirmPassword = !showConfirmPassword"
+                      >
+                        <Eye v-if="!showConfirmPassword" />
+                        <EyeOff v-else />
+                      </div>
+                    </div>
+                  </FormControl>
+                  <!-- <FormDescription>
+                      This is your public display name.
+                    </FormDescription> -->
+                  <FormMessage />
+                </FormItem>
+              </FormField>
+            </div>
+            <Button
+              type="submit"
+              class="w-full py-6 rounded-[12px] mt-4"
+              size="lg"
+              :loading="apiLoadingStates.resetPassword === API_STATES.LOADING"
+            >
+              Send
+            </Button>
+          </div>
+        </form>
+        <hr />
+        <div class="grid gap-2">
+          <p class="text-left text-[14px]">
+            Didn’t receive an email? Check your spam or promotion folder or
+            resend mail
+          </p>
+        </div>
       </div>
-      <Button variant="outline" class="w-full py-6 rounded-[12px] mt-4">
-        Back to login
-      </Button>
-    </div>
-  </form>
+    </form>
+    <Button
+      variant="secondary"
+      class="w-full py-6 rounded-[12px] mt-4"
+      :disabled="timerCount"
+      :loading="apiLoadingStates.forgotPassword === API_STATES.LOADING"
+      @click="resendEmail"
+    >
+      Resend Email <span v-if="timerCount">({{ timerCount }})</span>
+    </Button>
+    <Button
+      variant="outline"
+      class="w-full py-6 rounded-[12px] mt-4"
+      @click="router.push('/login')"
+    >
+      Back to login
+    </Button>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { nextTick } from "vue";
 const router = useRouter();
 import * as z from "zod";
 import { toTypedSchema } from "@vee-validate/zod";
@@ -142,7 +153,7 @@ import { Eye, EyeOff } from "lucide-vue-next";
 
 const authStore = useAuthStore();
 const { apiLoadingStates } = storeToRefs(authStore);
-const { triggerResetPassword } = authStore;
+const { triggerResetPassword, triggerForgotPassword } = authStore;
 
 const userEmail = ref<any>("");
 const showPassword = ref(false);
@@ -168,10 +179,6 @@ const formSchema = toTypedSchema(
     )
 );
 
-const timerInterval = ref<any>(null);
-const timeLimit = ref(20);
-const timePassed = ref(0);
-
 const { handleSubmit, resetForm, setFieldValue } = useForm({
   validationSchema: formSchema,
 });
@@ -183,27 +190,24 @@ const onSubmit = handleSubmit((values: any) => {
   });
 });
 
-const startTimer = () => {
-  timerInterval.value = setInterval(
-    () => (timePassed.value < 300 ? (timePassed.value += 1) : clearInterval()),
-    1000
-  );
+const resendEmail = async () => {
+  await triggerForgotPassword({ email: userEmail.value }, false);
+  timerCount.value = 30;
 };
-const timeLeft = computed(() => {
-  return timeLimit.value - timePassed.value;
-});
 
-const clearInterval = () => {};
+const timerCount = ref(30);
 
-const formattedTimeLeft = computed(() => {
-  const timeLeft = timeLeft.value;
-  const minutes = Math.floor(timeLeft / 60);
-  let seconds = timeLeft % 60;
-  if (seconds < 10) {
-    seconds = `0${seconds}`;
-  }
-  return `${minutes}:${seconds}`;
-});
+watch(
+  timerCount,
+  () => {
+    if (timerCount.value > 0) {
+      setTimeout(() => {
+        timerCount.value--;
+      }, 1000);
+    }
+  },
+  { immediate: true }
+);
 
 onMounted(() => {
   if (process.client) {

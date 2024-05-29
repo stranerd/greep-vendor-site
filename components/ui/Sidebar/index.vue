@@ -88,7 +88,7 @@ const navLinks = ref([
   },
   {
     to: "/vendor/support",
-    name: "Sales",
+    name: "Support",
     icon: MessageCircleQuestion,
   },
   {

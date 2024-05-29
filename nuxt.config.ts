@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@nuxtjs/tailwindcss", "shadcn-nuxt", "@pinia/nuxt"],
+  buildModules: ["@nuxtjs/moment"],
   runtimeConfig: {
     public: {
       baseURL: process.env.BASE_URL,

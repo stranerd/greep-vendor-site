@@ -13,7 +13,7 @@ import { X } from "lucide-vue-next";
 import { cn } from "@/lib/utils";
 
 const props = defineProps<
-  DialogContentProps & { class?: HTMLAttributes["class"]; hideClose?: Boolean }
+  DialogContentProps & { class?: HTMLAttributes["class"]; hideClose?: boolean }
 >();
 const emits = defineEmits<DialogContentEmits>();
 

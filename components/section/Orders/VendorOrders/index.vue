@@ -26,55 +26,37 @@
         <span class="bg-[#000] rounded-full h-[7px] w-[7px]"> </span>
         Sort by: Latest Item
       </p>
-      <client-only>
-        <Dialog class="w-[600px]">
-          <DialogTrigger>
-            <Button variant="primary" size="lg" rounded="md"
-              ><CirclePlus class="h-5 w-5 mr-[10px]" /> Create Item</Button
-            >
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>New Item</DialogTitle>
-              <DialogDescription>
-                <form class="my-5">
-                  <div class="mb-5">
-                    <Label for="name" class="mb-2 block"
-                      >Item Name <span class="text-[#FF5656]">Required</span>
-                    </Label>
-                    <Input
-                      id="name"
-                      type="text"
-                      placeholder="m@example.com"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label for="noOfItems" class="mb-2 block"
-                      >Number of Items
-                      <span class="text-[#999999]">Optional</span>
-                    </Label>
-                    <Input id="noOfItems" type="number" required />
-                  </div>
-                </form>
-              </DialogDescription>
-            </DialogHeader>
-
-            <DialogFooter> Save changes </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </client-only>
+      <Button variant="primary" size="lg" rounded="md"
+        ><CirclePlus class="h-5 w-5 mr-[10px]" /> Create Item</Button
+      >
     </div>
   </div>
-  <VendorHistoryTable source="page" />
+  <Skeleton
+    v-if="
+      marketplaceLoadingStates.allOrders === API_STATES.LOADING &&
+      orders.length === 0
+    "
+    class="h-[500px] w-full"
+  />
+  <div v-else>
+    <DisplayState
+      v-if="marketplaceLoadingStates.allOrders === API_STATES.ERROR"
+      message="Something went wrong, Please retry"
+      button-text="Get Orders"
+      @action="getVendorOrders()"
+    />
+    <VendorHistoryTable v-else source="page" :items="orders" />
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { Search, CirclePlus } from "lucide-vue-next";
+import { API_STATES } from "~/services/constants";
 
 import { useMarketPlaceStore } from "~/store/useMarketplace";
 const marketPlaceStore = useMarketPlaceStore();
 
+const { orders, marketplaceLoadingStates } = storeToRefs(marketPlaceStore);
 const { getVendorOrders } = useMarketPlaceStore();
 
 onMounted(() => {

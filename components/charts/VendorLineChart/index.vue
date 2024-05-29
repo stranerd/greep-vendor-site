@@ -65,19 +65,19 @@ export default {
         ],
         datasets: [
           {
-            label: "Today",
+            label: "This month",
             backgroundColor: "#10BB76",
             borderColor: "#10BB76",
             fill: true,
-            data: [40, 39, 10, 400, 39, 80, 40, 150, 90, 450, 600],
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             tension: 0.4,
           },
           {
-            label: "Yesterday",
+            label: "Last Month",
             backgroundColor: "#616161",
             borderColor: "#616161",
             fill: true,
-            data: [4, 9, 18, 60, 43, 30, 50, 300, 340, 500, 700],
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             tension: 0.4,
           },
         ],

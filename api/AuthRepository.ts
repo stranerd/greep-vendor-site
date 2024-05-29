@@ -17,10 +17,18 @@ export default () => {
       });
     },
     //
-    sendVerificationMail(payload: any) {
+    sendVerificationMail() {
+      const refreshToken = useCookie("refreshToken");
+      let authToken = "" as any;
+      if (process.client) {
+        authToken = localStorage.getItem("authToken");
+      }
       return useCustomFetch(`${resource}/emails/verify/mail`, {
         method: "POST",
-        body: payload,
+        headers: {
+          "Refresh-Token": refreshToken.value ? refreshToken.value : "",
+          "Access-Token": authToken ? authToken : "",
+        },
       });
     },
     verifyEmail(payload: any) {
@@ -74,6 +82,12 @@ export default () => {
     sendResetPasswordMail(payload: any) {
       return useCustomFetch(`${resource}/passwords/reset/mail`, {
         method: "POST",
+        body: payload,
+      });
+    },
+    updateUserProfile(payload: any) {
+      return useCustomFetch(`${resource}/user`, {
+        method: "PUT",
         body: payload,
       });
     },

@@ -4,6 +4,7 @@ import type {
   IUser,
   LoginPayload,
   SignUpPayload,
+  IUserProfile,
 } from "~/types/modules/authModel";
 import { getCookieExpiration } from "~/lib/utils";
 import { useToast } from "@/components/library/toast/use-toast";
@@ -11,22 +12,41 @@ import { useToast } from "@/components/library/toast/use-toast";
 export const useAuthStore = defineStore("auth", () => {
   // state variables
   const user = ref({}) as Ref<IUser>;
-  const userProfile = ref({}) as Ref<IUser>;
+  const userProfile = ref({}) as Ref<IUserProfile>;
   const isLoggedIn = ref(false) as Ref<boolean>;
   const apiLoadingStates = ref({
     login: API_STATES.IDLE,
     signup: API_STATES.IDLE,
     getUser: API_STATES.IDLE,
     getUserProfile: API_STATES.IDLE,
+    updateUserProfile: API_STATES.IDLE,
+    updateVendorProfile: API_STATES.IDLE,
     exchangeTokens: API_STATES.IDLE,
     providerAuth: API_STATES.IDLE,
     forgotPassword: API_STATES.IDLE,
     resetPassword: API_STATES.IDLE,
     updatePassword: API_STATES.IDLE,
+    sendVerificationMail: API_STATES.IDLE,
+    verifyEmail: API_STATES.IDLE,
   });
 
   // getter equivalent
-  const getUserName = computed(() => user.value.firstName);
+  const hasCompletedProfile = computed(
+    () =>
+      user.value.allNames.first &&
+      user.value.allNames.last &&
+      user.value.allNames.full
+  );
+
+  const hasCompletedVendorProfile = computed(
+    () =>
+      userProfile.value.vendor?.email &&
+      userProfile.value.vendor?.name &&
+      userProfile.value.vendor?.website &&
+      userProfile.value.vendor?.location?.location
+  );
+
+  const hasVerifiedEmail = computed(() => user.value.isVerified);
 
   // methods
   const updateUser = (user: any) => (user.value = user);
@@ -69,12 +89,75 @@ export const useAuthStore = defineStore("auth", () => {
       apiLoadingStates.value.signup = API_STATES.ERROR;
       return { error: error.value };
     } else if (data.value) {
-      completeLogin(data);
+      // completeLogin(data);
+      console.log(data.value);
+
+      const authToken = useCookie("authToken", {
+        expires: getCookieExpiration(1000), // 1 hour
+      });
+
+      const refreshToken = useCookie("refreshToken", {
+        expires: getCookieExpiration(24000), // 1 day
+      });
+      refreshToken.value = data?.value?.refreshToken;
+      authToken.value = data?.value?.accessToken;
+
+      if (process.client) {
+        localStorage.setItem("authToken", data?.value?.accessToken);
+        localStorage.setItem("verifyEmail", payload.email);
+      }
+      await sendVerificationMail();
       apiLoadingStates.value.signup = API_STATES.SUCCESS;
     }
   };
 
-  const completeLogin = (
+  const sendVerificationMail = async (navigate: boolean = true) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+    const router = useRouter();
+    apiLoadingStates.value.sendVerificationMail = API_STATES.LOADING;
+
+    const { data, error } =
+      (await await $api.auth.sendVerificationMail()) as any;
+    if (error.value) {
+      apiLoadingStates.value.sendVerificationMail = API_STATES.ERROR;
+      toast({
+        variant: "destructive",
+        title: "Something went wrong",
+        description: error.value?.data?.[0]?.message || "",
+      });
+    } else if (data.value) {
+      if (navigate) {
+        router.push("/confirm-email");
+      }
+
+      apiLoadingStates.value.sendVerificationMail = API_STATES.SUCCESS;
+    }
+  };
+
+  const verifyEmail = async (payload: { token: string }) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+    apiLoadingStates.value.verifyEmail = API_STATES.LOADING;
+
+    const { data, error } = (await await $api.auth.verifyEmail(payload)) as any;
+    if (error.value) {
+      apiLoadingStates.value.verifyEmail = API_STATES.ERROR;
+      toast({
+        variant: "destructive",
+        title: "Something went wrong",
+        description: error.value?.data?.[0]?.message || "",
+      });
+    } else if (data.value) {
+      if (process.client) {
+        localStorage.removeItem("verifyEmail");
+      }
+      completeLogin(data);
+      apiLoadingStates.value.verifyEmail = API_STATES.SUCCESS;
+    }
+  };
+
+  const completeLogin = async (
     data: any,
     options: { route: string; exchangeToken: boolean } = {
       route: "/vendor",
@@ -96,6 +179,7 @@ export const useAuthStore = defineStore("auth", () => {
     user.value = data?.value?.user;
     authToken.value = data?.value?.accessToken;
     localStorage.setItem("authToken", data?.value?.accessToken);
+    await getUserProfile();
     isLoggedIn.value = true;
     options.route && router.push(options.route);
   };
@@ -109,6 +193,8 @@ export const useAuthStore = defineStore("auth", () => {
     const { data, error } = await useAsyncData("user", () =>
       $api.auth.getUser()
     );
+    user.value.id = data.value.id;
+    await getUserProfile();
     if (error.value) {
       apiLoadingStates.value.getUser = API_STATES.ERROR;
 
@@ -144,8 +230,7 @@ export const useAuthStore = defineStore("auth", () => {
       // });
     } else if (data.value) {
       console.log(data.value);
-      isLoggedIn.value = true;
-      user.value = data.value;
+      userProfile.value = data.value;
       apiLoadingStates.value.getUserProfile = API_STATES.SUCCESS;
     }
   };
@@ -176,37 +261,10 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
-  // const loginProvider = async (provider: string, query: any) => {
-  //   const { $api } = useNuxtApp();
-  //   const router = useRouter();
-  //   const { notify } = useNotification();
-
-  //   apiLoadingStates.value.providerAuth = API_STATES.LOADING;
-
-  //   const { data, error } = await $api.auth.providerAuth(provider, query);
-  //   if (error.value) {
-  //     notify({
-  //       type: "error",
-  //       title: "Authorization Error",
-  //       text: error.value?.data?.error?.message || "",
-  //     });
-  //     apiLoadingStates.value.providerAuth = API_STATES.ERROR;
-  //     setTimeout(() => {
-  //       router.go(-2);
-  //     }, 800);
-  //   } else if (data.value) {
-  //     notify({
-  //       title: "Authorization completed",
-  //       text: `Welcome ${
-  //         data.value?.user?.firstName || data.value?.user?.username
-  //       }`,
-  //     });
-  //     apiLoadingStates.value.providerAuth = API_STATES.SUCCESS;
-  //     completeLogin(data);
-  //   }
-  // };
-
-  const triggerForgotPassword = async (payload: any) => {
+  const triggerForgotPassword = async (
+    payload: any,
+    navigate: boolean = true
+  ) => {
     const { $api } = useNuxtApp();
     const { toast } = useToast();
     const router = useRouter();
@@ -230,7 +288,10 @@ export const useAuthStore = defineStore("auth", () => {
         title: "Token Sent",
         description: "Please check your email for the reset password token",
       });
-      router.push("/reset-password");
+      if (navigate) {
+        router.push("/reset-password");
+      }
+
       apiLoadingStates.value.forgotPassword = API_STATES.SUCCESS;
       return { data: data.value };
     }
@@ -256,6 +317,9 @@ export const useAuthStore = defineStore("auth", () => {
         title: "Successful",
         description: error.value?.data?.[0]?.message || "",
       });
+      if (process.client) {
+        localStorage.removeItem("resetPasswordEmail");
+      }
 
       setTimeout(() => {
         completeLogin(data);
@@ -292,9 +356,58 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
+  const updateUserProfile = async (payload: any) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+
+    apiLoadingStates.value.updateUserProfile = API_STATES.LOADING;
+
+    const { data, error } = await $api.auth.updateUserProfile(payload);
+    if (error.value) {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      apiLoadingStates.value.updateUserProfile = API_STATES.ERROR;
+    }
+    if (data.value) {
+      toast({
+        title: "Successful",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      user.value = data.value;
+      apiLoadingStates.value.updateUserProfile = API_STATES.SUCCESS;
+    }
+  };
+
+  const updateVendorProfile = async (payload: any) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+
+    apiLoadingStates.value.updateVendorProfile = API_STATES.LOADING;
+
+    const { data, error } = await $api.users.updateVendorDetails(payload);
+    if (error.value) {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      apiLoadingStates.value.updateVendorProfile = API_STATES.ERROR;
+    }
+    if (data.value) {
+      toast({
+        title: "Successful",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      apiLoadingStates.value.updateVendorProfile = API_STATES.SUCCESS;
+    }
+  };
+
   return {
     user,
-    getUserName,
+    hasCompletedProfile,
     updateUser,
     exchangeToken,
     isLoggedIn,
@@ -308,5 +421,11 @@ export const useAuthStore = defineStore("auth", () => {
     updateUserPassword,
     getUserProfile,
     userProfile,
+    updateUserProfile,
+    updateVendorProfile,
+    hasCompletedVendorProfile,
+    verifyEmail,
+    sendVerificationMail,
+    hasVerifiedEmail,
   };
 });

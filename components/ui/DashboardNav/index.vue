@@ -1,6 +1,6 @@
 <template>
   <header
-    class="flex sticky top-0 w-full h-14 items-center gap-4 border-b-[1px] border-b-[#E0E2E4] bg-[#FFFFFF] lg:h-[76px]"
+    class="flex sticky top-0 w-full h-14 items-center gap-4 border-b-[1px] border-b-[#E0E2E4] bg-[#FFFFFF] z-[20] lg:h-[76px]"
   >
     <Sheet>
       <SheetTrigger as-child>
@@ -11,50 +11,27 @@
       </SheetTrigger>
       <SheetContent side="left" class="flex flex-col">
         <nav class="grid gap-2 text-lg font-medium">
-          <a href="#" class="flex items-center gap-2 text-lg font-semibold">
-            <Package2 class="h-6 w-6" />
-            <span class="sr-only">Acme Inc</span>
-          </a>
-          <a
-            href="#"
-            class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-          >
-            <Home class="h-5 w-5" />
-            Dashboard
-          </a>
-          <a
-            href="#"
-            class="mx-[-0.65rem] flex items-center gap-4 rounded-xl bg-muted px-3 py-2 text-foreground hover:text-foreground"
-          >
-            <ShoppingCart class="h-5 w-5" />
-            Orders
-            <Badge
-              class="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full"
+          <div v-for="(navItem, i) in navLinks" :key="i">
+            <nuxt-link
+              v-if="navItem.to"
+              :to="navItem.to"
+              active-class="bg-[#001726] !text-[#fff]"
+              class="flex items-center gap-4 mb-2 rounded-[4px] px-2 py-2 text-[16px] leading-[28px] text-muted-foreground transition-all hover:text-primary"
             >
-              6
-            </Badge>
-          </a>
-          <a
-            href="#"
-            class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-          >
-            <Package class="h-5 w-5" />
-            Products
-          </a>
-          <a
-            href="#"
-            class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-          >
-            <Users class="h-5 w-5" />
-            Customers
-          </a>
-          <a
-            href="#"
-            class="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-          >
-            <LineChart class="h-5 w-5" />
-            Analytics
-          </a>
+              <component :is="navItem.icon" class="h-6 w-6" />
+
+              {{ navItem.name }}
+            </nuxt-link>
+            <div
+              v-else
+              class="flex items-center !text-[#FF5656] cursor-pointer gap-4 rounded-[4px] px-2 py-2 text-[16px] leading-[28px] text-muted-foreground transition-all !hover:text-[#ffffff]"
+              @click="router.push('/login')"
+            >
+              <component :is="navItem.icon" class="h-6 w-6" />
+
+              {{ navItem.name }}
+            </div>
+          </div>
         </nav>
       </SheetContent>
     </Sheet>
@@ -88,10 +65,10 @@
           <h6
             class="font-medium text-[#212B36] text-[14px] leading-[20px] text-right"
           >
-            John Doe
+            {{ displayName }}
           </h6>
           <p class="text-[#637381] text-[12px] leading-[14px] text-right">
-            Admin
+            Vendor
           </p>
         </div>
         <client-only>
@@ -101,7 +78,7 @@
                 <Button variant="secondary" size="icon" class="rounded-full">
                   <Avatar>
                     <!-- <AvatarImage src="https://github.com/radix-vue.png" alt="@radix-vue" /> -->
-                    <AvatarFallback>JD</AvatarFallback>
+                    <AvatarFallback>{{ displayName[0] }}</AvatarFallback>
                   </Avatar>
                   <span class="sr-only">Toggle user menu</span>
                 </Button>
@@ -136,7 +113,54 @@ import {
   Search,
   ShoppingCart,
   Users,
+  ClipboardList,
+  BookmarkMinus,
+  Settings,
+  MessageCircleQuestion,
+  LogOut,
 } from "lucide-vue-next";
+import { useAuthStore } from "@/store/useAuthStore";
+
+const authStore = useAuthStore();
+const { apiLoadingStates, userProfile, user } = storeToRefs(authStore);
+const { getUserProfile, updateUserProfile } = authStore;
+
+const displayName = computed(
+  () => user.value.allNames.first || user.value.username
+);
+
+const navLinks = ref([
+  {
+    to: "/vendor",
+    name: "Sales",
+    icon: LineChart,
+  },
+  {
+    to: "/vendor/orders",
+    name: "Orders",
+    icon: ClipboardList,
+  },
+  {
+    to: "/vendor/item-manager",
+    name: "Item Manager",
+    icon: BookmarkMinus,
+  },
+  {
+    to: "/vendor/settings",
+    name: "Settings",
+    icon: Settings,
+  },
+  {
+    to: "/vendor/support",
+    name: "Support",
+    icon: MessageCircleQuestion,
+  },
+  {
+    name: "Logout",
+    icon: LogOut,
+    action: true,
+  },
+]);
 </script>
 
 <style></style>

@@ -13,11 +13,10 @@
         "
         class="hidden relative cover lg:block max-w-[100%]"
       >
-        <img
-          src="/images/logos/greep-green.svg"
-          alt="Logo"
-          class="absolute top-[47px] left-[59px]"
-        />
+        <nuxt-link to="/" class="absolute top-[47px] left-[59px]">
+          <img src="/images/logos/greep-green.svg" alt="Logo" />
+        </nuxt-link>
+
         <!-- <img
           src="/images/auth-bg.svg"
           alt="Image"
