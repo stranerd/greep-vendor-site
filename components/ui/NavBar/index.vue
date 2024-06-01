@@ -114,6 +114,10 @@ const navLinks = [
     name: "News",
     to: "/news",
   },
+  {
+    name: "Contact",
+    to: "/contact",
+  },
 ];
 </script>
 

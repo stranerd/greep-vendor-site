@@ -28,13 +28,15 @@
         <p class="text-[#001726] text-[16px]">
           We'll send you an update notification for you to know we are now live
         </p>
-        <div class="flex mt-6 mb-4 gap-4 flex-grow">
+        <div class="flex flex-col md:flex-row mt-6 mb-4 gap-4 flex-grow">
           <input
             type="text"
-            placeholder="enter your email"
+            placeholder="Enter your email"
             class="border-[1px] border-[#001726] p-3 rounded-[12px] grow text-[#505050] text-[16px]"
           />
-          <button class="border-[1px] rounded-[12px] border-[#001726] p-3">
+          <button
+            class="border-[1px] max-w-[200px] md:max-w-[100%] rounded-[12px] border-[#001726] p-3"
+          >
             Subscribe
           </button>
         </div>
@@ -73,9 +75,13 @@
         <div
           v-for="(link, i) in socialIcons"
           :key="i"
-          class="bg-[#009260] rounded-full h-[64px] w-[64px] flex items-center justify-center"
+          class="bg-[#009260] rounded-full h-[32px] w-[32px] md:h-[64px] md:w-[64px] flex items-center justify-center"
         >
-          <img :src="link.icon" :alt="link.alt" class="h-[24px] w-[24px]" />
+          <img
+            :src="link.icon"
+            :alt="link.alt"
+            class="h-[14px] w-[14px] md:h-[24px] md:w-[24px]"
+          />
         </div>
       </div>
     </div>

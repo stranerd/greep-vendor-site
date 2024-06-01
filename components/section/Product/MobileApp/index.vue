@@ -2,9 +2,13 @@
   <section class="mt-[40px]">
     <div class="container">
       <CursiveTitle> Users </CursiveTitle>
-      <h2 class="mb-[50px] font-bold text-[48px] mt-4">Greep Mobile App</h2>
+      <h2
+        class="mb-[50px] font-bold text-[24px] md:text-[32px] lg:text-[48px] mt-4"
+      >
+        Greep Mobile App
+      </h2>
       <p
-        class="max-w-[581px] text-center mx-auto text-[20px] leading-[24px] text-[#000E18]"
+        class="max-w-[581px] text-left md:text-center mx-auto text-[14px] md:text-[16px] lg:text-[20px] leading-[24px] text-[#000E18]"
       >
         <strong>{{ activeIndex + 1 }}.</strong>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra nunc

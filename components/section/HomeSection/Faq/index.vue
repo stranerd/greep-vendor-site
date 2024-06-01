@@ -29,19 +29,23 @@
       </div>
       <div class="relative md:min-w-[550px] w-full lg:pl-[100px]">
         <div
-          class="absolute py-[37px] md:py-[52px] left-0 px-[29px] md:px-[45px] bg-[#000E18] text-[#fff] w-full lg:max-w-[448px] rounded-[6px] bottom-0 lg:bottom-auto lg:top-[150px]"
+          class="absolute py-[37px] md:py-[52px] left-0 px-[20px] md:px-[45px] bg-[#000E18] text-[#fff] w-full lg:max-w-[448px] rounded-[6px] bottom-0 lg:bottom-auto lg:top-[150px]"
         >
-          <p class="text-[20px] font-medium mb-[21px]">
+          <p
+            class="text-[14px] md:text-[18px] lg:text-[20px] font-medium mb-[21px]"
+          >
             You need any help? get free consultation
           </p>
           <div class="flex items-center mb-[21px]">
             <img
               src="/images/icons/call-icon.svg"
               alt="call"
-              class="h-[63px] w-[63px] mr-[14px]"
+              class="h-[40px] w-[40px] md:h-[63px] md:w-[63px] mr-[14px]"
             />
             <div>
-              <p class="max-w-[166px]">Have Any Questions (00) 112 365 489</p>
+              <p class="max-w-[166px] text-[14px] md:text-[16px]">
+                Have Any Questions (00) 112 365 489
+              </p>
             </div>
           </div>
           <Button variant="withIcon" size="lg" rounded="lg"

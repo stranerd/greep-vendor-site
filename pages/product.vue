@@ -1,7 +1,7 @@
 <template>
-  <HeroWrapper class="mt-[33px] mb-[96px]">
+  <HeroWrapper class="mt-[33px] mb-[30px] md:mb-[96px]">
     <h1
-      class="text-center text-[68px] text-[#1A1A1A] font-semibold mb-[14px] leading-[81.6px]"
+      class="text-center text-[32px] md:text-[48px] lg:text-[68px] text-[#1A1A1A] font-semibold mb-[14px] leading-[48px] md:leading-[60px] lg:leading-[81.6px]"
     >
       Our Product
     </h1>

@@ -1,13 +1,15 @@
 <template>
-  <section class="py-[80px]">
+  <section class="py-[40px] md:py-[80px]">
     <div class="container">
       <div>
         <CursiveTitle> Meet our team </CursiveTitle>
       </div>
-      <h2 class="text-[64px] font-semibold leading-[75px] mt-[16px] mb-6">
+      <h2
+        class="text-[32px] md:text-[48px] lg:text-[64px] font-semibold leading-[48px] md:leading-[60px] lg:leading-[75px] mt-[16px] mb-6"
+      >
         Our team
       </h2>
-      <p class="text-[18px] leading-[27px] mb-[80px]">
+      <p class="text-[16px] md:text-[18px] leading-[27px] mb-[80px]">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       </p>
       <client-only>
@@ -24,20 +26,24 @@
           <swiper-slide
             v-for="(member, index) in team"
             :key="index"
-            class="w-[404px] max-w-[404px]"
+            class="w-full md:w-[404px] max-w-[404px]"
           >
             <div>
               <img :src="member.img" :alt="member.name" />
               <div class="bg-[#FCFCFD] p-[32px]">
                 <h4
-                  class="text-[24px] leading-[32px font-semibold mb-2 text-[#23262F] min-h-[64px]"
+                  class="text-[18px] md:text-[20px] lg:text-[24px] leading-[32px] font-semibold mb-2 text-[#23262F] min-h-[32px] md:min-h-[64px]"
                 >
                   {{ member.name }}
                 </h4>
-                <p class="text-[#777E90] txxt-[16px] leading-[24px]">
+                <p
+                  class="text-[#777E90] text-[14px] md:text-[16px] leading-[24px]"
+                >
                   {{ member.position }}
                 </p>
-                <div class="flex items-center mt-[32px] gap-6">
+                <div
+                  class="flex items-center mt-[24px] md:mt-[32px] gap-4 md:gap-6"
+                >
                   <a href="#">
                     <img src="/images/icons/linkedin.svg" alt="Linked In" />
                   </a>

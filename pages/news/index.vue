@@ -1,7 +1,7 @@
 <template>
-  <HeroWrapper class="mt-[33px] mb-[96px]">
+  <HeroWrapper class="mt-[33px] mb-[30px] md:mb-[96px]">
     <h1
-      class="text-center text-[68px] text-[#1A1A1A] font-semibold mb-[14px] leading-[81.6px]"
+      class="text-center text-[32px] md:text-[48px] lg:text-[68px] text-[#1A1A1A] font-semibold mb-[14px] leading-[48px] md:leading-[60px] lg:leading-[81.6px]"
     >
       Latest News & article
     </h1>
@@ -11,9 +11,11 @@
       Stay up to date and get to know the latest stories and news on Greep
     </p>
   </HeroWrapper>
-  <section class="pb-[80px]">
+  <section class="pb-[40px] md:pb-[60px] lg:pb-[80px]">
     <div class="container">
-      <div class="grid grid-cols-3 gap-y-[40px] gap-x-[30px]">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-[20px] md:gap-y-[40px] gap-x-[30px]"
+      >
         <NewsCard v-for="(card, i) in newsItems" :key="i" :cardData="card" />
       </div>
     </div>

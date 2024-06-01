@@ -2,7 +2,11 @@
   <section>
     <div class="container">
       <CursiveTitle> Vendor </CursiveTitle>
-      <h2 class="mb-[50px] font-bold text-[48px] mt-4">Greep Vendors</h2>
+      <h2
+        class="mb-[50px] font-bold text-[24px] md:text-[32px] lg:text-[48px] mt-4"
+      >
+        Greep Vendors
+      </h2>
       <div>
         <client-only>
           <swiper
@@ -13,17 +17,21 @@
             @slideChange="onSlideChange"
           >
             <swiper-slide v-for="(_, i) in 5" :key="i">
-              <div class="flex w-full items-center gap-[69px] justify-between">
-                <div class="max-w-[1006px] min-w-[500px] grow">
+              <div
+                class="flex flex-col lg:flex-row w-full items-center gap-[24px] md:gap-[40px] lg:gap-[69px] justify-between"
+              >
+                <div class="max-w-[1006px] w-full lg:min-w-[500px] grow">
                   <img
                     src="/images/vendor-img.jpg"
                     alt="Vendor admin"
-                    class="w-full h-auto"
+                    class="w-full h-auto object-cover"
                   />
                 </div>
 
                 <div class="grow max-w-[584px]">
-                  <p class="text-[20px] leading-[30px] text-[#000E18] mb-6">
+                  <p
+                    class="text-[14px] md:text-[16px] lg:text-[20px] leading-[26px] md:leading-[30px] text-[#000E18] mb-6"
+                  >
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry. Lorem Ipsum been the industry's
                     standard dummy text ever since the 1500s, when an unknown
