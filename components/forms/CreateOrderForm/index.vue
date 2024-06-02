@@ -399,7 +399,7 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
-  clearCart();
+  // clearCart();
 });
 </script>
 

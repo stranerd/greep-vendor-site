@@ -20,11 +20,8 @@
       <div class="relative h-auto flex align-center justify-center">
         <div class="relative mt-auto">
           <Avatar size="lg" class="w-[153px] h-[153px]">
-            <AvatarImage
-              src="/images/avatar/article-writer.png"
-              alt="Product"
-            />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarImage src="/images/placeholder.png" alt="User" />
+            <AvatarFallback>CNx</AvatarFallback>
           </Avatar>
           <div
             class="absolute flex items-center justify-center bg-[#000000] p-[14px] rounded-full bottom-0 right-0"

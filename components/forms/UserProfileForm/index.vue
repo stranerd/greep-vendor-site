@@ -41,6 +41,15 @@
           <FormMessage />
         </FormItem>
       </FormField>
+      <FormField v-slot="{ componentField }" name="photo">
+        <FormItem>
+          <FormLabel>Photo </FormLabel>
+          <FormControl>
+            <Input type="file" placeholder="File" v-bind="componentField" />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      </FormField>
       <Button
         type="submit"
         @click="onSubmit"
@@ -76,6 +85,7 @@ const formSchema = toTypedSchema(
       message: "Middle name cannot be less than 2 characters",
     }),
     phone: z.string(),
+    banner: z.any().optional(),
   })
 );
 
@@ -117,13 +127,21 @@ const onSubmit = handleSubmit(async (values: any) => {
   console.log("Form submitted!", values);
   const { toast } = useToast();
   if (phoneOptions.value.valid) {
-    await updateUserProfile({
-      ...values,
-      phone: {
-        code: `+${phoneOptions.value.countryCallingCode}`,
-        number: phoneOptions.value.nationalNumber,
-      },
+    const formData = new FormData();
+    Object.keys({ ...values }).forEach((item) => {
+      if (item === "phone") {
+        formData.append(
+          item,
+          JSON.stringify({
+            code: `+${phoneOptions.value.countryCallingCode}`,
+            number: phoneOptions.value.nationalNumber,
+          })
+        );
+      } else {
+        formData.append(item, values[item]);
+      }
     });
+    await updateUserProfile(formData);
     emit("completed", "user");
   } else {
     toast({
