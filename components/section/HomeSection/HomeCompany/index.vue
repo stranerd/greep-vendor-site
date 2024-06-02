@@ -9,7 +9,7 @@
       "
       class="bg-[#000E18] text-[white] pt-[80px] pb-[238px]"
     >
-      <div class="container bg-[#000E18]">
+      <div class="container px-[20px] md:px-[2rem] bg-[#000E18]">
         <CursiveTitle> Our Company </CursiveTitle>
         <h2 class="text-[48px] mt-4 font-bold leading-[57.6px]">
           Greep Company
@@ -25,7 +25,7 @@
         </p>
       </div>
     </div>
-    <div class="container -mt-[180px]">
+    <div class="container px-[20px] md:px-[2rem] -mt-[180px]">
       <video
         id="video1"
         class="main-vid max-w-[1147px] mx-auto rounded-[20px] overflow-hidden w-auto h-[607px]"

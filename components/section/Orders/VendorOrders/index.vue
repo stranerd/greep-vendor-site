@@ -26,9 +26,23 @@
         <span class="bg-[#000] rounded-full h-[7px] w-[7px]"> </span>
         Sort by: Latest Item
       </p>
-      <Button variant="primary" size="lg" rounded="md"
-        ><CirclePlus class="h-5 w-5 mr-[10px]" /> Create Item</Button
+      <Button
+        variant="primary"
+        size="lg"
+        rounded="md"
+        @click="isDialogOpen = true"
+        ><CirclePlus class="h-5 w-5 mr-[10px]" /> Create Order</Button
       >
+      <client-only>
+        <CreateOrderModal
+          :isOpen="isDialogOpen"
+          @close="isDialogOpen = false"
+          @completed="
+            isDialogOpen = false;
+            getVendorOrders({});
+          "
+        />
+      </client-only>
     </div>
   </div>
   <Skeleton
@@ -58,6 +72,8 @@ const marketPlaceStore = useMarketPlaceStore();
 
 const { orders, marketplaceLoadingStates } = storeToRefs(marketPlaceStore);
 const { getVendorOrders } = useMarketPlaceStore();
+
+const isDialogOpen = ref(false);
 
 onMounted(() => {
   console.log({ marketPlaceStore });

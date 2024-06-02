@@ -1,5 +1,5 @@
 <template>
-  <nav class="container sticky top-0 z-[40] pt-10">
+  <nav class="container px-[20px] md:px-[2rem] sticky top-0 z-[40] pt-10">
     <div
       class="flex items-center justify-between p-6 bg-[#FCFCFD bg-[#fff] border-[#F1F1F3] border-[1px] rounded-[100px]"
     >
@@ -47,14 +47,14 @@
             class="h-full flex py-[30px] items-center justify-between flex-col w-full"
           >
             <div class="w-full">
-              <nuxt-link
-                v-for="(link, i) in navLinks"
-                :key="i"
-                :to="link.to"
-                class="px-6 block py-[14px] w-full rounded-[100px]"
-                active-class="bg-[#F7F7F8] border-[1px] border-[#F1F1F3]"
-                >{{ link.name }}</nuxt-link
-              >
+              <SheetClose asChild v-for="(link, i) in navLinks" :key="i">
+                <nuxt-link
+                  :to="link.to"
+                  class="px-6 block py-[14px] w-full rounded-[100px]"
+                  active-class="bg-[#F7F7F8] border-[1px] border-[#F1F1F3]"
+                  >{{ link.name }}</nuxt-link
+                >
+              </SheetClose>
             </div>
             <Button
               variant="withIcon"

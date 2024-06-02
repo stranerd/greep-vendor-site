@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="container">
+    <div class="container px-[20px] md:px-[2rem]">
       <div
         style="
           background-image: url('/images/hero-wrapper-bg.svg');

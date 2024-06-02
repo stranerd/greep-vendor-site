@@ -1,6 +1,6 @@
 <template>
   <section class="mt-[40px]">
-    <div class="container">
+    <div class="container px-[20px] md:px-[2rem]">
       <CursiveTitle> Users </CursiveTitle>
       <h2
         class="mb-[50px] font-bold text-[24px] md:text-[32px] lg:text-[48px] mt-4"

@@ -40,5 +40,25 @@ export default () => {
         params,
       });
     },
+
+    checkoutCart(payload: any) {
+      return useCustomFetch(`${resource}/orders/checkout`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+
+    // CARTS
+    addItemToCart(payload: any) {
+      return useCustomFetch(`${resource}/carts`, {
+        body: payload,
+        method: "POST",
+      });
+    },
+    clearCart(id: string) {
+      return useCustomFetch(`${resource}/carts/${id}/clear`, {
+        method: "POST",
+      });
+    },
   };
 };

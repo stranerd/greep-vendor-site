@@ -1,7 +1,7 @@
 <template>
-  <section class="bg-[#F4F4F4] py-[83px]">
+  <section class="bg-[#F4F4F4] py-[40px] md:py-[83px]">
     <div
-      class="container flex flex-col w-full lg:flex-row gap-[50px] justify-between"
+      class="container px-[20px] md:px-[2rem] flex flex-col w-full lg:flex-row gap-[50px] justify-between"
     >
       <div class="w-full max-w-[100%] lg:max-w-[681px]">
         <CursiveTitle> FAQs </CursiveTitle>

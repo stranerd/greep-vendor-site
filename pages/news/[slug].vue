@@ -38,7 +38,7 @@
     </div>
   </HeroWrapper>
   <div
-    class="container mt-[24px] md:mt-[40px] lg:mt-[55px] mb-[24px] md:mb-[47px] lg:mb-[77px]"
+    class="container px-[20px] md:px-[2rem] mt-[24px] md:mt-[40px] lg:mt-[55px] mb-[24px] md:mb-[47px] lg:mb-[77px]"
   >
     <img
       src="/images/single-news.jpg"
@@ -46,7 +46,7 @@
       class="h-[358px] md:h-[400px] lg:h-[681px] w-full rounded-[10px] object-cover"
     />
   </div>
-  <div class="container">
+  <div class="container px-[20px] md:px-[2rem]">
     <div class="mx-auto max-w-[1248px]">
       <h2
         class="font-extrabold text-[24px] md:text-[32px] lg:text-[40px] leading-[28px] md:leading-[33px] lg:leading-[44px] mb-[22px]"
@@ -129,7 +129,7 @@
       </p>
     </div>
   </div>
-  <div class="container">
+  <div class="container px-[20px] md:px-[2rem]">
     <CursiveTitle>News </CursiveTitle>
     <h2
       class="text-[32px] md:text-[48px] lg:text-[64px] font-semibold leading-[48px] md:leading-[50px] lg:leading-[75px] mt-[8px] mb-10"

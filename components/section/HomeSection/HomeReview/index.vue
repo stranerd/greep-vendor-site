@@ -1,6 +1,6 @@
 <template>
-  <section class="relative py-[80px]">
-    <div class="container">
+  <section class="relative py-[40px] md:py-[80px]">
+    <div class="container px-[20px] md:px-[2rem]">
       <CursiveTitle> Our Reviews </CursiveTitle>
       <h2
         class="mb-[30px] md:mb-[50px] text-[24px] md:text-[32px] lg:text-[48px] font-bold"

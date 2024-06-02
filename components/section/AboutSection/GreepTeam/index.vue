@@ -1,6 +1,6 @@
 <template>
   <section class="py-[40px] md:py-[80px]">
-    <div class="container">
+    <div class="container px-[20px] md:px-[2rem]">
       <div>
         <CursiveTitle> Meet our team </CursiveTitle>
       </div>

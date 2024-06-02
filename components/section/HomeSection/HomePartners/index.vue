@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="container">
+    <div class="container px-[20px] md:px-[2rem]">
       <h3
         class="text-center text-[#1A1A1A] text-[20px] md:text-[28px] lg:text-[35px] font-semibold italic"
       >
@@ -22,7 +22,7 @@
       /> -->
     </div>
     <div
-      class="container flex justify-between w-full mb-[60px] xl:mb-0 flex-col xl:flex-row"
+      class="container px-[20px] md:px-[2rem] flex justify-between w-full mb-[60px] xl:mb-0 flex-col xl:flex-row"
     >
       <div class="grow max-w-[391px] mr-[30px] mb-[30px] xl:mr-[98px]">
         <div class="flex items-center">

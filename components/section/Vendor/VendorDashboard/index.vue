@@ -69,7 +69,9 @@
                   <h6 class="text-[14px] font-semibold leading-[21px]">
                     {{ product.title }}
                   </h6>
-                  <p class="text-[#999999] leading-[21px] font-light">
+                  <p
+                    class="text-[#999999] text-[12px] leading-[21px] font-light"
+                  >
                     {{ product?.description?.slice(0, 15) }}...
                   </p>
                 </div>

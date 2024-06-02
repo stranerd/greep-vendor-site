@@ -1,7 +1,7 @@
 <template>
   <footer class="relative py-[40px] md:py-[80px]">
     <div
-      class="container flex flex-col gap-[30px] lg:gap-[0px] lg:flex-row justify-between pt-[0px] md:pt-[48px] py-[48px]"
+      class="container px-[20px] md:px-[2rem] flex flex-col gap-[30px] lg:gap-[0px] lg:flex-row justify-between pt-[0px] md:pt-[48px] py-[48px]"
     >
       <div class="grow">
         <img src="/images/logos/greep-full.svg" alt="Greep" />
@@ -63,7 +63,7 @@
       </div>
     </div>
     <div
-      class="container flex flex-col lg:flex-row gap-[30px] justify-between items-center"
+      class="container px-[20px] md:px-[2rem] flex flex-col lg:flex-row gap-[30px] justify-between items-center"
     >
       <div class="flex text-[14px] flex-wrap align-center gap-6">
         <p>© {{ new Date().getFullYear() }} Greep. All rights reserved.</p>

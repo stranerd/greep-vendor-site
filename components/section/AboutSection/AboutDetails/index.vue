@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="container pt-[33px]">
+    <div class="container px-[20px] md:px-[2rem] pt-[33px]">
       <div class="flex flex-col md:flex-row justify-between gap-4">
         <div>
           <CursiveTitle> About Us </CursiveTitle>

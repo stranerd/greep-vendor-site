@@ -57,7 +57,9 @@ console.log({ route });
             "
           ></div>
 
-          <div class="container flex flex-1 flex-col gap-4 lg:gap-6">
+          <div
+            class="container px-[20px] md:px-[2rem] flex flex-1 flex-col gap-4 lg:gap-6"
+          >
             <slot />
           </div>
         </main>

@@ -1,6 +1,6 @@
 <template>
   <section class="">
-    <div class="container">
+    <div class="container px-[20px] md:px-[2rem]">
       <div class="bg-[#FCFCFD] py-[40px] md:py-[80px]">
         <div class="flex items-center w-full justify-center">
           <CursiveTitle> Values </CursiveTitle>

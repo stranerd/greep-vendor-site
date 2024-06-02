@@ -10,11 +10,7 @@
                 <span class="text-[#FF5656]">Required</span></FormLabel
               >
               <FormControl>
-                <Input
-                  type="email"
-                  placeholder="Rice"
-                  v-bind="componentField"
-                />
+                <Input type="text" placeholder="Rice" v-bind="componentField" />
               </FormControl>
               <!-- <FormDescription>
                     This is your public display name.

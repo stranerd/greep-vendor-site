@@ -1,5 +1,5 @@
 <template>
-  <header class="container">
+  <header class="container px-[20px] md:px-[2rem]">
     <h1
       class="text-[32px] md:text-[48px] lg:text-[68px] max-w-[956px] mx-auto text-center mb-[14px] font-semibold leading-[48px] md:leading-[60px] lg:leading-[81.6px] mt-[100px]"
     >

@@ -12,7 +12,7 @@
     </p>
   </HeroWrapper>
   <section class="pb-[40px] md:pb-[60px] lg:pb-[80px]">
-    <div class="container">
+    <div class="container px-[20px] md:px-[2rem]">
       <div
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-[20px] md:gap-y-[40px] gap-x-[30px]"
       >

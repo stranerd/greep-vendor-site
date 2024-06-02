@@ -9,7 +9,7 @@
     "
     class="bg-[#000E18] pt-[114px]"
   >
-    <div class="container">
+    <div class="container px-[20px] md:px-[2rem]">
       <div class="flex items-center w-full justify-center">
         <CursiveTitle> Features </CursiveTitle>
       </div>

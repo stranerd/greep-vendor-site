@@ -1,6 +1,6 @@
 <template>
   <section class="bg-[#000E18] py-[108px]">
-    <div class="container">
+    <div class="container px-[20px] md:px-[2rem]">
       <div class="mx-auto max-w-[1201.24px] text-[white]">
         <div class="flex items-center w-full justify-center">
           <CursiveTitle> Features </CursiveTitle>

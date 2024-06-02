@@ -35,7 +35,7 @@
         </nav>
       </SheetContent>
     </Sheet>
-    <div class="container flex items-center">
+    <div class="container px-[20px] md:px-[2rem] flex items-center">
       <div class="w-full flex-1">
         <!-- <form>
           <div class="relative">

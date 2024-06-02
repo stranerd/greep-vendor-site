@@ -23,7 +23,13 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     updateProduct: API_STATES.IDLE,
     recentOrders: API_STATES.IDLE,
     dashBoardData: API_STATES.IDLE,
+    searchVendorProducts: API_STATES.IDLE,
+    addToCart: API_STATES.IDLE,
+    clearCart: API_STATES.IDLE,
+    createOrder: API_STATES.IDLE,
   });
+
+  const currentCart = ref({});
 
   const getVendorOrders = async (payload?: any) => {
     const { $api } = useNuxtApp();
@@ -110,6 +116,109 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     }
   };
 
+  const searchVendorProducts = async (payload: any = {}) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+    const authStore = useAuthStore();
+
+    marketplaceLoadingStates.value.searchVendorProducts = API_STATES.LOADING;
+
+    const { data, error } = await $api.marketplace.getProducts({
+      ...payload,
+      where: JSON.stringify([{ field: "user.id", value: authStore.user.id }]),
+    });
+
+    if (error.value) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      marketplaceLoadingStates.value.searchVendorProducts = API_STATES.ERROR;
+      return { error: error.value };
+    }
+    if (data.value) {
+      marketplaceLoadingStates.value.searchVendorProducts = API_STATES.SUCCESS;
+      console.log(data.value);
+      return data.value.results;
+    }
+  };
+
+  const addToCart = async (payload: any) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+
+    marketplaceLoadingStates.value.addToCart = API_STATES.LOADING;
+
+    console.log({ payload });
+
+    const { data, error } = await $api.marketplace.addItemToCart(payload);
+
+    if (error.value) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      marketplaceLoadingStates.value.addToCart = API_STATES.ERROR;
+      return { error: error.value };
+    }
+    if (data.value) {
+      marketplaceLoadingStates.value.addToCart = API_STATES.SUCCESS;
+      console.log(data.value);
+
+      currentCart.value = data.value;
+    }
+  };
+
+  const createOrder = async (payload?: any) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+    marketplaceLoadingStates.value.createOrder = API_STATES.LOADING;
+
+    const { data, error } = await $api.marketplace.checkoutCart(payload);
+
+    if (error.value) {
+      console.log(error.value?.data);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      marketplaceLoadingStates.value.createOrder = API_STATES.ERROR;
+      return { error: error.value };
+    }
+    if (data.value) {
+      marketplaceLoadingStates.value.createOrder = API_STATES.SUCCESS;
+      console.log(data.value);
+    }
+  };
+
+  const clearCart = async () => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+
+    marketplaceLoadingStates.value.clearCart = API_STATES.LOADING;
+    const { data, error } = await $api.marketplace.clearCart(
+      currentCart.value.id
+    );
+
+    if (error.value) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      marketplaceLoadingStates.value.clearCart = API_STATES.ERROR;
+      return { error: error.value };
+    }
+    if (data.value) {
+      marketplaceLoadingStates.value.clearCart = API_STATES.SUCCESS;
+      console.log(data.value);
+      currentCart.value = data.value;
+    }
+  };
+
   const updateProduct = async (id: any, payload: any) => {
     const { $api } = useNuxtApp();
     const { toast } = useToast();
@@ -148,8 +257,16 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
       await $api.marketplace.getOrders({
         where: JSON.stringify([
           { field: "data.vendorId", value: authStore.user.id },
-          { field: "createdAt", condition: "gte", value: timeRange.start },
-          { field: "createdAt", condition: "lt", value: timeRange.end },
+          {
+            field: "createdAt",
+            condition: "gte",
+            value: timeRange.start.getTime(),
+          },
+          {
+            field: "createdAt",
+            condition: "lt",
+            value: timeRange.end.getTime(),
+          },
         ]),
         lazy: false,
       }),
@@ -207,5 +324,10 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     recentOrders,
     recentOrderMeta,
     dashBoardData,
+    searchVendorProducts,
+    addToCart,
+    currentCart,
+    clearCart,
+    createOrder,
   };
 });
