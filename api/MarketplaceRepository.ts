@@ -40,7 +40,33 @@ export default () => {
         params,
       });
     },
-
+    getSingleOrder(id: string) {
+      return useCustomFetch(`${resource}/orders/${id}`, {
+        method: "GET",
+      });
+    },
+    acceptOrRejectOrder(id: string, payload: any) {
+      return useCustomFetch(`${resource}/orders/${id}/accept`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+    cancelOrder(id: string) {
+      return useCustomFetch(`${resource}/orders/${id}/cancel`, {
+        method: "POST",
+      });
+    },
+    markOrderAsShipped(id: string) {
+      return useCustomFetch(`${resource}/orders/${id}/markShipped`, {
+        method: "POST",
+      });
+    },
+    dispatchOrder(payload: any) {
+      return useCustomFetch(`${resource}/orders/dispatch`, {
+        method: "POST",
+        body: payload,
+      });
+    },
     checkoutCart(payload: any) {
       return useCustomFetch(`${resource}/orders/checkout`, {
         method: "POST",

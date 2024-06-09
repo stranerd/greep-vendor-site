@@ -38,11 +38,9 @@
             >
               <div
                 class="w-[9px] h-[9px] rounded-[3px] mr-2"
-                :class="
-                  order?.status?.paid?.at ? 'bg-[#1F8F69] ' : 'bg-[#B91010] '
-                "
+                :class="paymentStatus(order.status).color"
               ></div>
-              {{ order?.status?.paid?.at ? "Paid" : "Await cash" }}
+              {{ paymentStatus(order.status).text }}
             </Badge>
           </TableCell>
           <TableCell>
@@ -52,9 +50,9 @@
             >
               <div
                 class="w-[9px] h-[9px] rounded-[3px] mr-2"
-                :class="order?.done ? 'bg-[#1F8F69] ' : 'bg-[#B91010] '"
+                :class="orderStatus(order.status).color"
               ></div>
-              {{ order?.done ? "Completed" : "Pending" }}
+              {{ orderStatus(order.status).text }}
             </Badge>
           </TableCell>
           <TableCell class="text-[12px]">
@@ -71,8 +69,9 @@
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                  <DropdownMenuItem @click="router.push(`/vendor/orders/${i}`)"
-                    >Edit</DropdownMenuItem
+                  <DropdownMenuItem
+                    @click="router.push(`/vendor/orders/${order.id}`)"
+                    >View</DropdownMenuItem
                   >
                   <DropdownMenuItem>Delete</DropdownMenuItem>
                 </DropdownMenuContent>
@@ -83,6 +82,7 @@
       </TableBody>
     </Table>
     <DisplayState
+      v-if="items.length === 0"
       :message="
         source === 'recent'
           ? 'No recent history to display. Come back soon and we`ll show you what you`ve been up to!'
@@ -95,6 +95,7 @@
 
 <script setup lang="ts">
 import { MoreHorizontal } from "lucide-vue-next";
+import { orderStatus, paymentStatus } from "~/lib/utils";
 const { $moment } = useNuxtApp();
 
 const props = defineProps({

@@ -193,8 +193,7 @@ export const useAuthStore = defineStore("auth", () => {
     const { data, error } = await useAsyncData("user", () =>
       $api.auth.getUser()
     );
-    user.value.id = data.value.id;
-    await getUserProfile();
+
     if (error.value) {
       apiLoadingStates.value.getUser = API_STATES.ERROR;
 
@@ -205,7 +204,8 @@ export const useAuthStore = defineStore("auth", () => {
       //   description: error.value?.data?.[0]?.message || "",
       // });
     } else if (data.value) {
-      console.log(data.value);
+      user.value.id = data.value.id;
+      await getUserProfile();
       isLoggedIn.value = true;
       user.value = data.value;
       apiLoadingStates.value.getUser = API_STATES.SUCCESS;

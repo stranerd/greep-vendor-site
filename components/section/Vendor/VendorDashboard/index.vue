@@ -27,7 +27,7 @@
   </div>
   <div v-else class="">
     <div class="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-      <Card v-for="(card, i) in overview" :key="i">
+      <Card v-for="(card, i) in overview" :key="i" style="overflow: hidden">
         <CardHeader
           class="flex flex-row items-center justify-between space-y-0 pb-[10px]"
         >
@@ -39,7 +39,7 @@
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div class="text-[#000000] text-[32px] font-semibold">
+          <div class="text-[#000000] text-[28px] font-semibold">
             {{ card.value }}
           </div>
           <!-- <p class="text-xs text-muted-foreground">+20.1% from last month</p> -->
@@ -57,7 +57,7 @@
             <div
               v-for="(product, i) in dashBoardData.products"
               :key="i"
-              class="border-[#F1F3F7] rounded-[12px] flex items-center justify-between border-[2px] py-3 px-4"
+              class="border-[#F1F3F7] rounded-[12px] mb-4 flex items-center justify-between border-[2px] py-3 px-4"
             >
               <div class="flex items-center">
                 <h6 class="text-[16px] mr-3 font-semibold">{{ i + 1 }}</h6>
@@ -128,6 +128,7 @@
 
 <script setup lang="ts">
 const date = ref("month");
+import { currencyConverter } from "~/lib/utils";
 import { API_STATES } from "~/services/constants";
 import { useAuthStore } from "~/store/useAuthStore";
 import { useMarketPlaceStore } from "~/store/useMarketplace";
@@ -144,21 +145,28 @@ const { getRecentOrders, getDashboardData } = marketPlaceStore;
 const overview = computed(() => [
   {
     title: "Total Sales",
-    value: "₺ 0",
+    value: currencyConverter(
+      "TRY",
+      dashBoardData?.value?.stats?.reduce(function (accumulator, curValue) {
+        return accumulator + curValue.fee.total;
+      }, 0) || 0
+    ),
   },
   {
-    title: "Total Orders > 0%",
-    value: "0",
+    title: "Total Orders",
+    value: dashBoardData.value?.stats?.length || 0,
     titleColor: "text-[#249F5D]",
   },
   {
-    title: "Total Visits > 0%",
+    title: "Total Visits",
     value: "0",
     titleColor: "text-[#FFB545]",
   },
   {
-    title: "Total Canceled > 0%",
-    value: "0",
+    title: "Total Canceled ",
+    value:
+      dashBoardData.value?.stats?.filter((order: any) => order.status.cancelled)
+        ?.length || 0,
   },
 ]);
 

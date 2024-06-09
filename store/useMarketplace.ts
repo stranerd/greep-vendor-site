@@ -10,11 +10,12 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
   const orderMeta = ref({});
   const recentOrders = ref<Array<IOrders>>([]);
   const recentOrderMeta = ref({});
+  const singleOrder = ref<IOrders>();
   const products = ref<Array<IProduct>>([]);
   const profuctsMeta = ref({});
   const dashBoardData = ref<{ products: Array<IProduct>; stats: any }>({
     products: [],
-    stats: {},
+    stats: [],
   });
   const marketplaceLoadingStates = ref({
     allOrders: API_STATES.IDLE,
@@ -27,6 +28,11 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     addToCart: API_STATES.IDLE,
     clearCart: API_STATES.IDLE,
     createOrder: API_STATES.IDLE,
+    singleOrder: API_STATES.IDLE,
+    cancelOrder: API_STATES.IDLE,
+    dispatchOrder: API_STATES.IDLE,
+    rejectOrAcceptOrder: API_STATES.IDLE,
+    markShipped: API_STATES.IDLE,
   });
 
   const currentCart = ref({});
@@ -275,8 +281,11 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     if (productsRes?.value?.data?.value?.results) {
       dashBoardData.value.products = productsRes?.value?.data?.value?.results;
     }
+    console.log(statsRes.value.data, "stat res");
+
     if (statsRes?.value?.data?.value) {
       console.log(statsRes?.value?.data?.value);
+      dashBoardData.value.stats = statsRes?.value?.data?.value?.results;
     }
     marketplaceLoadingStates.value.dashBoardData = API_STATES.SUCCESS;
   };
@@ -298,7 +307,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     if (error.value) {
       toast({
         variant: "destructive",
-        title: "Authorization Error",
+        title: "Error",
         description: error.value?.data?.[0]?.message || "",
       });
       marketplaceLoadingStates.value.recentOrders = API_STATES.ERROR;
@@ -308,6 +317,168 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
       recentOrders.value = data.value.results;
       recentOrderMeta.value = data.value.pages;
       marketplaceLoadingStates.value.recentOrders = API_STATES.SUCCESS;
+    }
+  };
+
+  const getSingleOrder = async (id: string) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+    marketplaceLoadingStates.value.singleOrder = API_STATES.LOADING;
+
+    const { data, error } = await $api.marketplace.getSingleOrder(id);
+
+    if (error.value) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      marketplaceLoadingStates.value.singleOrder = API_STATES.ERROR;
+      return { error: error.value };
+    }
+    if (data.value) {
+      const producytIds = data.value?.data?.products?.reduce(
+        (acc: any, post: any) => {
+          return { ...acc, [post.id]: post };
+        },
+        {}
+      );
+
+      const productRes = await $api.marketplace.getProducts({
+        where: JSON.stringify([
+          { field: "id", condition: "in", value: Object.keys(producytIds) },
+        ]),
+      });
+      singleOrder.value = {
+        ...data.value,
+        data: {
+          ...data.value.data,
+          products: (
+            productRes?.data?.value?.results || data?.value?.data?.products
+          ).map((product: any) => {
+            return {
+              ...product,
+              quantity: producytIds?.[product.id]?.quantity || 1,
+            };
+          }),
+        },
+      };
+
+      marketplaceLoadingStates.value.singleOrder = API_STATES.SUCCESS;
+    }
+  };
+
+  const cancelOrder = async (id: string) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+    marketplaceLoadingStates.value.cancelOrder = API_STATES.LOADING;
+
+    const { data, error } = await $api.marketplace.cancelOrder(id);
+
+    if (error.value) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      marketplaceLoadingStates.value.cancelOrder = API_STATES.ERROR;
+      return { error: error.value };
+    }
+    if (data.value) {
+      console.log(data.value);
+      toast({
+        title: "Success",
+        description: "Order cancelled successfully",
+      });
+      singleOrder.value = data.value;
+      marketplaceLoadingStates.value.cancelOrder = API_STATES.SUCCESS;
+      return data.value;
+    }
+  };
+
+  const rejectOrAcceptOrder = async (id: string, payload: any) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+    marketplaceLoadingStates.value.rejectOrAcceptOrder = API_STATES.LOADING;
+
+    const { data, error } = await $api.marketplace.acceptOrRejectOrder(
+      id,
+      payload
+    );
+
+    if (error.value) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      marketplaceLoadingStates.value.rejectOrAcceptOrder = API_STATES.ERROR;
+      return { error: error.value };
+    }
+    if (data.value) {
+      console.log(data.value);
+      toast({
+        title: "Success",
+        description: "Order updated successfully",
+      });
+      singleOrder.value = data.value;
+      marketplaceLoadingStates.value.rejectOrAcceptOrder = API_STATES.SUCCESS;
+      return data.value;
+    }
+  };
+
+  const dispatchOrder = async (payload: any) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+    marketplaceLoadingStates.value.dispatchOrder = API_STATES.LOADING;
+
+    const { data, error } = await $api.marketplace.dispatchOrder(payload);
+
+    if (error.value) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      marketplaceLoadingStates.value.dispatchOrder = API_STATES.ERROR;
+      return { error: error.value };
+    }
+    if (data.value) {
+      console.log(data.value);
+      toast({
+        title: "Success",
+        description: "Order updated successfully",
+      });
+      // singleOrder.value = data.value
+      marketplaceLoadingStates.value.dispatchOrder = API_STATES.SUCCESS;
+      return data.value;
+    }
+  };
+
+  const markOrderAsShipped = async (payload: any) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+    marketplaceLoadingStates.value.markShipped = API_STATES.LOADING;
+
+    const { data, error } = await $api.marketplace.markOrderAsShipped(payload);
+
+    if (error.value) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      marketplaceLoadingStates.value.markShipped = API_STATES.ERROR;
+      return { error: error.value };
+    }
+    if (data.value) {
+      console.log(data.value);
+      toast({
+        title: "Success",
+        description: "Order updated successfully",
+      });
+      marketplaceLoadingStates.value.markShipped = API_STATES.SUCCESS;
+      return data.value;
     }
   };
 
@@ -329,5 +500,11 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     currentCart,
     clearCart,
     createOrder,
+    getSingleOrder,
+    singleOrder,
+    cancelOrder,
+    rejectOrAcceptOrder,
+    dispatchOrder,
+    markOrderAsShipped,
   };
 });

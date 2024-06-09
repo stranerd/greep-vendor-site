@@ -134,14 +134,14 @@
           </FormField>
         </div>
         <div class="grid gap-2">
-          <FormField v-slot="{ componentField }" name="banner">
+          <FormField name="banner" v-slot="{ handleChange }">
             <FormItem>
               <FormLabel
                 >Item Image
                 <span class="text-[#FF5656]">Required</span></FormLabel
               >
               <FormControl>
-                <Input type="file" placeholder="File" v-bind="componentField" />
+                <Input type="file" placeholder="File" @change="handleChange" />
               </FormControl>
               <!-- <FormDescription>
                     This is your public display name.
@@ -272,13 +272,14 @@ const formSchema = toTypedSchema(
   })
 );
 
-const { handleSubmit, resetForm } = useForm({
+const { handleSubmit, resetForm, setFieldValue } = useForm({
   validationSchema: formSchema,
   initialValues: {
     inStock: true,
   },
 });
 
+const file = ref(null);
 const categories = ref([
   {
     title: "Stuff",
@@ -331,7 +332,6 @@ const onSubmit = handleSubmit(async (values: any) => {
   });
   await createProduct(form);
   emits("completed");
-  // loginUser(values);
 });
 
 // const accountFormSchema = toTypedSchema(

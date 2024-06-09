@@ -6,7 +6,11 @@
       alt="Empty State"
     />
     <p class="text-[12px] text-center">{{ message }}</p>
-    <Button v-if="!hideButton" @click="$emit('action')">
+    <Button
+      v-if="!hideButton"
+      class="mx-auto block mt-4"
+      @click="$emit('action')"
+    >
       {{ buttonText }}
     </Button>
   </div>

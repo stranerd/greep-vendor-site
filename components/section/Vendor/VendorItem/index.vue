@@ -40,10 +40,7 @@
           <CreateProductModal
             :isOpen="isDialogOpen"
             @close="isDialogOpen = false"
-            @completed="
-              isDialogOpen = false;
-              getAllProducts({});
-            "
+            @completedCreation="completeProductCreation"
           />
         </client-only>
       </div>
@@ -130,6 +127,13 @@ const { products, marketplaceLoadingStates } = storeToRefs(marketplaceStore);
 const { getAllProducts } = marketplaceStore;
 
 const isDialogOpen = ref(false);
+
+const completeProductCreation = () => {
+  isDialogOpen.value = false;
+  console.log("called");
+
+  getAllProducts({});
+};
 
 onMounted(() => {
   getAllProducts({});

@@ -1,5 +1,5 @@
 <template>
-  <Dialog :open="isOpen">
+  <Dialog :open="isOpenLocal">
     <DialogContent :hideClose="true">
       <DialogHeader>
         <DialogTitle>New Item</DialogTitle>
@@ -9,7 +9,12 @@
         />
       </DialogHeader>
       <DialogDescription>
-        <CreateProductForm @completed="$emit('completed')" />
+        <CreateProductForm
+          @completed="
+            isOpenLocal = false;
+            $emit('completedCreation');
+          "
+        />
       </DialogDescription>
     </DialogContent>
   </Dialog>
@@ -25,7 +30,18 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["close", "completed"]);
+const isOpenLocal = ref(props.isOpen);
+
+watch(
+  props,
+  () => {
+    console.log({ isOpen: props.isOpen });
+
+    isOpenLocal.value = props.isOpen;
+  },
+  { immediate: true }
+);
+const emit = defineEmits(["close", "completedCreation"]);
 </script>
 
 <style></style>

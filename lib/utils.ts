@@ -50,3 +50,73 @@ export function debounce<T extends (...args: any[]) => any>(
     }, wait);
   };
 }
+
+export const currencyConverter = (currency: string, value: number) => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+  }).format(value);
+};
+
+export const orderStatus = (status: any) => {
+  if (status.refunded) {
+    return {
+      text: "Refunded",
+      color: "bg-[bg-[#B91010]]",
+    };
+  }
+  if (status.cancelled) {
+    return {
+      text: "Cancelled",
+      color: "bg-[#B91010]",
+    };
+  }
+  if (status.rejected) {
+    return {
+      text: "Rejected",
+      color: "bg-[#B91010]",
+    };
+  }
+  if (status.completed) {
+    return {
+      text: "Completed",
+      color: "bg-[#009260]",
+    };
+  }
+  if (status.driverAssigned) {
+    return {
+      text: "Driver assigned",
+      color: "bg-[#009260]",
+    };
+  }
+  if (status.shipped) {
+    return {
+      text: "Shipped",
+      color: "bg-[#009260]",
+    };
+  }
+  if (status.accepted) {
+    return {
+      text: "Accepted",
+      color: "bg-[#009260]",
+    };
+  }
+  return {
+    text: "Pending",
+    color: "bg-[#B91010]",
+  };
+};
+
+export const paymentStatus = (status: any) => {
+  if (status.paid) {
+    return {
+      text: "Paid",
+      color: "bg-[#009260]",
+    };
+  } else {
+    return {
+      text: "Await Cash",
+      color: "bg-[#B91010]",
+    };
+  }
+};
