@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt', '@pinia/nuxt'],
-  css: ['./assets/css/iconsax-css/style.css'],
+  // css: [],
   buildModules: ['@nuxtjs/moment'],
   runtimeConfig: {
     public: {

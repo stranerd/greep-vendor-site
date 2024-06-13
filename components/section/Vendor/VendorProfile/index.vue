@@ -93,8 +93,8 @@
             <h4 class="text-[16px] leading-[20px] font-medium">
               {{ profileItem }}
             </h4>
-            <Button class="hidden" size="icon" @click="openDialog(profileItem)">
-              <FilePenLine class="h-3 w-3"
+            <Button class="" size="icon" @click="openDialog(profileItem)">
+              <EditIcon class="h-5 w-5"
             /></Button>
           </div>
 
@@ -111,12 +111,11 @@
                 {{ item.title }}
               </p>
               <p
+                @click.prevent="openDialog(profileItem)"
                 class="flex font-light gap-2 cursor-pointer leading-[20px] text-[14px]">
                 {{ item.value || '--' }}
 
-                <EditIcon
-                  class="h-5 w-5"
-                  @click.self.once.stop="openDialog(profileItem)" />
+                <EditIcon class="h-5 w-5 hidden" />
               </p>
             </div>
           </div>
@@ -149,9 +148,7 @@
                 class="flex font-light gap-2 cursor-pointer leading-[20px] text-[14px]">
                 {{ item.value || '--' }}
 
-                <EditIcon
-                  class="h-5 w-5"
-                  @click.self="openDialog(profileItem)" />
+                <EditIcon class="h-5 w-5" />
               </p>
             </div>
           </div>

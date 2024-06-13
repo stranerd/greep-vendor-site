@@ -7,8 +7,11 @@
 
 <script setup lang="ts">
 definePageMeta({
-  layout: "dashboard",
-  middleware: ["authenticated"],
+  layout: 'dashboard',
+  middleware: ['authenticated'],
+});
+useHead({
+  title: 'Vendors Settings',
 });
 </script>
 
