@@ -1,75 +1,85 @@
-import type { LoginPayload, SignUpPayload } from "~/types/modules/authModel";
+import type { LoginPayload, SignUpPayload } from '~/types/modules/authModel';
 
-const resource = "/marketplace";
+const resource = '/marketplace';
 
 export default () => {
   return {
     createProduct(payload: any) {
       return useCustomFetch(`${resource}/products`, {
         body: payload,
-        method: "POST",
+        method: 'POST',
       });
     },
+
     updateProduct(id: string, payload: any) {
       return useCustomFetch(`${resource}/products/${id}`, {
         body: payload,
-        method: "PUT",
+        method: 'PUT',
       });
     },
+
     getProducts(query: any) {
       return useCustomFetch(`${resource}/products`, {
         query,
-        method: "GET",
+        method: 'GET',
       });
     },
+
     getSingleProduct(query: any) {
       return useCustomFetch(`${resource}/products`, {
         query,
-        method: "POST",
+        method: 'POST',
       });
     },
+
     deleteProduct(id: string) {
       return useCustomFetch(`${resource}/products/${id}`, {
-        method: "DELETE",
+        method: 'DELETE',
       });
     },
+
     // ORDERS
     getOrders(params: any) {
       return useCustomFetch(`${resource}/orders`, {
-        method: "GET",
+        method: 'GET',
         params,
       });
     },
+
     getSingleOrder(id: string) {
       return useCustomFetch(`${resource}/orders/${id}`, {
-        method: "GET",
+        method: 'GET',
       });
     },
+
     acceptOrRejectOrder(id: string, payload: any) {
       return useCustomFetch(`${resource}/orders/${id}/accept`, {
-        method: "POST",
+        method: 'POST',
         body: payload,
       });
     },
+
     cancelOrder(id: string) {
       return useCustomFetch(`${resource}/orders/${id}/cancel`, {
-        method: "POST",
+        method: 'POST',
       });
     },
+
     markOrderAsShipped(id: string) {
       return useCustomFetch(`${resource}/orders/${id}/markShipped`, {
-        method: "POST",
+        method: 'POST',
       });
     },
+
     dispatchOrder(payload: any) {
       return useCustomFetch(`${resource}/orders/dispatch`, {
-        method: "POST",
+        method: 'POST',
         body: payload,
       });
     },
     checkoutCart(payload: any) {
       return useCustomFetch(`${resource}/orders/checkout`, {
-        method: "POST",
+        method: 'POST',
         body: payload,
       });
     },
@@ -78,12 +88,12 @@ export default () => {
     addItemToCart(payload: any) {
       return useCustomFetch(`${resource}/carts`, {
         body: payload,
-        method: "POST",
+        method: 'POST',
       });
     },
     clearCart(id: string) {
       return useCustomFetch(`${resource}/carts/${id}/clear`, {
-        method: "POST",
+        method: 'POST',
       });
     },
   };
