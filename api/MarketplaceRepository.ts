@@ -31,11 +31,13 @@ export default () => {
         method: 'POST',
       });
     },
+
     deleteProduct(id: string) {
       return useCustomFetch(`${resource}/products/${id}`, {
         method: 'DELETE',
       });
     },
+
     // ORDERS
     getOrders(params: any) {
       return useCustomFetch(`${resource}/orders`, {
@@ -43,27 +45,32 @@ export default () => {
         params,
       });
     },
+
     getSingleOrder(id: string) {
       return useCustomFetch(`${resource}/orders/${id}`, {
         method: 'GET',
       });
     },
+
     acceptOrRejectOrder(id: string, payload: any) {
       return useCustomFetch(`${resource}/orders/${id}/accept`, {
         method: 'POST',
         body: payload,
       });
     },
+
     cancelOrder(id: string) {
       return useCustomFetch(`${resource}/orders/${id}/cancel`, {
         method: 'POST',
       });
     },
+
     markOrderAsShipped(id: string) {
       return useCustomFetch(`${resource}/orders/${id}/markShipped`, {
         method: 'POST',
       });
     },
+
     dispatchOrder(payload: any) {
       return useCustomFetch(`${resource}/orders/dispatch`, {
         method: 'POST',
