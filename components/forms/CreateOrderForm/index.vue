@@ -104,7 +104,7 @@
                 class="max-w-[75px] w-full min-w-[70px]"
               />
             </div>
-            <div
+            <!-- <div
               v-if="cartItem.quantity && cartItem.productId"
               class="cursor-pointer flex bg-[#E0E2E4] text-[#000] py-[10px] px-3 rounded-[6px]"
               @click="addItemToCart(i)"
@@ -117,7 +117,7 @@
                 class="mr-2 h-4 w-4 animate-spin"
               />
               Save
-            </div>
+            </div> -->
           </div>
         </div>
         <div
@@ -271,6 +271,7 @@ const {
   addToCart,
   clearCart,
   createOrder,
+  createCartLink,
 } = marketPlaceStore;
 
 const df = new DateFormatter("en-US", {
@@ -350,8 +351,6 @@ const addItemToCart = (index: number) => {
   savedIndex.value = index;
   const item = productsArray.value[index];
   delete item.open;
-  console.log(item);
-
   addToCart({ ...item, add: true });
 };
 
@@ -369,14 +368,25 @@ const emits = defineEmits(["completed"]);
 
 const onSubmit = handleSubmit(async (values: any) => {
   console.log("Form submitted!", values);
+  console.log({ productsArray });
+
   const payload = {
     ...values,
+    packs: [
+      productsArray.value.map((product: any) => {
+        return {
+          id: product.productId,
+          quantity: product.quantity,
+          addOns: [],
+        };
+      }),
+    ],
     to: {
       coords: [2, 4],
       location: values.to,
       description: "Location",
     },
-    cartId: currentCart.value.id,
+    // cartId: currentCart.value.id,
     payment: "wallet",
     time: {
       date: new Date(values.time).getTime(),
@@ -386,7 +396,7 @@ const onSubmit = handleSubmit(async (values: any) => {
   console.log({ payload });
   delete payload.deliveryTime;
 
-  await createOrder(payload);
+  await createCartLink(payload);
   emits("completed");
 });
 

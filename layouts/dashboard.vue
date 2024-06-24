@@ -6,7 +6,6 @@ const { hasCompletedVendorProfile, hasCompletedProfile, hasVerifiedEmail } =
   storeToRefs(authStore);
 
 const route = useRoute();
-console.log({ route });
 </script>
 
 <template>

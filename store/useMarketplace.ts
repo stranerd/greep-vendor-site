@@ -33,6 +33,9 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     dispatchOrder: API_STATES.IDLE,
     rejectOrAcceptOrder: API_STATES.IDLE,
     markShipped: API_STATES.IDLE,
+    createCartLink: API_STATES.IDLE,
+    getCartLinkDetails: API_STATES.IDLE,
+    checkoutCartLink: API_STATES.IDLE,
   });
 
   const currentCart = ref({});
@@ -482,6 +485,108 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     }
   };
 
+  const createCartLink = async (payload: any) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+    marketplaceLoadingStates.value.createCartLink = API_STATES.LOADING;
+
+    const { data, error } = await $api.marketplace.createCartLink(payload);
+
+    if (error.value) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      marketplaceLoadingStates.value.createCartLink = API_STATES.ERROR;
+      return { error: error.value };
+    }
+    if (data.value) {
+      console.log(data.value);
+      toast({
+        title: "Success",
+        description: "Order updated successfully",
+      });
+      marketplaceLoadingStates.value.createCartLink = API_STATES.SUCCESS;
+      return data.value;
+    }
+  };
+
+  const getCartLinkDetails = async (id: string) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+    marketplaceLoadingStates.value.getCartLinkDetails = API_STATES.LOADING;
+
+    const { data, error } = await $api.marketplace.getCartLink(id);
+
+    if (error.value) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      marketplaceLoadingStates.value.getCartLinkDetails = API_STATES.ERROR;
+      return { error: error.value };
+    }
+    if (data.value) {
+      let response = {} as any;
+      const producytIds = data.value?.packs?.[0]?.reduce(
+        (acc: any, product: any) => {
+          return { ...acc, [product.id]: product };
+        },
+        {}
+      );
+      const productRes = await $api.marketplace.getProducts({
+        where: JSON.stringify([
+          { field: "id", condition: "in", value: Object.keys(producytIds) },
+        ]),
+      });
+      response = {
+        ...data.value,
+        packs: [
+          [
+            ...(productRes?.data?.value?.results || data.value?.packs?.[0]).map(
+              (product: any) => {
+                return {
+                  ...product,
+                  quantity: producytIds?.[product.id]?.quantity || 1,
+                };
+              }
+            ),
+          ],
+        ],
+      };
+      toast({
+        description: "Cart fetched successfully",
+      });
+      marketplaceLoadingStates.value.getCartLinkDetails = API_STATES.SUCCESS;
+      return response;
+    }
+  };
+
+  const checkoutCartLink = async (payload?: any) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+    marketplaceLoadingStates.value.checkoutCartLink = API_STATES.LOADING;
+
+    const { data, error } = await $api.marketplace.checkoutCartLink(payload);
+
+    if (error.value) {
+      console.log(error.value?.data);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      marketplaceLoadingStates.value.checkoutCartLink = API_STATES.ERROR;
+      return { error: error.value };
+    }
+    if (data.value) {
+      marketplaceLoadingStates.value.checkoutCartLink = API_STATES.SUCCESS;
+      console.log(data.value);
+    }
+  };
+
   return {
     marketplaceLoadingStates,
     orders,
@@ -506,5 +611,8 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     rejectOrAcceptOrder,
     dispatchOrder,
     markOrderAsShipped,
+    createCartLink,
+    getCartLinkDetails,
+    checkoutCartLink,
   };
 });
