@@ -46,7 +46,7 @@
                   {{
                     cartItem.productId
                       ? formattedProducts.find(
-                          (product) => product.value === cartItem.productId
+                          (product) => product.value === cartItem.productId,
                         )?.label
                       : "Select product..."
                   }}
@@ -84,7 +84,7 @@
                               'ml-auto h-4 w-4',
                               cartItem.productId === product.value
                                 ? 'opacity-100'
-                                : 'opacity-0'
+                                : 'opacity-0',
                             )
                           "
                         />
@@ -126,6 +126,7 @@
         >
           <CirclePlus class="h-[20px] w-[20px] mr-[6px]" /> Add another item
         </div>
+
         <div class="flex gap-[20px]">
           <FormField v-slot="{ field, value }" name="time">
             <FormItem class="flex flex-col grow">
@@ -138,7 +139,7 @@
                       :class="
                         cn(
                           'w-full grow justify-start text-left font-normal',
-                          !value && 'text-muted-foreground'
+                          !value && 'text-muted-foreground',
                         )
                       "
                     >
@@ -151,6 +152,7 @@
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
+
                 <PopoverContent class="p-0">
                   <Calendar
                     v-model:placeholder="placeholder"
@@ -176,6 +178,7 @@
             </FormItem>
             <input type="hidden" v-bind="field" />
           </FormField>
+
           <FormField v-slot="{ componentField }" name="deliveryTime">
             <FormItem class="grow">
               <FormLabel>Time </FormLabel>
@@ -191,6 +194,7 @@
             </FormItem>
           </FormField>
         </div>
+
         <FormField v-slot="{ componentField }" name="discount">
           <FormItem class="grow">
             <FormLabel>Discount </FormLabel>
@@ -205,6 +209,7 @@
             <FormMessage />
           </FormItem>
         </FormField>
+
         <FormField v-slot="{ componentField }" name="dropoffNote">
           <FormItem>
             <FormLabel>Drop off note </FormLabel>
@@ -217,8 +222,16 @@
             <FormMessage />
           </FormItem>
         </FormField>
+
         <div class="flex items-center justify-end mt-4">
-          <Button variant="ghost" class="rounded-[12px] mr-3"> Cancel </Button>
+          <Button
+            variant="ghost"
+            type="button"
+            class="rounded-[12px] mr-3"
+            @click="$emit('completed')"
+          >
+            Cancel
+          </Button>
 
           <Button
             type="submit"
@@ -317,10 +330,10 @@ const formSchema = toTypedSchema(
       .datetime()
       .optional()
       .refine((date: any) => date !== undefined, "Please select a valid date."),
-  })
+  }),
 );
 
-const { handleSubmit, setFieldValue, resetForm } = useForm({
+const { handleSubmit, setFieldValue, resetForm, isSubmitting } = useForm({
   validationSchema: formSchema,
   initialValues: {
     to: "",
@@ -349,7 +362,7 @@ const addNewProduct = () => {
 const addItemToCart = (index: number) => {
   savedIndex.value = index;
   const item = productsArray.value[index];
-  delete item.open;
+  delete item?.open;
   console.log(item);
 
   addToCart({ ...item, add: true });
@@ -357,7 +370,7 @@ const addItemToCart = (index: number) => {
 
 const filterFunction = (
   val: string[] | number[] | false[] | true[] | Record<string, any>[],
-  term: string
+  term: string,
 ) => val;
 
 type SelectItems = {

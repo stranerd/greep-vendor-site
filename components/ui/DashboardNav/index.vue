@@ -126,7 +126,7 @@ const { apiLoadingStates, userProfile, user } = storeToRefs(authStore);
 const { getUserProfile, updateUserProfile } = authStore;
 
 const displayName = computed(
-  () => user.value.allNames.first || user.value.username
+  () => user.value?.allNames?.first || user.value?.username
 );
 
 const navLinks = ref([

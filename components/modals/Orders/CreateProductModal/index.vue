@@ -39,7 +39,7 @@ watch(
 
     isOpenLocal.value = props.isOpen;
   },
-  { immediate: true }
+  { immediate: true },
 );
 const emit = defineEmits(["close", "completedCreation"]);
 </script>
