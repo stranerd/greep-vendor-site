@@ -5,7 +5,7 @@
     >
       <div
         style="
-          background-image: url('/images/sign-up-bg.svg');
+          background-image: url(&quot;/images/sign-up-bg.svg&quot;);
           background-position: center;
           background-repeat: no-repeat;
           background-size: cover;
@@ -31,6 +31,8 @@
   </main>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+console.log({ env: import.meta.env });
+</script>
 
 <style></style>

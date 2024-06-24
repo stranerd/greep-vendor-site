@@ -6,8 +6,7 @@
           <img
             src="/images/logos/logo-full-black.svg"
             alt="Greep"
-            class="w-[157px] h-auto object-contain"
-          />
+            class="w-[157px] h-auto object-contain" />
         </nuxt-link>
       </div>
       <div class="flex-1">
@@ -21,8 +20,7 @@
               v-if="navItem.to"
               :to="navItem.to"
               active-class="bg-[#001726] !text-[#fff]"
-              class="flex items-center gap-4 mb-2 rounded-[4px] px-6 py-2 text-[16px] leading-[28px] text-muted-foreground transition-all hover:text-primary"
-            >
+              class="flex items-center gap-4 mb-2 rounded-[4px] px-6 py-2 text-[16px] leading-[28px] text-muted-foreground transition-all hover:text-primary">
               <component :is="navItem.icon" class="h-6 w-6" />
 
               {{ navItem.name }}
@@ -30,8 +28,7 @@
             <div
               v-else
               class="flex items-center !text-[#FF5656] cursor-pointer gap-4 rounded-[4px] px-6 py-2 text-[16px] leading-[28px] text-muted-foreground transition-all !hover:text-[#ffffff]"
-              @click="router.push('/login')"
-            >
+              @click="router.push('/login')">
               <component :is="navItem.icon" class="h-6 w-6" />
 
               {{ navItem.name }}
@@ -61,38 +58,43 @@ import {
   Settings,
   MessageCircleQuestion,
   LogOut,
-} from "lucide-vue-next";
+} from 'lucide-vue-next';
 
 const router = useRouter();
 
 const navLinks = ref([
   {
-    to: "/vendor",
-    name: "Sales",
+    to: '/vendor',
+    name: 'Sales',
     icon: LineChart,
   },
   {
-    to: "/vendor/orders",
-    name: "Orders",
+    to: '/vendor/orders',
+    name: 'Orders',
     icon: ClipboardList,
   },
   {
-    to: "/vendor/item-manager",
-    name: "Item Manager",
+    to: '/vendor/item-manager',
+    name: 'Item Manager',
     icon: BookmarkMinus,
   },
   {
-    to: "/vendor/settings",
-    name: "Settings",
+    to: '/vendor/menu',
+    name: 'Menu',
+    icon: BookmarkMinus,
+  },
+  {
+    to: '/vendor/settings',
+    name: 'Settings',
     icon: Settings,
   },
   {
-    to: "/vendor/support",
-    name: "Support",
+    to: '/vendor/support',
+    name: 'Support',
     icon: MessageCircleQuestion,
   },
   {
-    name: "Logout",
+    name: 'Logout',
     icon: LogOut,
     action: true,
   },

@@ -13,6 +13,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
   const singleOrder = ref<IOrders>();
   const products = ref<Array<IProduct>>([]);
   const profuctsMeta = ref({});
+  const singleProduct = ref<any>({});
   const dashBoardData = ref<{ products: Array<IProduct>; stats: any }>({
     products: [],
     stats: [],
@@ -21,6 +22,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     allOrders: API_STATES.IDLE,
     createProduct: API_STATES.IDLE,
     getProducts: API_STATES.IDLE,
+    getSingleProduct: API_STATES.IDLE,
     updateProduct: API_STATES.IDLE,
     recentOrders: API_STATES.IDLE,
     dashBoardData: API_STATES.IDLE,
@@ -88,6 +90,32 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     if (data.value) {
       marketplaceLoadingStates.value.createProduct = API_STATES.SUCCESS;
       console.log(data.value);
+    }
+  };
+
+  const getSingleProduct = async (id: string) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+    const authStore = useAuthStore();
+
+    marketplaceLoadingStates.value.getSingleProduct = API_STATES.LOADING;
+
+    const { data, error } = await $api.marketplace.getSingleProduct(id);
+
+    if (error.value) {
+      console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      marketplaceLoadingStates.value.getSingleProduct = API_STATES.ERROR;
+      return { error: error.value };
+    }
+    if (data.value) {
+      marketplaceLoadingStates.value.getSingleProduct = API_STATES.SUCCESS;
+      console.log({ singleproduct: data.value });
+      singleProduct.value = data.value;
     }
   };
 
@@ -206,7 +234,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
 
     marketplaceLoadingStates.value.clearCart = API_STATES.LOADING;
     const { data, error } = await $api.marketplace.clearCart(
-      currentCart.value.id
+      currentCart.value.id,
     );
 
     if (error.value) {
@@ -341,7 +369,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
         (acc: any, post: any) => {
           return { ...acc, [post.id]: post };
         },
-        {}
+        {},
       );
 
       const productRes = await $api.marketplace.getProducts({
@@ -403,7 +431,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
 
     const { data, error } = await $api.marketplace.acceptOrRejectOrder(
       id,
-      payload
+      payload,
     );
 
     if (error.value) {
@@ -488,6 +516,8 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     getVendorOrders,
     createProduct,
     getAllProducts,
+    getSingleProduct,
+    singleProduct,
     products,
     updateProduct,
     getRecentOrders,
