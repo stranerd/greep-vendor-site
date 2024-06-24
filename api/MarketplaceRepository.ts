@@ -1,3 +1,5 @@
+import type { LoginPayload, SignUpPayload } from "~/types/modules/authModel";
+
 const resource = "/marketplace";
 
 export default () => {
@@ -23,10 +25,9 @@ export default () => {
       });
     },
 
-    getSingleProduct(query: any) {
-      return useCustomFetch(`${resource}/products`, {
-        query,
-        method: "POST",
+    getSingleProduct(id: string) {
+      return useCustomFetch(`${resource}/products/${id}`, {
+        method: "GET",
       });
     },
 
