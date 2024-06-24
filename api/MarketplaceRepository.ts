@@ -83,6 +83,13 @@ export default () => {
       });
     },
 
+    checkoutCartLink(payload: any) {
+      return useCustomFetch(`${resource}/orders/checkout/links`, {
+        method: "POST",
+        body: payload,
+      });
+    },
+
     // CARTS
     addItemToCart(payload: any) {
       return useCustomFetch(`${resource}/carts`, {
@@ -93,6 +100,17 @@ export default () => {
     clearCart(id: string) {
       return useCustomFetch(`${resource}/carts/${id}/clear`, {
         method: "POST",
+      });
+    },
+    createCartLink(payload: any) {
+      return useCustomFetch(`${resource}/cartLinks`, {
+        body: payload,
+        method: "POST",
+      });
+    },
+    getCartLink(id: string) {
+      return useCustomFetch(`${resource}/cartLinks/${id}`, {
+        method: "GET",
       });
     },
   };

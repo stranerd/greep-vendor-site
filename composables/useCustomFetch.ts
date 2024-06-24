@@ -7,9 +7,10 @@ export const useCustomFetch = (request: any, opts?: any) => {
     // onRequest({ request, options }) {
     //     // Set the request headers
     // },
-    // onRequestError({ request, options, error }) {
-    //     // Handle the request errors
-    // },
+    onRequestError({ request, options, error }) {
+      // Handle the request errors
+      console.log({ error });
+    },
     // onResponse({ request, response, options }) {
     //     // Process the response data
     //     return response._data

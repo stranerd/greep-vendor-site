@@ -1,10 +1,10 @@
 <template>
-  <SupportSection />
+  <PaymentLayout />
 </template>
 
 <script setup lang="ts">
 definePageMeta({
-  layout: "dashboard",
+  layout: "public",
   middleware: ["authenticated"],
 });
 </script>

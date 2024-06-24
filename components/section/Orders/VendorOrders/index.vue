@@ -76,8 +76,6 @@ const { getVendorOrders } = useMarketPlaceStore();
 const isDialogOpen = ref(false);
 
 onMounted(() => {
-  console.log({ marketPlaceStore });
-
   getVendorOrders({});
 });
 </script>
