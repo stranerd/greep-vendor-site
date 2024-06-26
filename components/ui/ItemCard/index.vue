@@ -24,7 +24,7 @@
       </p>
 
       <div class="flex items-center justify-between">
-        <Button variant="ghost" size="dense">
+        <Button variant="ghost" size="dense" @click="editProduct">
           Edit <img src="/images/icons/edit.svg" alt="Edit" class="ml-2" />
         </Button>
         <client-only>
@@ -62,6 +62,12 @@ const { marketplaceLoadingStates } = storeToRefs(marketPlaceStore);
 const { updateProduct } = marketPlaceStore;
 
 const localData = ref();
+
+const emits = defineEmits(["triggerEdit"]);
+
+const editProduct = () => {
+  emits("triggerEdit", localData.value);
+};
 
 const handleChange = async (e: any) => {
   localData.value.inStock = e;

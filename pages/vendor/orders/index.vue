@@ -3,7 +3,7 @@
     <h1 class="text-lg font-semibold md:text-2xl">Orders</h1>
   </div>
 
-  <div class="w-[96%] grid-cols-3 gap-4 grid">
+  <!-- <div class="w-[96%] grid-cols-3 gap-4 grid">
     <div class="w-full flex flex-col gap-2">
       <Button class="w-full bg-[#7C13FF]">
         New ({{ orders.filter(({ type }) => type === "new").length }})</Button
@@ -39,9 +39,9 @@
         :type="order.type"
       />
     </div>
-  </div>
+  </div> -->
 
-  <!-- <VendorOrders /> -->
+  <VendorOrders />
 </template>
 
 <script setup lang="ts">

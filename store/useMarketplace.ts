@@ -516,6 +516,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
   const createCartLink = async (payload: any) => {
     const { $api } = useNuxtApp();
     const { toast } = useToast();
+    const router = useRouter();
     marketplaceLoadingStates.value.createCartLink = API_STATES.LOADING;
 
     const { data, error } = await $api.marketplace.createCartLink(payload);
@@ -533,10 +534,11 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
       console.log(data.value);
       toast({
         title: "Success",
-        description: "Order updated successfully",
+        description: "Public cart created successfully",
       });
       marketplaceLoadingStates.value.createCartLink = API_STATES.SUCCESS;
-      return data.value;
+      router.push(`/payment?id=${data.value.id}`);
+      // return data.value;
     }
   };
 
@@ -562,7 +564,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
         (acc: any, product: any) => {
           return { ...acc, [product.id]: product };
         },
-        {}
+        {},
       );
       const productRes = await $api.marketplace.getProducts({
         where: JSON.stringify([
@@ -579,7 +581,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
                   ...product,
                   quantity: producytIds?.[product.id]?.quantity || 1,
                 };
-              }
+              },
             ),
           ],
         ],

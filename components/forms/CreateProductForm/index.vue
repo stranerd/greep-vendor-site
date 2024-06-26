@@ -65,10 +65,10 @@
                     selectedValues.length === 0
                       ? "Select labels"
                       : selectedValues.length === 1
-                      ? selectedValues[0].label
-                      : selectedValues.length === 2
-                      ? selectedValues.map(({ label }) => label).join(", ")
-                      : `${selectedValues.length} labels selected`
+                        ? selectedValues[0].label
+                        : selectedValues.length === 2
+                          ? selectedValues.map(({ label }) => label).join(", ")
+                          : `${selectedValues.length} labels selected`
                   }}
                 </span>
                 <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -113,9 +113,80 @@
             </PopoverContent>
           </Popover>
         </div>
-        <div class="grid gap-2">
-          <FormField v-slot="{ componentField }" name="price">
-            <FormItem>
+        <div class="grid grid-cols-3 gap-2">
+          <FormField name="currency" class="col-span-1">
+            <FormItem class="flex flex-col col-span-1">
+              <FormLabel class="mb-[6px] block"
+                >Currency <span class="text-[#FF5656]">*</span></FormLabel
+              >
+              <Popover>
+                <PopoverTrigger as-child>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      :class="
+                        cn(
+                          'w-full justify-between',
+                          !values.currency && 'text-muted-foreground',
+                        )
+                      "
+                    >
+                      {{
+                        values.currency
+                          ? currencies.find(
+                              (currency) => currency.value === values.currency,
+                            )?.label
+                          : "Select currency..."
+                      }}
+                      <ChevronsUpDown
+                        class="ml-2 h-4 w-4 shrink-0 opacity-50"
+                      />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent class="w-full p-0">
+                  <Command>
+                    <CommandInput placeholder="Search language..." />
+                    <CommandEmpty>Nothing found.</CommandEmpty>
+                    <CommandList>
+                      <CommandGroup>
+                        <CommandItem
+                          v-for="currency in currencies"
+                          :key="currency.value"
+                          :value="currency.label"
+                          @select="
+                            () => {
+                              setFieldValue('currency', currency.value);
+                            }
+                          "
+                        >
+                          <Check
+                            :class="
+                              cn(
+                                'mr-2 h-4 w-4',
+                                currency.value === values.currency
+                                  ? 'opacity-100'
+                                  : 'opacity-0',
+                              )
+                            "
+                          />
+                          {{ currency.label }}
+                        </CommandItem>
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <FormField
+            v-slot="{ componentField }"
+            name="price"
+            class="col-span-2"
+          >
+            <FormItem class="col-span-2">
               <FormLabel
                 >Price <span class="text-[#FF5656]">Required</span></FormLabel
               >
@@ -126,9 +197,6 @@
                   v-bind="componentField"
                 />
               </FormControl>
-              <!-- <FormDescription>
-                    This is your public display name.
-                  </FormDescription> -->
               <FormMessage />
             </FormItem>
           </FormField>
@@ -143,9 +211,6 @@
               <FormControl>
                 <Input type="file" placeholder="File" @change="handleChange" />
               </FormControl>
-              <!-- <FormDescription>
-                    This is your public display name.
-                  </FormDescription> -->
               <FormMessage />
             </FormItem>
           </FormField>
@@ -168,60 +233,6 @@
             </FormItem>
           </FormField>
         </div>
-        <!-- <FormField v-slot="{ componentField }" name="email">
-          <FormItem>
-            <FormLabel>Email</FormLabel>
-
-            <Select v-bind="componentField">
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Set Category" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem
-                    v-for="(category, i) in categories"
-                    :key="i"
-                    :value="category.value"
-                  >
-                    {{ category.title }}
-                  </SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
-        </FormField> -->
-
-        <!-- <Dialog
-          :open="openDialog"
-          @update:open="
-            (open) => {
-              if (!open) openCombobox = true;
-              openDialog = open;
-            }
-          "
-        >
-          <DialogContent class="max-h-[90vh] flex flex-col">
-            <DialogHeader>
-              <DialogTitle>Edit Labels</DialogTitle>
-              <DialogDescription>
-                Change the label names or delete the labels. Create a label
-                through the combobox though.
-              </DialogDescription>
-            </DialogHeader>
-            <div class="overflow-scroll -mx-6 px-6 flex-1 py-2">
-              <form action="">ajkabsuka</form>
-            </div>
-            <DialogFooter class="bg-opacity-40">
-              <DialogClose asChild>
-                <Button variant="outline">Close</Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog> -->
-
         <div class="flex items-center justify-end mt-4">
           <Button variant="ghost" class="rounded-[12px] mr-3"> Cancel </Button>
 
@@ -248,6 +259,7 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import { API_STATES } from "~/services/constants";
 import { useMarketPlaceStore } from "@/store/useMarketplace";
+import { cn } from "@/lib/utils";
 
 const marketPlaceStore = useMarketPlaceStore();
 const { marketplaceLoadingStates } = storeToRefs(marketPlaceStore);
@@ -269,15 +281,35 @@ const formSchema = toTypedSchema(
       required_error: "Image is required",
     }),
     inStock: z.boolean(),
-  })
+    currency: z.string({
+      required_error: "Required",
+    }),
+  }),
 );
 
-const { handleSubmit, resetForm, setFieldValue } = useForm({
+const props = defineProps({
+  mode: {
+    type: String,
+    default: "create",
+  },
+  selectedProduct: {
+    type: Object,
+    default: () => {},
+  },
+});
+
+const { handleSubmit, resetForm, setFieldValue, values } = useForm({
   validationSchema: formSchema,
   initialValues: {
     inStock: true,
+    currency: "NGN",
   },
 });
+
+const currencies = [
+  { label: "NGN", value: "NGN" },
+  { label: "TRY", value: "TRY" },
+];
 
 const file = ref(null);
 const categories = ref([
@@ -308,7 +340,7 @@ const toggleFramework = (framework: Framework) => {
     selectedValues.value = [...selectedValues.value, framework];
   } else {
     selectedValues.value = selectedValues.value.filter(
-      (l: any) => l.value !== framework.value
+      (l: any) => l.value !== framework.value,
     );
   }
 };
@@ -322,7 +354,7 @@ const onSubmit = handleSubmit(async (values: any) => {
     if (item === "price") {
       form.append(
         item,
-        JSON.stringify({ amount: values[item], currency: "NGN" })
+        JSON.stringify({ amount: values[item], currency: values.currency }),
       );
     } else if (item === "tagIds") {
       form.append(item, JSON.stringify([]));
@@ -332,6 +364,23 @@ const onSubmit = handleSubmit(async (values: any) => {
   });
   await createProduct(form);
   emits("completed");
+});
+
+onMounted(() => {
+  if (props.mode === "edit") {
+    const { inStock, title, description, price, banner } =
+      props.selectedProduct;
+    resetForm({
+      values: {
+        inStock,
+        title,
+        description,
+        price: price.amount,
+        currency: price.currency,
+      },
+    });
+    // setFieldValue("banner", banner);
+  }
 });
 
 // const accountFormSchema = toTypedSchema(

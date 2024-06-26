@@ -39,6 +39,8 @@
         <client-only>
           <CreateProductModal
             :isOpen="isDialogOpen"
+            :mode="mode"
+            :selectedProduct="selectedProduct"
             @close="isDialogOpen = false"
             @completedCreation="completeProductCreation"
           />
@@ -90,7 +92,12 @@
             v-if="products?.length > 0"
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
           >
-            <ItemCard v-for="(item, i) in products" :key="i" :cardData="item" />
+            <ItemCard
+              v-for="(item, i) in products"
+              :key="i"
+              :cardData="item"
+              @triggerEdit="triggerEdit"
+            />
           </div>
           <DisplayState
             v-else
@@ -128,11 +135,21 @@ const { getAllProducts } = marketplaceStore;
 
 const isDialogOpen = ref(false);
 
+const mode = ref("create");
+const selectedProduct = ref({});
+
 const completeProductCreation = () => {
   isDialogOpen.value = false;
-  console.log("called");
-
+  mode.value = "create";
   getAllProducts({});
+};
+
+const triggerEdit = (product: any) => {
+  mode.value = "edit";
+  console.log({ product }, "here");
+
+  selectedProduct.value = product;
+  isDialogOpen.value = true;
 };
 
 onMounted(() => {

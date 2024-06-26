@@ -2,7 +2,7 @@
   <div class="grid gap-4 mt-4">
     <form class="space-y-8" @submit="onSubmit">
       <div class="grid gap-4">
-        <div class="grid gap-2">
+        <!-- <div class="grid gap-2">
           <FormField v-slot="{ componentField }" name="to">
             <FormItem>
               <FormLabel
@@ -16,13 +16,10 @@
                   v-bind="componentField"
                 />
               </FormControl>
-              <!-- <FormDescription>
-                      This is your public display name.
-                    </FormDescription> -->
               <FormMessage />
             </FormItem>
           </FormField>
-        </div>
+        </div> -->
         <div class="grid gap-2">
           <Label
             >Select Items <span class="text-[#FF5656]">Required</span></Label
@@ -126,7 +123,7 @@
         >
           <CirclePlus class="h-[20px] w-[20px] mr-[6px]" /> Add another item
         </div>
-
+        <!-- 
         <div class="flex gap-[20px]">
           <FormField v-slot="{ field, value }" name="time">
             <FormItem class="flex flex-col grow">
@@ -216,12 +213,9 @@
             <FormControl>
               <Textarea placeholder="Type note" v-bind="componentField" />
             </FormControl>
-            <!-- <FormDescription>
-                    This is your public display name.
-                  </FormDescription> -->
             <FormMessage />
           </FormItem>
-        </FormField>
+        </FormField> -->
 
         <div class="flex items-center justify-end mt-4">
           <Button
@@ -237,7 +231,7 @@
             type="submit"
             class="rounded-[12px]"
             :loading="
-              marketplaceLoadingStates.createOrder === API_STATES.LOADING
+              marketplaceLoadingStates.createCartLink === API_STATES.LOADING
             "
             @click="onSubmit"
           >
@@ -316,21 +310,21 @@ const productsArray = ref([
 
 const formSchema = toTypedSchema(
   z.object({
-    to: z.string({
-      required_error: "Address cannot be empty",
-    }),
-    discount: z.number({
-      required_error: "Discount cannot be empty",
-    }),
-    dropoffNote: z.string().optional(),
-    deliveryTime: z.string({
-      required_error: "Delivey time is required",
-    }),
-    time: z
-      .string()
-      .datetime()
-      .optional()
-      .refine((date: any) => date !== undefined, "Please select a valid date."),
+    // to: z.string({
+    //   required_error: "Address cannot be empty",
+    // }),
+    // discount: z.number({
+    //   required_error: "Discount cannot be empty",
+    // }),
+    // dropoffNote: z.string().optional(),
+    // deliveryTime: z.string({
+    //   required_error: "Delivey time is required",
+    // }),
+    // time: z
+    //   .string()
+    //   .datetime()
+    //   .optional()
+    //   .refine((date: any) => date !== undefined, "Please select a valid date."),
   }),
 );
 
@@ -396,20 +390,19 @@ const onSubmit = handleSubmit(async (values: any) => {
         };
       }),
     ],
-    to: {
-      coords: [2, 4],
-      location: values.to,
-      description: "Location",
-    },
-    // cartId: currentCart.value.id,
-    payment: "wallet",
-    time: {
-      date: new Date(values.time).getTime(),
-      time: values.deliveryTime,
-    },
+    // to: {
+    //   coords: [2, 4],
+    //   location: values.to,
+    //   description: "Location",
+    // },
+    // // cartId: currentCart.value.id,
+    // payment: "wallet",
+    // time: {
+    //   date: new Date(values.time).getTime(),
+    //   time: values.deliveryTime,
+    // },
   };
-  console.log({ payload });
-  delete payload.deliveryTime;
+  // delete payload.deliveryTime;
 
   await createCartLink(payload);
   emits("completed");
