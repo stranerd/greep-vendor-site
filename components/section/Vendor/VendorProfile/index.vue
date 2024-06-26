@@ -316,7 +316,7 @@ const profileDetails = computed(() => {
       {
         icon: LocationTickIcon,
         title: "Location",
-        value: userProfile.value.vendor?.location.location || "",
+        value: userProfile.value.vendor?.location?.location || "",
       },
     ],
     "Personal Details": [
