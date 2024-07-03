@@ -1,5 +1,5 @@
 <template>
-  <div class="grid gap-4 mt-4">
+  <div class="mt-4 grid max-h-[80vh] gap-4 overflow-auto pr-2">
     <form class="space-y-8" @submit="onSubmit">
       <div class="grid gap-4">
         <div class="grid gap-2">
@@ -71,10 +71,10 @@
               v-for="framework in selectedValues"
               :key="framework.value"
               variant="outline"
-              class="mr-2 py-2 px-3 mb-2"
+              class="mb-2 mr-2 px-3 py-2"
             >
               {{ framework.label }}
-              <X class="h-[16px] w-[16px] ml-3" />
+              <X class="ml-3 h-[16px] w-[16px]" />
             </Badge>
           </div>
           <Popover v-model:open="openCombobox">
@@ -115,7 +115,7 @@
                     <ReserveIcon
                       class="mr-2 h-4 w-4 text-black"
                       :class="{
-                        'opacity-100 text-primary':
+                        'text-primary opacity-100':
                           selectedValues.includes(framework),
                         'opacity-100': !selectedValues.includes(framework),
                       }"
@@ -145,18 +145,8 @@
               <FormLabel>Add On settings</FormLabel>
               <FormDescription>
                 Create side items that come with your food
+                <AddOnsForm />
               </FormDescription>
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder="Price"
-                  v-bind="componentField"
-                />
-              </FormControl>
-              <!-- <FormDescription>
-                    This is your public display name.
-                  </FormDescription> -->
-              <FormMessage />
             </FormItem>
           </FormField>
         </div>
@@ -195,64 +185,11 @@
             </FormItem>
           </FormField>
         </div>
-        <!-- <FormField v-slot="{ componentField }" name="email">
-          <FormItem>
-            <FormLabel>Email</FormLabel>
 
-            <Select v-bind="componentField">
-              <FormControl>
-                <SelectTrigger>
-                  <SelectValue placeholder="Set Category" />
-                </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem
-                    v-for="(category, i) in categories"
-                    :key="i"
-                    :value="category.value"
-                  >
-                    {{ category.title }}
-                  </SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-            <FormMessage />
-          </FormItem>
-        </FormField> -->
-
-        <Dialog
-          :open="openDialog"
-          @update:open="
-            (open) => {
-              if (!open) openCombobox = true;
-              openDialog = open;
-            }
-          "
-        >
-          <DialogContent class="max-h-[90vh] flex flex-col">
-            <DialogHeader>
-              <DialogTitle>Edit Labels</DialogTitle>
-              <DialogDescription>
-                Change the label names or delete the labels. Create a label
-                through the combobox though.
-              </DialogDescription>
-            </DialogHeader>
-            <div class="overflow-scroll -mx-6 px-6 flex-1 py-2">
-              <form action="">ajkabsuka</form>
-            </div>
-            <DialogFooter class="bg-opacity-40">
-              <DialogClose asChild>
-                <Button variant="outline">Close</Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-
-        <div class="flex items-center justify-end mt-4">
+        <div class="mt-4 flex items-center justify-end">
           <Button
             variant="ghost"
-            class="rounded-[12px] mr-3"
+            class="mr-3 rounded-[12px]"
             type="button"
             @click="emits('completed')"
           >

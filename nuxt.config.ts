@@ -1,9 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', 'shadcn-nuxt', '@pinia/nuxt'],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "shadcn-nuxt",
+    "@pinia/nuxt",
+    "@pinia-plugin-persistedstate/nuxt",
+  ],
   // css: [],
-  buildModules: ['@nuxtjs/moment'],
+  buildModules: ["@nuxtjs/moment"],
   runtimeConfig: {
     public: {
       baseURL: process.env.BASE_URL,
@@ -14,16 +19,16 @@ export default defineNuxtConfig({
     /**
      * Prefix for all the imported component
      */
-    prefix: '',
+    prefix: "",
     /**
      * Directory that the component lives in.
      * @default "./components/ui"
      */
-    componentDir: './components/library',
+    componentDir: "./components/library",
   },
   components: [
     {
-      path: '~/components',
+      path: "~/components",
       pathPrefix: false,
     },
   ],
@@ -33,7 +38,7 @@ export default defineNuxtConfig({
   //   background: "green",
   // },
   routeRules: {
-    '/vendor': { ssr: false },
-    '/vendor/orders': { ssr: false },
+    "/vendor": { ssr: false },
+    "/vendor/orders": { ssr: false },
   },
 });

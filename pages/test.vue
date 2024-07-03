@@ -1,12 +1,11 @@
 <template>
-  <div>Hello bro</div>
+  <div><AddOnsForm /></div>
 </template>
 
 <script setup lang="ts">
 definePageMeta({
-  layout: "",
-
-  middleware: ["test-routes"],
+  layout: "dashboard",
+  // middleware: ["test-routes"],
 });
 </script>
 

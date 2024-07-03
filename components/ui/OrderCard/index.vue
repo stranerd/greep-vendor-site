@@ -1,62 +1,70 @@
 <template>
   <div
-    class="rounded-lg overflow-hidden flex flex-col justify-between w-72 h-60"
+    class="flex h-60 w-full flex-col justify-between overflow-hidden rounded-lg text-[#001726]"
     :style="{ backgroundColor: getOrderColor(type).secondary }"
   >
     <div
-      class="p-2 flex gap-2"
+      class="flex gap-2 p-2"
       :style="{ backgroundColor: getOrderColor(type).primary }"
     >
       <MenuIcon class="h6 w-4" />
       <h2 class="font-medium">ORDER ID #{{ order.id }}</h2>
     </div>
 
-    <div class="p-2 pb-0">
-      <div class="text-sm flex gap-1 items-center">
+    <div class="p-2 pb-0 font-medium">
+      <div class="flex items-center gap-1 text-sm">
         <LocationIcon
           class="h-6 w-6"
           :style="{ color: getOrderColor(type).primary }"
         />
-        <span class="">Location : </span>
+        <span class="text-[#616161]">Location : </span>
         <h2 class="">{{ order.location }}</h2>
       </div>
-      <div class="text-sm flex gap-1 items-center">
+      <div class="flex items-center gap-1 text-sm">
         <Money2Icon
           class="h-6 w-6"
           :style="{ color: getOrderColor(type).primary }"
         />
-        <span class="">Amount : </span>
+        <span class="text-[#616161]">Amount : </span>
         <h2 class="">${{ order.amount }}</h2>
       </div>
-      <div class="text-sm flex gap-1 items-center">
+      <div class="flex items-center gap-1 text-sm">
         <LayerIcon
           class="h-6 w-6"
           :style="{ color: getOrderColor(type).primary }"
         />
-        <span class="">No of Plates: </span>
+        <span class="text-[#616161]">No of Plates: </span>
         <h2 class="">{{ order.no_of_order }}</h2>
       </div>
 
       <!-- Customer -->
 
-      <div class="mt-8 gap-2 flex items-center">
+      <div class="mt-8 flex items-center gap-2">
         <img
           :src="order.customer.picture"
           alt=""
-          class="rounded-[50%] h-10 w-10"
+          class="h-10 w-10 rounded-[50%]"
         />
-        <div class="">
+        <div class="font-normal">
           <h2 class="text-sm">{{ order.customer.name }}</h2>
-          <h2 class="text-xs text-gray-400">
-            {{ new Date(order.customer.time as Date).toDateString() }}
+          <h2 class="flex text-xs text-gray-400">
+            {{ $moment(order.customer.time as Date).format("MMM Do") }} •
+            {{ $moment(order.customer.time as Date).format("h:mm:ss A") }}
           </h2>
         </div>
       </div>
     </div>
     <h2
-      class="underline self-center text-center pb-1 w-full text-xs text-blue-500"
+      class="w-full self-center pb-1 text-center text-xs text-blue-500 underline"
     >
-      <span class="">view full details</span>
+      <span class="cursor-pointer" @click="openDetailsModal = true"
+        >view full details</span
+      >
+
+      <OrderDetailsViewModal
+        :isOpen="openDetailsModal"
+        @close="openDetailsModal = false"
+      />
     </h2>
   </div>
 </template>
@@ -83,10 +91,13 @@ interface OrderData {
     time: Date | String;
   };
 }
+
 const props = defineProps({
   type: { type: String as PropType<OrderTypes>, required: true },
   order: { type: Object as PropType<OrderData>, required: true },
 });
+
+const openDetailsModal = ref(false);
 
 const getOrderColor = (type: OrderTypes) => {
   if (type === "new") {
