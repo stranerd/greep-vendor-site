@@ -10,7 +10,7 @@
       </DialogHeader>
 
       <DialogDescription>
-        <OrderDetails @completed="isOpenLocal = false" />
+        <OrderFoodDetails @completed="isOpenLocal = false" />
       </DialogDescription>
     </DialogContent>
   </Dialog>

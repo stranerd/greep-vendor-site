@@ -1,149 +1,142 @@
 <template>
-  <!-- <div v-if="marketplaceLoadingStates.singleOrder === API_STATES.LOADING">
-    <Skeleton class="mb-6 h-[340px] w-full" />
-    <Skeleton class="h-[540px] w-full" />
-  </div> -->
-
-  <!-- The main scroll items -->
-  <div class="max-h-[80vh] w-full overflow-auto pr-2">
-    <!-- Customer descriptions -->
-    <div class="grid grid-cols-2 items-center gap-4">
+  <Card class="mb-6 w-full">
+    <CardHeader
+      class="flex flex-row items-center justify-between space-y-0 pb-[10px]"
+    >
+      <CardTitle class="flex text-[20px] font-medium text-[#111827]">
+        Order #670944
+      </CardTitle>
+      <div class="flex items-center gap-2">
+        <Badge
+          variant="outline"
+          class="rounded-[8px] py-1 text-[12px] font-normal"
+        >
+          <div class="mr-2 h-[9px] w-[9px] rounded-[3px] bg-[#B91010]"></div>
+          Await Cash
+        </Badge>
+        <Badge
+          variant="outline"
+          class="rounded-[8px] py-1 text-[12px] font-normal"
+        >
+          <div class="mr-2 h-[9px] w-[9px] rounded-[3px] bg-[#B91010]"></div>
+          Pending
+        </Badge>
+        <Button variant="ghost" size="sm">
+          <Ellipsis class="h-[20px] w-[20px]" />
+        </Button>
+      </div>
+    </CardHeader>
+    <CardContent>
+      <div class="text-[14px] text-[#6B7280]">Dec 24, 2022, 2:56:31 PM</div>
+      <div class="mt-6 flex items-center gap-4">
+        <Avatar>
+          <AvatarImage src="/images/avatar/article-writer.png" alt="Product" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+        <div>
+          <h6 class="text-[14px] font-normal leading-[28px]">Robert Sanchez</h6>
+          <p class="text-[14px] leading-[20px] text-[#6B7280]">@robert</p>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+  <Card class="w-full">
+    <CardHeader
+      class="flex flex-row items-center justify-between space-y-0 pb-[10px]"
+    >
+      <CardTitle class="flex text-[20px] font-medium text-[#111827]">
+        Summary
+      </CardTitle>
+      <div class="flex items-center gap-2">
+        <Button variant="outline" size="sm">Edit order</Button>
+        <Button variant="outline" size="sm">Export PDF</Button>
+        <Button variant="ghost" size="sm">
+          <Ellipsis class="h-[20px] w-[20px]" />
+        </Button>
+      </div>
+    </CardHeader>
+    <CardContent>
       <div
-        class="text-sm"
-        v-for="(details, index) in customerDetails"
-        :class="{ 'text-end': index % 2 === 1 }"
+        v-for="(_, i) in 3"
+        :key="i"
+        class="mb-2 flex items-center justify-between py-2"
       >
-        <h2 class="">{{ details.title }}</h2>
-        <h2 class="text-black">{{ details.value }}</h2>
+        <div class="flex gap-4">
+          <Avatar shape="square" class="h-[48px]">
+            <AvatarImage
+              src="/images/avatar/article-writer.png"
+              alt="Product"
+            />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <div>
+            <h6 class="text-[14px] leading-[24px]">Maggi</h6>
+            <p class="text-[14px] text-[#6B7280]">Tubers - Large</p>
+          </div>
+        </div>
+        <div class="flex gap-6">
+          <p class="min-w-[104px] text-right text-[14px] text-[#6B7280]">
+            1 kg
+          </p>
+          <p class="min-w-[40px] text-right text-[14px] text-[#6B7280]">1x</p>
+          <p class="min-w-[104px] text-right text-[14px] text-[#111827]">
+            100.00 TRY
+          </p>
+        </div>
       </div>
-    </div>
-
-    <!-- Items table -->
-    <div
-      class="mt-4 grid grid-cols-[3fr,1.5fr,1fr,1fr] border-y border-[#E0E2E4] p-2 text-black"
-    >
-      <h2 class="">Items</h2>
-      <h2 class="">Quantity</h2>
-      <h2 class="">Price</h2>
-      <h2 class="text-end">Total</h2>
-    </div>
-
-    <!-- Items List -->
-    <div
-      class="grid grid-cols-[3fr,1.5fr,1fr,1fr] p-2 text-black"
-      v-for="item in itemList"
-    >
-      <h2 class="">
-        <h2 class="">{{ item.title }} ></h2>
-        <h2 class="max-w-[80%] text-xs text-[#999999]">{{ item.addOns }}</h2>
-      </h2>
-      <h2 class="">{{ item.quantity }}x</h2>
-      <h2 class="">{{ currencyConverter("TRY", item.price) }}</h2>
-      <h2 class="text-end">
-        {{ currencyConverter("TRY", item.price * item.quantity) }}
-      </h2>
-    </div>
-
-    <div class="my-4 flex flex-col items-end gap-2 border-t py-4 text-black">
-      <div class="flex w-60 items-center justify-between gap-x-16">
-        <h2 class="text-[#999999]">Subtotal</h2>
-        <h2 class="">{{ currencyConverter("TRY", subTotalPrice) }}</h2>
+      <div class="mb-4 flex items-center justify-between py-2">
+        <p class="text-[14px] text-[#111827]">Subtotal</p>
+        <p class="min-w-[104px] text-right text-[14px] text-[#111827]">
+          1000.00 TRY
+        </p>
       </div>
-      <div class="flex w-60 items-center justify-between gap-x-16">
-        <h2 class="text-[#999999]">Delivery Fee</h2>
-        <h2 class="">{{ currencyConverter("TRY", deliveryFee) }}</h2>
+      <div
+        v-for="(item, i) in orderPaymentAddons"
+        :key="i"
+        class="mb-2 flex items-center justify-between border-b-[1px] border-b-[#E5E7EB] py-2"
+      >
+        <p
+          class="text-[14px]"
+          :class="i === 0 ? 'text-[#111827]' : 'text-[#9CA3AF]'"
+        >
+          {{ item.title }}
+        </p>
+        <p class="min-w-[104px] text-right text-[14px] text-[#111827]">
+          {{ item.value }}
+        </p>
       </div>
-      <div class="flex w-60 items-center justify-between gap-x-16">
-        <h2 class="text-[#999999]">VAT</h2>
-        <h2 class="">{{ currencyConverter("TRY", VAT) }}</h2>
+      <div class="mt-4 flex items-center justify-between py-2">
+        <p class="text-[14px] font-medium text-[#111827]">Total</p>
+        <p class="text-right text-[20px] font-medium text-[#111827]">
+          3,424.50 TRY
+        </p>
       </div>
-      <div class="flex w-60 items-center justify-between gap-x-16">
-        <h2 class="font-medium text-[#000]">Total</h2>
-        <h2 class="">{{ currencyConverter("TRY", totalPrice) }}</h2>
-      </div>
-    </div>
-  </div>
-
-  <!-- <DisplayState
-    v-else-if="marketplaceLoadingStates.singleOrder === API_STATES.ERROR"
-    class="my-[80px]"
-    message="Something went wrong"
-    buttonText="Reload"
-    @action="getSingleOrder(route?.params?.id || '')"
-  /> -->
+      <Button class="mt-[36px] w-full">Ship Order</Button>
+    </CardContent>
+  </Card>
 </template>
 
 <script lang="ts" setup>
 import { Ellipsis } from "lucide-vue-next";
-import { API_STATES } from "~/services/constants";
-import { useMarketPlaceStore } from "@/store/useMarketplace";
-import * as z from "zod";
-import { toTypedSchema } from "@vee-validate/zod";
-import { useForm } from "vee-validate";
 
-const marketPlaceStore = useMarketPlaceStore();
-const { marketplaceLoadingStates, singleOrder } = storeToRefs(marketPlaceStore);
-const {
-  getSingleOrder,
-  cancelOrder,
-  rejectOrAcceptOrder,
-  dispatchOrder,
-  markOrderAsShipped,
-} = marketPlaceStore;
-import { currencyConverter, orderStatus, paymentStatus } from "@/lib/utils";
-
-const route = useRoute();
-const { $moment } = useNuxtApp();
-const openDialog = ref(false);
-
-const deliveryFee = ref(100);
-const VAT = ref(10);
-
-const customerDetails = ref([
-  { title: "Customer Name", value: "John Oseni" },
-  { title: "Order ID", value: "673784" },
-  { title: "Delivery Type", value: "Instant Delivery" },
-  { title: "Payment Type", value: "Wallet Paper" },
-  { title: "Address", value: "11 Orkun Tibsoba, Lefkosa " },
-  { title: "Extra Details", value: "City building, apartment 15" },
-]);
-
-const itemList = ref([
+const orderPaymentAddons = ref([
   {
-    title: "Jollof Rice",
-    addOns: "Lamb, Mashed Potatoes, Veggies & Sprite",
-    quantity: 3,
-    price: 223,
+    title: "Shipping",
+    value: "100.00 TRY",
   },
   {
-    title: "Fried Rice",
-    addOns: "Beef, Fried Plantains, Mixed Salad & Juice",
-    quantity: 1,
-    price: 288,
+    title: "Payment",
+    value: "Wallet",
   },
   {
-    title: "Spaghetti Bolognese",
-    addOns: "Pork, Rice Balls, Coleslaw & Fanta",
-    quantity: 5,
-    price: 251,
+    title: "VAT(%)",
+    value: "₺ 0.67",
   },
   {
-    title: "Chicken Curry",
-    addOns: "Chicken, Plantain, Salad & Coke",
-    quantity: 2,
-    price: 457,
+    title: "Shipping Date",
+    value: `24 Dec, 2024  - 10 AM`,
   },
 ]);
-
-const subTotalPrice = computed(() =>
-  itemList.value.reduce((accumulator: any, dish: any) => {
-    return accumulator + dish.price;
-  }, 0),
-);
-
-const totalPrice = computed(
-  () => subTotalPrice.value + VAT.value + deliveryFee.value,
-);
 </script>
 
 <style></style>

@@ -10,7 +10,7 @@
       </DialogHeader>
 
       <DialogDescription>
-        <OrderDetails @completed="isOpenLocal = false" />
+        <OrderFoodDetails @completed="isOpenLocal = false" />
         <div class="flex items-end justify-end">
           <Button
             class="bg-transparent font-medium text-[#FF5656] hover:bg-transparent"
