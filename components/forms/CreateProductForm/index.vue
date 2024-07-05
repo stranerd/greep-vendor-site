@@ -82,19 +82,19 @@
                 />
                 <CommandGroup class="max-h-[145px] overflow-auto">
                   <CommandItem
-                    v-for="framework in frameworks"
-                    :key="framework.value"
-                    :value="framework.value"
-                    @select="toggleFramework(framework)"
+                    v-for="tag in recommendedTags"
+                    :key="tag.id"
+                    :value="tag.id"
+                    @select="toggleTags(tag)"
                   >
                     <Check
                       class="mr-2 h-4 w-4"
                       :class="{
-                        'opacity-100': selectedValues.includes(framework),
-                        'opacity-0': !selectedValues.includes(framework),
+                        'opacity-100': selectedValues.includes(tag),
+                        'opacity-0': !selectedValues.includes(tag),
                       }"
                     />
-                    <div class="flex-1">{{ framework.label }}</div>
+                    <div class="flex-1">{{ tag.title }}</div>
                   </CommandItem>
                 </CommandGroup>
                 <CommandSeparator alwaysRender />
@@ -262,9 +262,10 @@ import { useMarketPlaceStore } from "@/store/useMarketplace";
 import { cn } from "@/lib/utils";
 
 const marketPlaceStore = useMarketPlaceStore();
-const { marketplaceLoadingStates } = storeToRefs(marketPlaceStore);
+const { marketplaceLoadingStates, recommendedTags } =
+  storeToRefs(marketPlaceStore);
 
-const { createProduct } = marketPlaceStore;
+const { createProduct, getRecommendedProductsTags } = marketPlaceStore;
 
 const formSchema = toTypedSchema(
   z.object({
@@ -319,28 +320,17 @@ const categories = ref([
   },
 ]);
 
-type Framework = {
-  value: string;
-  label: string;
-};
-
-const FRAMEWORKS: Framework[] = [
-  { value: "grains", label: "Grains" },
-  { value: "tubers", label: "Tubers" },
-];
-
-const frameworks = ref<Framework[]>(FRAMEWORKS);
 const openCombobox = ref<boolean>(false);
 const openDialog = ref<boolean>(false);
 const inputValue = ref<string>("");
-const selectedValues = ref<Framework[]>([]);
+const selectedValues = ref<any[]>([]);
 
-const toggleFramework = (framework: Framework) => {
-  if (!selectedValues.value.includes(framework)) {
-    selectedValues.value = [...selectedValues.value, framework];
+const toggleTags = (tag: any) => {
+  if (!selectedValues.value.includes(tag)) {
+    selectedValues.value = [...selectedValues.value, tag];
   } else {
     selectedValues.value = selectedValues.value.filter(
-      (l: any) => l.value !== framework.value,
+      (l: any) => l.id !== tag.id,
     );
   }
 };
@@ -379,33 +369,9 @@ onMounted(() => {
         currency: price.currency,
       },
     });
-    // setFieldValue("banner", banner);
   }
+  getRecommendedProductsTags();
 });
-
-// const accountFormSchema = toTypedSchema(
-//   z.object({
-//     name: z
-//       .string({
-//         required_error: "Required.",
-//       })
-//       .min(2, {
-//         message: "Name must be at least 2 characters.",
-//       })
-//       .max(30, {
-//         message: "Name must not be longer than 30 characters.",
-//       }),
-//     dob: z
-//       .string()
-//       .datetime()
-//       .optional()
-//       .refine(
-//         (date: Date) => date !== undefined,
-//         "Please select a valid date."
-//       ),
-//     language: z.string().min(1, "Please select a language."),
-//   })
-// );
 </script>
 
 <style></style>

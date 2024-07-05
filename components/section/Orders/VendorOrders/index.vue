@@ -9,14 +9,20 @@
         <Input
           type="search"
           placeholder="Search "
+          v-model="searchTerm"
           class="w-full appearance-none bg-background px-[48px] rounded-[99px] h-[48px] shadow-none lg:w-full"
+          @input="searchOrders"
         />
         <Separator orientation="vertical" />
-        <img
-          class="absolute right-4 top-[50%] translate-y-[-50%] h-[24px] w-[24px] text-muted-foreground"
+        <LoaderCircle
+          v-if="marketplaceLoadingStates.allOrders === API_STATES.LOADING"
+          class="absolute right-4 top-[12px] h-[24px] w-[24px] animate-spin"
+        />
+        <!-- <img
+          class=" text-muted-foreground"
           src="/images/icons/arrangevertical.svg"
           alt="Arrange"
-        />
+        /> -->
       </div>
     </form>
     <div class="flex">
@@ -59,24 +65,58 @@
       button-text="Get Orders"
       @action="getVendorOrders()"
     />
-    <VendorHistoryTable v-else source="page" :items="orders" />
+    <div v-else class="flex flex-col h-full justify-between">
+      <div class="h-full max-h-[67vh] min-h-[66vh] overflow-y-scroll">
+        <VendorHistoryTable source="page" :items="orders" />
+      </div>
+      <Pagination
+        :meta="orderMeta"
+        :loading="marketplaceLoadingStates.allOrders === API_STATES.LOADING"
+        @paginate="paginateData"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Search, CirclePlus } from "lucide-vue-next";
+import { debounce } from "~/lib/utils";
+import { Search, CirclePlus, LoaderCircle } from "lucide-vue-next";
 import { API_STATES } from "~/services/constants";
 
 import { useMarketPlaceStore } from "~/store/useMarketplace";
 const marketPlaceStore = useMarketPlaceStore();
 
-const { orders, marketplaceLoadingStates } = storeToRefs(marketPlaceStore);
+const { orders, marketplaceLoadingStates, orderMeta } =
+  storeToRefs(marketPlaceStore);
 const { getVendorOrders } = useMarketPlaceStore();
 
 const isDialogOpen = ref(false);
 
+const searchTerm = ref("");
+
+const searchOrders = debounce(async () => {
+  await getVendorOrders({
+    search: { value: searchTerm.value, fields: ["dropoffNote", "email"] },
+  });
+}, 1500);
+
+const paginateData = (params: { page: number }) => {
+  let payload = { ...params } as Record<string, any>;
+  if (searchTerm.value) {
+    payload = {
+      ...payload,
+      search: { value: searchTerm.value, fields: ["dropoffNote", "email"] },
+    };
+  }
+  getVendorOrders({
+    ...payload,
+  });
+};
+
 onMounted(() => {
-  getVendorOrders({});
+  getVendorOrders({
+    page: 1,
+  });
 });
 </script>
 
