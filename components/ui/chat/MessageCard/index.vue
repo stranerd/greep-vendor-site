@@ -23,6 +23,7 @@ const props = defineProps({
 });
 
 const authStore = useAuthStore();
+
 const { user } = storeToRefs(authStore);
 </script>
 

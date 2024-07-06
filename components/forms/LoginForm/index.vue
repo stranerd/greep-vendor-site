@@ -4,7 +4,7 @@
       <img
         src="/images/logos/greep.svg"
         alt="Greep"
-        class="mx-auto w-[45.45px] h-[45.45px] object-contain mb-2"
+        class="mx-auto mb-2 h-[45.45px] w-[45.45px] object-contain"
       />
       <div class="grid gap-2 text-center">
         <h1 class="text-[22px] font-semibold">Welcome!</h1>
@@ -12,7 +12,7 @@
       </div>
       <Button
         variant="outline"
-        class="w-full py-6 rounded-[12px] mt-4"
+        class="mt-4 w-full rounded-[12px] py-6"
         disabled
       >
         Continue with Google
@@ -35,7 +35,7 @@
                   <Input
                     type="email"
                     placeholder="m@example.com"
-                    class="py-[24px] rounded-[12px]"
+                    class="rounded-[12px] py-[24px]"
                     v-bind="componentField"
                   />
                 </FormControl>
@@ -55,7 +55,7 @@
                     <Input
                       :type="showPassword ? 'text' : 'password'"
                       placeholder="m@example.com"
-                      class="py-[24px] rounded-[12px]"
+                      class="rounded-[12px] py-[24px]"
                       v-bind="componentField"
                     />
                     <div
@@ -76,7 +76,7 @@
           </div>
           <Button
             type="submit"
-            class="w-full py-6 rounded-[12px] mt-4"
+            class="mt-4 w-full rounded-[12px] py-6"
             size="lg"
             :loading="apiLoadingStates.login === API_STATES.LOADING"
           >
@@ -86,7 +86,7 @@
       </form>
       <nuxt-link
         to="/forgot-password"
-        class="text-[#0250C6] text-center text-[16px] leading-[24px]"
+        class="text-center text-[16px] leading-[24px] text-[#0250C6]"
       >
         Forgot password?
       </nuxt-link>
@@ -124,7 +124,7 @@ const formSchema = toTypedSchema(
         required_error: "Email cannot be empty",
       })
       .email(),
-  })
+  }),
 );
 
 const { handleSubmit, resetForm } = useForm({
@@ -154,10 +154,10 @@ const accountFormSchema = toTypedSchema(
       .optional()
       .refine(
         (date: Date) => date !== undefined,
-        "Please select a valid date."
+        "Please select a valid date.",
       ),
     language: z.string().min(1, "Please select a language."),
-  })
+  }),
 );
 </script>
 

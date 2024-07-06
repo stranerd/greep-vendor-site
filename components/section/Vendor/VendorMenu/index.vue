@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-[80vh]">
-    <div class="flex mt-[25px] justify-between items-center">
+    <div class="mt-[25px] flex items-center justify-between">
       <form class="w-full max-w-[570px]">
         <div class="relative flex w-full">
           <Search
@@ -10,11 +10,11 @@
           <Input
             type="search"
             placeholder="Search "
-            class="w-full appearance-none bg-background px-[48px] rounded-[99px] h-[48px] shadow-none lg:w-full"
+            class="h-[48px] w-full appearance-none rounded-[99px] bg-background px-[48px] shadow-none lg:w-full"
           />
           <Separator orientation="vertical" />
           <img
-            class="absolute right-4 top-[50%] translate-y-[-50%] h-[24px] w-[24px] text-muted-foreground"
+            class="absolute right-4 top-[50%] h-[24px] w-[24px] translate-y-[-50%] text-muted-foreground"
             src="/images/icons/arrangevertical.svg"
             alt="Arrange"
           />
@@ -22,9 +22,9 @@
       </form>
       <div class="flex">
         <p
-          class="flex w-[150px] items-center gap-[10px] text-[14px] leading-[21px] mr-[31px]"
+          class="mr-[31px] flex w-[150px] items-center gap-[10px] text-[14px] leading-[21px]"
         >
-          <span class="bg-[#000] w-fit rounded-full h-[7px]"> </span>
+          <span class="h-[7px] w-fit rounded-full bg-[#000]"> </span>
           Sort by: Latest&nbsp;Item
         </p>
 
@@ -33,7 +33,7 @@
           size="lg"
           rounded="md"
           @click="isDialogOpen = true"
-          ><CirclePlus class="h-5 w-5 mr-[10px]" /> Create Menu</Button
+          ><CirclePlus class="mr-[10px] h-5 w-5" /> Create Menu</Button
         >
 
         <client-only>
@@ -42,7 +42,7 @@
             @close="isDialogOpen = false"
             @completedCreation="completeProductCreation"
           />
-        </client-only>öl.
+        </client-only>
       </div>
     </div>
     <div class="mt-6">
@@ -58,21 +58,21 @@
           marketplaceLoadingStates.getProducts === API_STATES.LOADING &&
           products?.length === 0
         "
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+        class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4"
       >
         <div
           v-for="(_, i) in 12"
           :key="i"
-          class="rounded-[8px] overflow-hidden min-h-[280px] border-[#EBEBEB] border-[0px]"
+          class="min-h-[280px] overflow-hidden rounded-[8px] border-[0px] border-[#EBEBEB]"
         >
           <Skeleton class="h-[140px]" />
           <div class="px-4">
-            <Skeleton class="h-[20px] mt-4 w-[50%]" />
-            <Skeleton class="h-[15px] mt-3 w-[60%]" />
-            <Skeleton class="h-[15px] mt-3 w-[80%]" />
+            <Skeleton class="mt-4 h-[20px] w-[50%]" />
+            <Skeleton class="mt-3 h-[15px] w-[60%]" />
+            <Skeleton class="mt-3 h-[15px] w-[80%]" />
             <div class="flex justify-between">
-              <Skeleton class="h-[25px] mt-4 w-[25%]" />
-              <Skeleton class="h-[25px] mt-4 w-[25%]" />
+              <Skeleton class="mt-4 h-[25px] w-[25%]" />
+              <Skeleton class="mt-4 h-[25px] w-[25%]" />
             </div>
           </div>
         </div>
@@ -88,7 +88,7 @@
         <div v-else>
           <div
             v-if="products?.length > 0"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+            class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4"
           >
             <RouterLink
               v-for="(item, i) in products"

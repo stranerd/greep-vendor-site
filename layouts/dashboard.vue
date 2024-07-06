@@ -6,6 +6,10 @@ const { hasCompletedVendorProfile, hasCompletedProfile, hasVerifiedEmail } =
   storeToRefs(authStore);
 
 const route = useRoute();
+
+onMounted(async () => {
+  await authStore.getUser();
+});
 </script>
 
 <template>

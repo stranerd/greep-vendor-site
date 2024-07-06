@@ -17,6 +17,13 @@ export interface IUser {
     middle: string;
     last: string;
   };
+  bio: {
+    name: {
+      first: string;
+      middle: string;
+      last: string;
+    };
+  };
   description: string;
   photo: any;
   isVerified: boolean;

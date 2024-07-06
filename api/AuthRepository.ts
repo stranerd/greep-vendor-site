@@ -16,7 +16,7 @@ export default () => {
         body: payload,
       });
     },
-    //
+
     sendVerificationMail() {
       const refreshToken = useCookie("refreshToken");
       let authToken = "" as any;
@@ -79,12 +79,14 @@ export default () => {
         body: payload,
       });
     },
+
     sendResetPasswordMail(payload: any) {
       return useCustomFetch(`${resource}/passwords/reset/mail`, {
         method: "POST",
         body: payload,
       });
     },
+
     updateUserProfile(payload: any) {
       return useCustomFetch(`${resource}/user`, {
         method: "PUT",
