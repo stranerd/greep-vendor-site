@@ -14,6 +14,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
   const products = ref<Array<IProduct>>([]);
   const profuctsMeta = ref({});
   const singleProduct = ref<any>({});
+  const recommendedTags = ref<any[]>([]);
   const dashBoardData = ref<{ products: Array<IProduct>; stats: any }>({
     products: [],
     stats: [],
@@ -38,11 +39,12 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     createCartLink: API_STATES.IDLE,
     getCartLinkDetails: API_STATES.IDLE,
     checkoutCartLink: API_STATES.IDLE,
+    getRecommendedProductsTags: API_STATES.IDLE,
   });
 
   const currentCart = ref({});
 
-  const getVendorOrders = async (payload?: any) => {
+  const getVendorOrders = async (params?: any) => {
     const { $api } = useNuxtApp();
     const { toast } = useToast();
 
@@ -53,6 +55,9 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
       where: JSON.stringify([
         { field: "data.vendorId", value: authStore.user.id },
       ]),
+      sort: JSON.stringify([{ field: "createdAt", desc: true }]),
+      ...params,
+      limit: 15,
       lazy: false,
     });
 
@@ -68,7 +73,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     }
     if (data.value) {
       orders.value = data.value.results;
-      orderMeta.value = data.value.pages;
+      orderMeta.value = { ...data.value.pages, ...data.value.docs };
       marketplaceLoadingStates.value.allOrders = API_STATES.SUCCESS;
     }
   };
@@ -150,6 +155,32 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
       console.log(data.value);
       products.value = data.value.results;
       profuctsMeta.value = data.value.pages;
+    }
+  };
+  const getRecommendedProductsTags = async () => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+
+    marketplaceLoadingStates.value.getRecommendedProductsTags =
+      API_STATES.LOADING;
+    const { data, error } = await $api.marketplace.getRecommendedTags({
+      limit: 100,
+    });
+
+    if (error.value) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.value?.data?.[0]?.message || "",
+      });
+      marketplaceLoadingStates.value.getRecommendedProductsTags =
+        API_STATES.ERROR;
+      return { error: error.value };
+    }
+    if (data.value) {
+      marketplaceLoadingStates.value.getRecommendedProductsTags =
+        API_STATES.SUCCESS;
+      recommendedTags.value = data.value.results;
     }
   };
 
@@ -516,6 +547,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
   const createCartLink = async (payload: any) => {
     const { $api } = useNuxtApp();
     const { toast } = useToast();
+    const router = useRouter();
     marketplaceLoadingStates.value.createCartLink = API_STATES.LOADING;
 
     const { data, error } = await $api.marketplace.createCartLink(payload);
@@ -533,10 +565,11 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
       console.log(data.value);
       toast({
         title: "Success",
-        description: "Order updated successfully",
+        description: "Public cart created successfully",
       });
       marketplaceLoadingStates.value.createCartLink = API_STATES.SUCCESS;
-      return data.value;
+      router.push(`/payment?id=${data.value.id}`);
+      // return data.value;
     }
   };
 
@@ -562,7 +595,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
         (acc: any, product: any) => {
           return { ...acc, [product.id]: product };
         },
-        {}
+        {},
       );
       const productRes = await $api.marketplace.getProducts({
         where: JSON.stringify([
@@ -579,7 +612,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
                   ...product,
                   quantity: producytIds?.[product.id]?.quantity || 1,
                 };
-              }
+              },
             ),
           ],
         ],
@@ -618,6 +651,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
   return {
     marketplaceLoadingStates,
     orders,
+    orderMeta,
     getVendorOrders,
     createProduct,
     getAllProducts,
@@ -644,5 +678,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     createCartLink,
     getCartLinkDetails,
     checkoutCartLink,
+    getRecommendedProductsTags,
+    recommendedTags,
   };
 });

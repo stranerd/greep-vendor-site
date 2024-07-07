@@ -76,11 +76,11 @@ const vendorFormSchema = toTypedSchema(
     website: z
       .string()
       .regex(
-        /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+        /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g,
       )
       .optional(),
     location: z.string(),
-  })
+  }),
 );
 
 const vendorFormInstance = useForm({
@@ -89,7 +89,7 @@ const vendorFormInstance = useForm({
     name: userProfile.value.vendor?.name || "",
     email: userProfile.value.vendor?.email || "",
     website: userProfile.value.vendor?.website || "",
-    location: userProfile.value.vendor?.location.location || "",
+    location: userProfile.value.vendor?.location?.location || "",
   },
 });
 
