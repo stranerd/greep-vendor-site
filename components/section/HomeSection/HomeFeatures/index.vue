@@ -1,7 +1,7 @@
 <template>
   <section
     style="
-      background-image: url('/images/features-bg.svg');
+      background-image: url(&quot;/images/features-full-bg.png&quot;);
       background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
