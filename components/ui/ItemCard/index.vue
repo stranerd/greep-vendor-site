@@ -71,6 +71,7 @@ const editProduct = () => {
 
 const handleChange = async (e: any) => {
   localData.value.inStock = e;
+  const payload = localData.value;
   await updateProduct(localData.value.id, { ...localData.value, inStock: e });
 };
 
