@@ -1,5 +1,5 @@
 <template>
-  <div class="flex mt-[25px] justify-between items-center">
+  <div class="mb-6 mt-[25px] flex items-center justify-between">
     <form class="w-full max-w-[576px]">
       <div class="relative flex w-full">
         <Search
@@ -10,7 +10,7 @@
           type="search"
           placeholder="Search "
           v-model="searchTerm"
-          class="w-full appearance-none bg-background px-[48px] rounded-[99px] h-[48px] shadow-none lg:w-full"
+          class="h-[48px] w-full appearance-none rounded-[99px] bg-background px-[48px] shadow-none lg:w-full"
           @input="searchOrders"
         />
         <Separator orientation="vertical" />
@@ -27,9 +27,9 @@
     </form>
     <div class="flex">
       <p
-        class="flex items-center gap-[10px] text-[14px] leading-[21px] mr-[31px]"
+        class="mr-[31px] flex items-center gap-[10px] text-[14px] leading-[21px]"
       >
-        <span class="bg-[#000] rounded-full h-[7px] w-[7px]"> </span>
+        <span class="h-[7px] w-[7px] rounded-full bg-[#000]"> </span>
         Sort by: Latest Item
       </p>
       <Button
@@ -37,7 +37,7 @@
         size="lg"
         rounded="md"
         @click="isDialogOpen = true"
-        ><CirclePlus class="h-5 w-5 mr-[10px]" /> Create Order</Button
+        ><CirclePlus class="mr-[10px] h-5 w-5" /> Create Order</Button
       >
       <client-only>
         <CreateOrderModal
@@ -65,7 +65,7 @@
       button-text="Get Orders"
       @action="getVendorOrders()"
     />
-    <div v-else class="flex flex-col h-full justify-between">
+    <div v-else class="flex h-full flex-col justify-between">
       <div class="h-full max-h-[67vh] min-h-[66vh] overflow-y-scroll">
         <VendorHistoryTable source="page" :items="orders" />
       </div>

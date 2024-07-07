@@ -1,7 +1,7 @@
 <template>
   <main>
     <div
-      class="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[700px] h-[100vh]"
+      class="h-[100vh] w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[700px]"
     >
       <div
         style="
@@ -10,9 +10,9 @@
           background-repeat: no-repeat;
           background-size: cover;
         "
-        class="hidden relative cover lg:block max-w-[100%]"
+        class="cover relative hidden max-w-[100%] lg:block"
       >
-        <nuxt-link to="/" class="absolute top-[47px] left-[59px]">
+        <nuxt-link to="/" class="absolute left-[59px] top-[47px]">
           <img src="/images/logos/greep-green.svg" alt="Logo" />
         </nuxt-link>
 
@@ -31,8 +31,6 @@
   </main>
 </template>
 
-<script setup lang="ts">
-console.log({ env: import.meta.env });
-</script>
+<script setup lang="ts"></script>
 
 <style></style>

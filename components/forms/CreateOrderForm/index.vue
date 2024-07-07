@@ -1,5 +1,5 @@
 <template>
-  <div class="grid gap-4 mt-4">
+  <div class="relative mt-4 grid max-h-[78vh] gap-4 overflow-y-scroll">
     <form class="space-y-8" @submit="onSubmit">
       <div class="grid gap-4">
         <!-- <div class="grid gap-2">
@@ -27,10 +27,10 @@
           <div
             v-for="(cartItem, i) in productsArray"
             :key="i"
-            class="flex items-center gap-[20px] mb-3"
+            class="mb-3 flex items-center gap-[20px]"
           >
             <div>
-              <div class="min-w-1 min-h-1 rounded-full bg-[#000]"></div>
+              <div class="min-h-1 min-w-1 rounded-full bg-[#000]"></div>
             </div>
             <Popover v-model:open="cartItem.open">
               <PopoverTrigger as-child>
@@ -98,7 +98,7 @@
                 placeholder="00"
                 :disabled="!cartItem.productId"
                 v-model="cartItem.quantity"
-                class="max-w-[75px] w-full min-w-[70px]"
+                class="w-full min-w-[70px] max-w-[75px]"
               />
             </div>
             <!-- <div
@@ -119,14 +119,14 @@
         </div>
         <div
           @click="addNewProduct"
-          class="flex items-center max-w-[190px] cursor-pointer rounded-[6px]"
+          class="flex max-w-[190px] cursor-pointer items-center rounded-[6px]"
         >
-          <CirclePlus class="h-[20px] w-[20px] mr-[6px]" /> Add another item
+          <CirclePlus class="mr-[6px] h-[20px] w-[20px]" /> Add another item
         </div>
         <!-- 
         <div class="flex gap-[20px]">
           <FormField v-slot="{ field, value }" name="time">
-            <FormItem class="flex flex-col grow">
+            <FormItem class="flex grow flex-col">
               <FormLabel class="mb-[10px]">Delivery date</FormLabel>
               <Popover>
                 <PopoverTrigger as-child>
@@ -217,11 +217,11 @@
           </FormItem>
         </FormField> -->
 
-        <div class="flex items-center justify-end mt-4">
+        <DialogFooter class="mt-4 flex items-center justify-end">
           <Button
             variant="ghost"
             type="button"
-            class="rounded-[12px] mr-3"
+            class="mr-3 rounded-[12px]"
             @click="$emit('completed')"
           >
             Cancel
@@ -237,7 +237,7 @@
           >
             Submit Item
           </Button>
-        </div>
+        </DialogFooter>
       </div>
     </form>
   </div>

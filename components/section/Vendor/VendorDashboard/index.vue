@@ -147,9 +147,12 @@ const overview = computed(() => [
     title: "Total Sales",
     value: currencyConverter(
       "TRY",
-      dashBoardData?.value?.stats?.reduce(function (accumulator, curValue) {
+      dashBoardData?.value?.stats?.reduce(function (
+        accumulator: any,
+        curValue: any,
+      ) {
         return accumulator + curValue.fee.total;
-      }, 0) || 0
+      }, 0) || 0,
     ),
   },
   {

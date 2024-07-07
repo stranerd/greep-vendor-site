@@ -2,8 +2,8 @@
   <PageHeader :isInnerPage="true">
     Orders > Order #{{ route?.params?.id?.slice(0, 9) || "" }}
   </PageHeader>
-  <div class="max-w-[848px] w-full mx-auto">
-    <OrderDetails />
+  <div class="mx-auto w-full max-w-[848px]">
+    <OrderFoodDetails />
   </div>
 </template>
 

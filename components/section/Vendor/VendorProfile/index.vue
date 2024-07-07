@@ -1,7 +1,7 @@
 <template>
   <div v-if="apiLoadingStates.getUserProfile === API_STATES.LOADING">
-    <Skeleton class="w-[153px] h-[153px] mb-2 rounded-full" />
-    <Skeleton class="h-7 w-[250px] mb-9" />
+    <Skeleton class="mb-2 h-[153px] w-[153px] rounded-full" />
+    <Skeleton class="mb-9 h-7 w-[250px]" />
     <div class="flex justify-between">
       <div class="flex items-center space-x-4">
         <div class="flex flex-col space-y-4">
@@ -17,25 +17,25 @@
   </div>
   <div v-else-if="apiLoadingStates.getUserProfile === API_STATES.SUCCESS">
     <div class="flex justify-between">
-      <div class="relative h-auto flex align-center justify-center">
+      <div class="align-center relative flex h-auto justify-center">
         <div class="relative mt-auto">
-          <Avatar size="lg" class="w-[153px] h-[153px]">
+          <Avatar size="lg" class="h-[153px] w-[153px]">
             <AvatarImage src="/images/placeholder.png" alt="User" />
             <AvatarFallback>CNx</AvatarFallback>
           </Avatar>
           <div
-            class="absolute flex items-center justify-center bg-[#000000] p-[14px] rounded-full bottom-0 right-0"
+            class="absolute bottom-0 right-0 flex items-center justify-center rounded-full bg-[#000000] p-[14px]"
           >
             <Camera class="text-[#fff]" />
           </div>
         </div>
       </div>
 
-      <Card class="border-[#E0E2E4] border-[2px] min-w-[368px]">
-        <CardHeader class="pt-4 pb-1">
+      <Card class="min-w-[368px] border-[2px] border-[#E0E2E4]">
+        <CardHeader class="pb-1 pt-4">
           <CardTitle class="text-[22px]">Estimated Balance</CardTitle>
         </CardHeader>
-        <CardContent class="grid gap-1 max-h-[280px] pb-4">
+        <CardContent class="grid max-h-[280px] gap-1 pb-4">
           <div class="flex">
             <h6 class="text-[22px]">
               {{ wallet?.balance?.currency }} {{ wallet?.balance?.amount }}
@@ -43,27 +43,27 @@
           </div>
           <!-- <small class="text-[12px]">TL Rate: ₺1 = 41</small> -->
           <div class="flex gap-6">
-            <div class="flex flex-col justify-center items-center">
+            <div class="flex flex-col items-center justify-center">
               <Button size="icon" variant="secondary">
                 <Plus class="h-[20px] w-[20px]" />
               </Button>
-              <small class="text-[12px] font-semibold mt-[6px] block"
+              <small class="mt-[6px] block text-[12px] font-semibold"
                 >Deposit</small
               >
             </div>
-            <div class="flex flex-col justify-center items-center">
+            <div class="flex flex-col items-center justify-center">
               <Button size="icon" variant="secondary">
                 <MoveRight class="h-[20px] w-[20px]" />
               </Button>
-              <small class="text-[12px] font-semibold mt-[6px] block"
+              <small class="mt-[6px] block text-[12px] font-semibold"
                 >Transfer</small
               >
             </div>
-            <div class="flex flex-col justify-center items-center">
+            <div class="flex flex-col items-center justify-center">
               <Button size="icon" variant="secondary">
                 <Minus class="h-[20px] w-[20px]" />
               </Button>
-              <small class="text-[12px] font-semibold mt-[6px] block"
+              <small class="mt-[6px] block text-[12px] font-semibold"
                 >Withdraw</small
               >
             </div>
@@ -74,10 +74,10 @@
 
     <!-- Vendor image part -->
     <div>
-      <h1 class="text-lg font-medium md:text-2xl mb-2">
+      <h1 class="mb-2 text-lg font-medium md:text-2xl">
         {{ userProfile.vendor?.name || "----" }}
       </h1>
-      <div class="flex gap-[13px] mb-[20px]">
+      <div class="mb-[20px] flex gap-[13px]">
         <MapPin />
         <p class="text-[14px] leading-[21px]">
           {{ userProfile.vendor?.location?.location || "Location not set" }}
@@ -91,8 +91,8 @@
           :key="i"
           class="p-5"
         >
-          <div class="flex mb-[30px] justify-between items-center">
-            <h4 class="text-[16px] leading-[20px] font-medium">
+          <div class="mb-[30px] flex items-center justify-between">
+            <h4 class="text-[16px] font-medium leading-[20px]">
               {{ profileItem }}
             </h4>
             <Button class="" size="icon" @click="openDialog(profileItem)">
@@ -108,18 +108,18 @@
               :key="index"
               class="flex items-center justify-between"
             >
-              <p class="font-medium text-[14px] leading-[20px] flex gap-2">
-                <component :is="item.icon" class="text-primary h-5 w-5" />
+              <p class="flex gap-2 text-[14px] font-medium leading-[20px]">
+                <component :is="item.icon" class="h-5 w-5 text-primary" />
 
                 {{ item.title }}
               </p>
               <p
                 @click.prevent="openDialog(profileItem)"
-                class="flex font-light gap-2 cursor-pointer leading-[20px] text-[14px]"
+                class="flex cursor-pointer gap-2 text-[14px] font-light leading-[20px]"
               >
                 {{ item.value || "--" }}
 
-                <EditIcon class="h-5 w-5 hidden" />
+                <EditIcon class="hidden h-5 w-5" />
               </p>
             </div>
           </div>
@@ -128,32 +128,32 @@
 
       <!-- Other Options -->
       <div
-        class="grid gap-4 mt-8 border-2 border-gray-100 rounded-lg md:gap-8 lg:grid-cols-1 xl:grid-cols-1"
+        class="mt-8 grid gap-4 rounded-lg border-2 border-gray-100 md:gap-8 lg:grid-cols-1 xl:grid-cols-1"
       >
         <div
           v-for="(profileItem, i) in Object.keys(otherOptions)"
           :key="i"
           class="p-5"
         >
-          <h4 class="text-[16px] leading-[20px] font-medium mb-[30px]">
+          <h4 class="mb-[30px] text-[16px] font-medium leading-[20px]">
             {{ profileItem }}
           </h4>
-          <div class="grid grid-cols-2 w-full gap-[35px]">
+          <div class="grid w-full grid-cols-2 gap-[35px]">
             <div
               v-for="(item, index) in otherOptions[profileItem]"
               :key="index"
               class="flex items-center justify-between"
             >
-              <p class="font-medium text-[14px] leading-[20px] flex gap-2">
+              <p class="flex gap-2 text-[14px] font-medium leading-[20px]">
                 <component
                   :is="DocumentText1Icon"
-                  class="text-primary h-5 w-5"
+                  class="h-5 w-5 text-primary"
                 />
 
                 {{ item.title }}
               </p>
               <p
-                class="flex font-light gap-2 cursor-pointer leading-[20px] text-[14px]"
+                class="flex cursor-pointer gap-2 text-[14px] font-light leading-[20px]"
               >
                 {{ item.value || "--" }}
 
@@ -165,14 +165,14 @@
       </div>
 
       <!-- Auth Options -->
-      <div class="grid gap-4 mt-8 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">
+      <div class="mt-8 grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-2">
         <div
           v-for="(profileItem, i) in Object.keys(authOptions)"
           :key="i"
           class="p-5"
         >
           <div class="flex justify-between">
-            <h4 class="text-[16px] leading-[20px] font-medium mb-[30px]">
+            <h4 class="mb-[30px] text-[16px] font-medium leading-[20px]">
               {{ profileItem }}
             </h4>
           </div>
@@ -183,13 +183,13 @@
               :key="index"
               class="flex items-center justify-between"
             >
-              <component :is="item.icon" class="text-primary h-5 w-5" />
-              <p class="font-medium text-[14px] leading-[20px]">
+              <component :is="item.icon" class="h-5 w-5 text-primary" />
+              <p class="text-[14px] font-medium leading-[20px]">
                 {{ item.title }}
               </p>
 
               <p
-                class="flex font-light cursor-pointer leading-[20px] text-[14px]"
+                class="flex cursor-pointer text-[14px] font-light leading-[20px]"
               >
                 {{ item.value || "--" }}
               </p>
@@ -199,10 +199,10 @@
       </div>
 
       <Alert variant="warning" class="">
-        <CircleAlert class="w-4 h-4" />
+        <CircleAlert class="h-4 w-4" />
         <!-- <AlertTitle>Error</AlertTitle> -->
         <AlertDescription
-          class="text-[14px] flex gap-10 justify-between items-center"
+          class="flex items-center justify-between gap-10 text-[14px]"
         >
           <strong>Secure Your Account </strong>: Two-factor authentication adds
           an extra layer of security to your account. To log in, in addition
@@ -213,13 +213,13 @@
     </div>
   </div>
 
-  <Dialog :open="isProfileDialogOpen">
+  <Dialog :open="isProfileDialogOpen" class="max-h-[78vh] overflow-y-auto">
     <DialogContent class="sm:max-w-[425px]" :hideClose="true">
       <DialogHeader>
         <DialogTitle>Edit {{ editDetails.title }}</DialogTitle>
 
         <X
-          class="absolute right-4 top-4 rounded-sm opacity-70 cursor-pointer ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none h-4 2-4 data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+          class="2-4 absolute right-4 top-4 h-4 cursor-pointer rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
           @click="isProfileDialogOpen = false"
         />
       </DialogHeader>
@@ -232,7 +232,7 @@
         <DialogTitle>Edit {{ editDetails.title }}</DialogTitle>
 
         <X
-          class="absolute right-4 top-4 rounded-sm opacity-70 cursor-pointer ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none h-4 2-4 data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+          class="2-4 absolute right-4 top-4 h-4 cursor-pointer rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
           @click="isDialogOpen = false"
         />
       </DialogHeader>

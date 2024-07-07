@@ -123,7 +123,7 @@
         <div class="text-[#6B7280] text-[14px]">
           {{
             $moment(singleOrder?.createdAt || "").format(
-              "MMM DD, YYYY, hh:mm a"
+              "MMM DD, YYYY, hh:mm a",
             )
           }}
         </div>
@@ -194,7 +194,7 @@
               {{
                 currencyConverter(
                   product?.currency || product?.price?.currency,
-                  product.amount || product?.price?.amount
+                  product.amount || product?.price?.amount,
                 )
               }}
             </p>
@@ -206,7 +206,7 @@
             {{
               currencyConverter(
                 singleOrder?.fee?.currency || "NGN",
-                singleOrder?.fee.subTotal || 0
+                singleOrder?.fee.subTotal || 0,
               )
             }}
           </p>
@@ -227,7 +227,7 @@
               item.title !== "currency"
                 ? currencyConverter(
                     singleOrder?.fee?.currency || "",
-                    item.value
+                    item.value,
                   )
                 : item.value
             }}
@@ -239,7 +239,7 @@
             {{
               currencyConverter(
                 singleOrder?.fee?.currency || "NGN",
-                singleOrder?.fee?.total || 0
+                singleOrder?.fee?.total || 0,
               )
             }}
           </p>
@@ -289,7 +289,7 @@ const orderPaymentAddons = computed(
           value: singleOrder.value?.fee?.[feeItem],
         };
       }),
-  ]
+  ],
   // [
   //   {
   //     title: "Shipping",
@@ -323,7 +323,7 @@ const formSchema = toTypedSchema(
     message: z.string({
       required_error: "Description cannot be empty",
     }),
-  })
+  }),
 );
 
 const { handleSubmit, resetForm } = useForm({

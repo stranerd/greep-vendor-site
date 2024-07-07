@@ -10,8 +10,6 @@ definePageMeta({
   layout: "dashboard",
   middleware: ["authenticated"],
 });
-
-const date = ref("today");
 </script>
 
 <style></style>
