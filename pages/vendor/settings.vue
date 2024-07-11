@@ -6,12 +6,14 @@
 </template>
 
 <script setup lang="ts">
+import { GP_ROUTES } from "~/constants/route-names";
 definePageMeta({
-  layout: 'dashboard',
-  middleware: ['authenticated'],
+  layout: "dashboard",
+  middleware: ["authenticated"],
+  name: GP_ROUTES.VENDOR.SETTINGS,
 });
 useHead({
-  title: 'Vendors Settings',
+  title: "Vendors Settings",
 });
 </script>
 

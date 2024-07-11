@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-4 grid max-h-[80vh] gap-4 overflow-auto pr-2">
-    <form class="space-y-8" @submit="onSubmit">
+  <div class="mt-4 max-h-[80vh] w-fit overflow-auto">
+    <form class="space-y-8 p-2" @submit="onSubmit">
       <div class="grid gap-4">
         <div class="grid gap-2">
           <FormField v-slot="{ componentField }" name="title">
@@ -68,13 +68,16 @@
           <Label>Set Category </Label>
           <div class="relative mt-3 h-auto overflow-y-auto">
             <Badge
-              v-for="framework in selectedValues"
+              v-for="(framework, index) in selectedValues"
               :key="framework.value"
               variant="outline"
-              class="mb-2 mr-2 px-3 py-2"
+              class="mb-2 mr-2 px-3 py-2 capitalize"
             >
-              {{ framework.label }}
-              <X class="ml-3 h-[16px] w-[16px]" />
+              {{ framework.title }}
+              <X
+                class="ml-3 h-[16px] w-[16px]"
+                @click="selectedValues.splice(index, 1)"
+              />
             </Badge>
           </div>
           <Popover v-model:open="openCombobox">
@@ -85,15 +88,15 @@
                 :aria-expanded="openCombobox"
                 class="w-full justify-between text-foreground"
               >
-                <span class="truncate text-[#64748B]">
+                <span class="truncate capitalize text-[#64748B]">
                   {{
                     selectedValues.length === 0
                       ? "Select categories"
                       : selectedValues.length === 1
-                        ? selectedValues[0].label
+                        ? selectedValues[0].title
                         : selectedValues.length === 2
-                          ? selectedValues.map(({ label }) => label).join(", ")
-                          : `${selectedValues.length} labels selected`
+                          ? selectedValues.map(({ title }) => title).join(", ")
+                          : `${selectedValues.length} tags selected`
                   }}
                 </span>
                 <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -101,37 +104,58 @@
             </PopoverTrigger>
             <PopoverContent class="w-[350px] p-0">
               <Command loop>
-                <CommandInput
-                  placeholder="Search category..."
-                  v-model="inputValue"
-                />
-                <CommandGroup class="max-h-[145px] overflow-auto">
-                  <CommandItem
-                    v-for="framework in frameworks"
-                    :key="framework.value"
-                    :value="framework.value"
-                    @select="toggleFramework(framework)"
-                  >
-                    <ReserveIcon
-                      class="mr-2 h-4 w-4 text-black"
-                      :class="{
-                        'text-primary opacity-100':
-                          selectedValues.includes(framework),
-                        'opacity-100': !selectedValues.includes(framework),
-                      }"
-                    />
-                    <div class="flex-1">{{ framework.label }}</div>
-                  </CommandItem>
-                </CommandGroup>
+                <CommandInput placeholder="Search category..." />
+                <CommandEmpty>
+                  <div class="">
+                    <h2 class="my-2">No category found.</h2>
+                    <button
+                      variant="outline"
+                      class="mx-auto flex w-[98%] justify-center rounded-sm bg-[#F1F5F9] p-2 text-center text-xs text-muted-foreground"
+                      @click="openCreateCategoryModal = true"
+                    >
+                      <div class="mr-2 h-4 w-4"></div>
+                      <CirclePlus class="mr-2 h-4 w-4" />
+                      Create a new category
+                    </button>
+                  </div>
+                </CommandEmpty>
+                <CommandList>
+                  <CommandGroup class="max-h-[145px] overflow-auto">
+                    <CommandItem
+                      v-for="tag in productFoodsTags"
+                      :key="tag.id"
+                      :value="tag.id"
+                      @select="toggleCategory(tag)"
+                    >
+                      <ReserveIcon
+                        class="mr-2 h-4 w-4 text-black"
+                        :class="{
+                          'stroke-primary stroke-1 text-primary opacity-100':
+                            selectedValues.includes(tag),
+                          'opacity-100': !selectedValues.includes(tag),
+                        }"
+                      />
+                      <div
+                        class="flex-1 capitalize"
+                        :class="{
+                          'font-semibold text-primary opacity-100':
+                            selectedValues.includes(tag),
+                        }"
+                      >
+                        {{ tag.title }}
+                      </div>
+                    </CommandItem>
+                  </CommandGroup>
+                </CommandList>
                 <CommandSeparator alwaysRender />
                 <CommandGroup>
                   <CommandItem
-                    :value="`:${inputValue}:`"
+                    value="createCategory"
                     class="text-xs text-muted-foreground"
-                    @select="openDialog = true"
+                    @select="openCreateCategoryModal = true"
                   >
                     <div class="mr-2 h-4 w-4"></div>
-                    <CirclePlus class="mr-2 h-2.5 w-2.5" />
+                    <CirclePlus class="mr-2 h-4 w-4" />
                     Create a new category
                   </CommandItem>
                 </CommandGroup>
@@ -140,12 +164,13 @@
           </Popover>
         </div>
         <div class="grid gap-2">
+          {{ addOns }}
           <FormField v-slot="{ componentField }" name="add_ons">
             <FormItem>
               <FormLabel>Add On settings</FormLabel>
               <FormDescription>
                 Create side items that come with your food
-                <AddOnsForm />
+                <AddOnsForm @create-addons="(val) => (addOns = val)" />
               </FormDescription>
             </FormItem>
           </FormField>
@@ -167,6 +192,27 @@
             </FormItem>
           </FormField>
         </div>
+        <div class="grid gap-2">
+          <FormField v-slot="{ componentField }" name="price">
+            <FormItem>
+              <FormLabel
+                >Price <span class="text-[#FF5656]">Required</span></FormLabel
+              >
+              <FormControl>
+                <Input
+                  type="number"
+                  placeholder="Price"
+                  v-bind="componentField"
+                />
+              </FormControl>
+              <!-- <FormDescription>
+                    This is your public display name.
+                  </FormDescription> -->
+              <FormMessage />
+            </FormItem>
+          </FormField>
+        </div>
+
         <div class="grid gap-2">
           <FormField v-slot="{ value, handleChange }" name="inStock">
             <FormItem>
@@ -209,6 +255,47 @@
         </div>
       </div>
     </form>
+
+    <Dialog class="max-h-[78vh] !max-w-[200px]" :open="openCreateCategoryModal">
+      <DialogContent :hideClose="true">
+        <DialogHeader>
+          <DialogTitle>Create New Category </DialogTitle>
+          <X
+            @click="openCreateCategoryModal = false"
+            class="2-4 absolute right-4 top-4 h-4 cursor-pointer rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+          />
+        </DialogHeader>
+        <DialogDescription class="z-10">
+          <div class="grid gap-2">
+            <FormField v-slot="{ componentField }" name="description">
+              <FormItem>
+                <FormLabel>
+                  Title
+                  <span class="font-normal text-red-400">required</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter Text Here..."
+                    v-bind="componentField"
+                    v-model="newCategoryTitle"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            </FormField>
+          </div>
+        </DialogDescription>
+        <div class="mt-4 flex items-center justify-end">
+          <Button
+            type="submit"
+            class="rounded-[12px]"
+            @click="createFoodCategoryTag"
+          >
+            Create Category
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   </div>
 </template>
 
@@ -222,16 +309,37 @@ import { useMarketPlaceStore } from "@/store/useMarketplace";
 import { ReserveIcon } from "@placetopay/iconsax-vue/outline";
 
 const marketPlaceStore = useMarketPlaceStore();
-const { marketplaceLoadingStates } = storeToRefs(marketPlaceStore);
+const { marketplaceLoadingStates, productFoodsTags, productFoodTagItems } =
+  storeToRefs(marketPlaceStore);
 
-const { createProduct } = marketPlaceStore;
+const { createProduct, getProductFoodsTags, createProductCategoryTag } =
+  marketPlaceStore;
+
+const file = ref(null);
+
+const emits = defineEmits(["completed"]);
+const openCombobox = ref<boolean>(false);
+const openCreateCategoryModal = ref<boolean>(false);
+const newCategoryTitle = ref<string>("");
+const selectedValues = ref<any[]>([]);
+const addOns = ref<any[]>([]);
+
+const toggleCategory = (tag: any) => {
+  if (!selectedValues.value.includes(tag)) {
+    selectedValues.value = [...selectedValues.value, tag];
+  } else {
+    selectedValues.value = selectedValues.value.filter(
+      (item: any) => item.id !== tag.id,
+    );
+  }
+};
 
 const formSchema = toTypedSchema(
   z.object({
     title: z.string().min(3, {
       message: "Title cannot be less than 3 characters",
     }),
-    no_of_items: z.string().optional(),
+    no_of_items: z.number().optional(),
     description: z.string().optional(),
     price: z.number({
       required_error: "Price cannot be empty",
@@ -247,53 +355,22 @@ const { handleSubmit, resetForm, setFieldValue } = useForm({
   validationSchema: formSchema,
   initialValues: {
     inStock: true,
+    price: 400,
+    title: "grains",
+    description: "This is best",
   },
 });
-
-const file = ref(null);
-const categories = ref([
-  {
-    title: "Stuff",
-    value: "stuff",
-  },
-]);
-
-type Framework = {
-  value: string;
-  label: string;
-};
-
-const FRAMEWORKS: Framework[] = [
-  { value: "grains", label: "Grains" },
-  { value: "tubers", label: "Tubers" },
-];
-
-const frameworks = ref<Framework[]>(FRAMEWORKS);
-const openCombobox = ref<boolean>(false);
-const openDialog = ref<boolean>(false);
-const inputValue = ref<string>("");
-const selectedValues = ref<Framework[]>([]);
-
-const toggleFramework = (framework: Framework) => {
-  if (!selectedValues.value.includes(framework)) {
-    selectedValues.value = [...selectedValues.value, framework];
-  } else {
-    selectedValues.value = selectedValues.value.filter(
-      (l: any) => l.value !== framework.value,
-    );
-  }
-};
-
-const emits = defineEmits(["completed"]);
 
 const onSubmit = handleSubmit(async (values: any) => {
   console.log("Form submitted!", values);
   const form = new FormData();
+  const tagIds = selectedValues.value.map((tag) => tag.id);
+
   Object.keys({ ...values, tagIds: [""] }).forEach((item) => {
     if (item === "price") {
       form.append(
         item,
-        JSON.stringify({ amount: values[item], currency: "NGN" }),
+        JSON.stringify({ amount: values[item], currency: "TRY" }),
       );
     } else if (item === "tagIds") {
       form.append(item, JSON.stringify([]));
@@ -301,33 +378,40 @@ const onSubmit = handleSubmit(async (values: any) => {
       form.append(item, values[item]);
     }
   });
-  await createProduct(form);
-  emits("completed");
+
+  console.log(
+    { tagIds: addOns.value, category: tagIds },
+    { formValues: values },
+  );
+  // await createProduct(form);
+  // emits("completed");
 });
 
-// const accountFormSchema = toTypedSchema(
-//   z.object({
-//     name: z
-//       .string({
-//         required_error: "Required.",
-//       })
-//       .min(2, {
-//         message: "Name must be at least 2 characters.",
-//       })
-//       .max(30, {
-//         message: "Name must not be longer than 30 characters.",
-//       }),
-//     dob: z
-//       .string()
-//       .datetime()
-//       .optional()
-//       .refine(
-//         (date: Date) => date !== undefined,
-//         "Please select a valid date."
-//       ),
-//     language: z.string().min(1, "Please select a language."),
-//   })
-// );
+const categorySchema = toTypedSchema(
+  z.object({
+    title: z.string({ message: "Title is required" }).min(3, {
+      message: "Title cannot be less than 3 characters",
+    }),
+  }),
+);
+
+// const { handleSubmit: handleCreateCategory, resetForm: resetCreateCategory } =
+//   useForm({
+//     validationSchema: categorySchema,
+//   });
+
+// const createCategory = handleCreateCategory(async (values) => {});
+
+const createFoodCategoryTag = async () => {
+  await createProductCategoryTag({
+    title: newCategoryTitle.value,
+    type: "productFoods",
+  });
+};
+
+onMounted(() => {
+  getProductFoodsTags();
+});
 </script>
 
 <style></style>

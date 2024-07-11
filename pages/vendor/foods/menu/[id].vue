@@ -6,18 +6,16 @@
 </template>
 
 <script setup lang="ts">
+import { GP_ROUTES } from "~/constants/route-names";
 definePageMeta({
-  layout: 'dashboard',
-  middleware: ['authenticated'],
-  name: 'ROUTE_NAMES_SINGLE_MENU',
+  layout: "dashboard",
+  middleware: ["authenticated", "vendor-foods"],
+  name: GP_ROUTES.VENDOR.FOOD.MENU_DETAILS,
 });
 
 useHead({
-  title: 'Vendor Menu',
+  title: "Vendor Menu",
 });
-
-const router = useRouter();
-const route = useRoute();
 </script>
 
 <style scoped></style>
