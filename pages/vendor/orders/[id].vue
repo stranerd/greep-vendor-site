@@ -3,7 +3,7 @@
     Orders > Order #{{ route?.params?.id?.slice(0, 9) || "" }}
   </PageHeader>
   <div class="mx-auto w-full max-w-[848px]">
-    <OrderFoodDetails />
+    <OrderDetails />
   </div>
 </template>
 
