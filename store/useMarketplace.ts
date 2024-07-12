@@ -152,9 +152,8 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     }
     if (data.value) {
       marketplaceLoadingStates.value.getProducts = API_STATES.SUCCESS;
-      console.log(data.value);
       products.value = data.value.results;
-      profuctsMeta.value = data.value.pages;
+      profuctsMeta.value = { ...data.value.pages, ...data.value.docs };
     }
   };
   const getRecommendedProductsTags = async () => {
@@ -680,5 +679,6 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     checkoutCartLink,
     getRecommendedProductsTags,
     recommendedTags,
+    profuctsMeta,
   };
 });
