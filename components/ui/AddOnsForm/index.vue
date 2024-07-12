@@ -8,7 +8,7 @@
         :key="addOnIndex"
       >
         <div class="flex items-center justify-between gap-4">
-          <h2 class="flex max-w-[40%] flex-1 items-center gap-1">
+          <h2 class="flex min-w-[120px] max-w-[50%] flex-1 items-center gap-1">
             <span class="text-4xl"> • </span>
 
             <Input
@@ -22,7 +22,7 @@
             <h2 class="">Options</h2>
             <Select class="border-2 border-black">
               <SelectTrigger
-                class="h-8 w-[100px] border border-black focus:border-none"
+                class="h-8 w-[80px] border border-black focus:border-none"
               >
                 <SelectValue placeholder="Select a fruit" class="text-sm" />
               </SelectTrigger>
@@ -49,7 +49,7 @@
         <div class="ml-10 mt-2 flex flex-col gap-2">
           <div class="" v-for="(item, itemIndex) in addOn.items">
             <div class="flex items-center justify-between gap-4">
-              <h2 class="flex max-w-[60%] flex-1 items-center gap-1">
+              <h2 class="flex max-w-[70%] flex-1 items-center gap-1">
                 <span class="text-3xl"> • </span>
                 <Input
                   :placeholder="item.placeholder"
@@ -62,7 +62,7 @@
                 <h2 class="">Price</h2>
                 <Input
                   type="number"
-                  class="h-8 flex-1 rounded border border-black focus:border-none"
+                  class="h-8 w-[100px] flex-1 rounded border border-black focus:border-none"
                   v-model="item.price.amount"
                 />
               </div>
@@ -127,7 +127,7 @@ const addAddOn = () => {
     title: "",
     option: { required: true },
     selection: 1,
-    placeholder: getRandomStringFromArray(categories),
+    placeholder: "e.g Toppings",
     items: [],
   };
   addOnList.push(addOn);
@@ -137,7 +137,7 @@ const addAddOnItem = (index: number) => {
   if (addOnList[index]) {
     addOnList[index].items.push({
       name: "",
-      placeholder: getRandomStringFromArray(items),
+      placeholder: "e.g meat",
       price: { amount: 0, currency: "TRY" },
     });
   }

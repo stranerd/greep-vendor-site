@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="">
     <div
       class="relative h-screen w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[700px]"
     >
@@ -24,7 +24,7 @@
           class="h-full w-full object-cover"
         /> -->
       </div>
-      <div class="flex items-center justify-center pt-12">
+      <div class="flex items-center justify-center overflow-auto pb-6 pt-12">
         <slot />
       </div>
     </div>

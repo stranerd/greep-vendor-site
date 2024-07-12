@@ -34,3 +34,7 @@
     background: #010161;
   }
 }
+
+input::placeholder {
+  color: #a4a8ab !important;
+}

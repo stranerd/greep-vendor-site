@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-4 max-h-[80vh] w-fit overflow-auto">
-    <form class="space-y-8 p-2" @submit="onSubmit">
+  <div class="mt-4 max-h-[80vh] w-full overflow-auto">
+    <form class="space-y-8 p-2" @submit="createNewFoodProduct">
       <div class="grid gap-4">
         <div class="grid gap-2">
           <FormField v-slot="{ componentField }" name="title">
@@ -163,8 +163,7 @@
             </PopoverContent>
           </Popover>
         </div>
-        <div class="grid gap-2">
-          {{ addOns }}
+        <div class="grids hidden gap-2">
           <FormField v-slot="{ componentField }" name="add_ons">
             <FormItem>
               <FormLabel>Add On settings</FormLabel>
@@ -183,7 +182,12 @@
                 <span class="text-[#FF5656]">Required</span></FormLabel
               >
               <FormControl>
-                <Input type="file" placeholder="File" @change="handleChange" />
+                <Input
+                  type="file"
+                  placeholder="File"
+                  @change="handleChange"
+                  v-model="file"
+                />
               </FormControl>
               <!-- <FormDescription>
                     This is your public display name.
@@ -248,7 +252,8 @@
             :loading="
               marketplaceLoadingStates.createProduct === API_STATES.LOADING
             "
-            @click="onSubmit"
+            @click="openConfirmDialog = true"
+            :disabled="Object.keys(errors).length > 0 || file === null"
           >
             Submit Item
           </Button>
@@ -296,6 +301,21 @@
         </div>
       </DialogContent>
     </Dialog>
+
+    <AlertDialog>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Create New Item</AlertDialogTitle>
+          <AlertDialogDescription>
+            You want to create a new item
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction @click="null">Continue</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   </div>
 </template>
 
@@ -322,6 +342,7 @@ const openCombobox = ref<boolean>(false);
 const openCreateCategoryModal = ref<boolean>(false);
 const newCategoryTitle = ref<string>("");
 const selectedValues = ref<any[]>([]);
+const openConfirmDialog = ref(false);
 const addOns = ref<any[]>([]);
 
 const toggleCategory = (tag: any) => {
@@ -351,40 +372,38 @@ const formSchema = toTypedSchema(
   }),
 );
 
-const { handleSubmit, resetForm, setFieldValue } = useForm({
+const { handleSubmit, resetForm, setFieldValue, errors } = useForm({
   validationSchema: formSchema,
   initialValues: {
     inStock: true,
-    price: 400,
-    title: "grains",
-    description: "This is best",
   },
 });
 
-const onSubmit = handleSubmit(async (values: any) => {
-  console.log("Form submitted!", values);
+const openCreateProductModal = () => {
+  openConfirmDialog.value = true;
+};
+
+const createNewFoodProduct = handleSubmit(async (values: any) => {
   const form = new FormData();
   const tagIds = selectedValues.value.map((tag) => tag.id);
-
-  Object.keys({ ...values, tagIds: [""] }).forEach((item) => {
+  Object.keys({ ...values, tagIds }).forEach((item) => {
     if (item === "price") {
       form.append(
         item,
         JSON.stringify({ amount: values[item], currency: "TRY" }),
       );
     } else if (item === "tagIds") {
-      form.append(item, JSON.stringify([]));
+      form.append(item, JSON.stringify(tagIds));
     } else {
       form.append(item, values[item]);
     }
   });
 
-  console.log(
-    { tagIds: addOns.value, category: tagIds },
-    { formValues: values },
-  );
-  // await createProduct(form);
-  // emits("completed");
+  form.append("data", JSON.stringify({ type: "foods" }));
+  form.append("addOnId", null);
+
+  await createProduct(form);
+  emits("completed");
 });
 
 const categorySchema = toTypedSchema(

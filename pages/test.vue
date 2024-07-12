@@ -1,6 +1,18 @@
 <script setup lang="ts">
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/library/alert-dialog";
+
 definePageMeta({
-  layouts: "dashboard",
+  layout: "dashboard",
 });
 </script>
 
