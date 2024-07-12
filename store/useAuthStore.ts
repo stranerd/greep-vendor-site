@@ -94,7 +94,6 @@ export const useAuthStore = defineStore(
         return { error: error.value };
       } else if (data.value) {
         // completeLogin(data);
-        console.log(data.value);
 
         const authToken = useCookie("authToken", {
           expires: getCookieExpiration(1000), // 1 hour
@@ -457,6 +456,16 @@ export const useAuthStore = defineStore(
       }
     };
 
+    const logoutUser = () => {
+      const authToken = useCookie("authToken");
+
+      const refreshToken = useCookie("refreshToken");
+      authToken.value = null;
+      refreshToken.value = null;
+      const router = useRouter();
+      router.push("/login");
+    };
+
     return {
       user,
       hasCompletedProfile,
@@ -480,6 +489,7 @@ export const useAuthStore = defineStore(
       verifyEmail,
       sendVerificationMail,
       hasVerifiedEmail,
+      logoutUser,
     };
   },
   { persist: true },

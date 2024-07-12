@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-[80vh]">
-    <div class="flex mt-[25px] justify-between items-center">
+    <div class="mt-[25px] flex items-center justify-between">
       <form class="w-full max-w-[576px]">
         <div class="relative flex w-full">
           <Search
@@ -10,21 +10,22 @@
           <Input
             type="search"
             placeholder="Search "
-            class="w-full appearance-none bg-background px-[48px] rounded-[99px] h-[48px] shadow-none lg:w-full"
+            v-model="searchTerm"
+            class="h-[48px] w-full appearance-none rounded-[99px] bg-background px-[48px] shadow-none lg:w-full"
+            @input="searchProducts"
           />
           <Separator orientation="vertical" />
-          <img
-            class="absolute right-4 top-[50%] translate-y-[-50%] h-[24px] w-[24px] text-muted-foreground"
-            src="/images/icons/arrangevertical.svg"
-            alt="Arrange"
+          <LoaderCircle
+            v-if="marketplaceLoadingStates.getProducts === API_STATES.LOADING"
+            class="absolute right-4 top-[12px] h-[24px] w-[24px] animate-spin"
           />
         </div>
       </form>
       <div class="flex">
         <p
-          class="flex items-center gap-[10px] text-[14px] leading-[21px] mr-[31px]"
+          class="mr-[31px] flex items-center gap-[10px] text-[14px] leading-[21px]"
         >
-          <span class="bg-[#000] rounded-full h-[7px] w-[7px]"> </span>
+          <span class="h-[7px] w-[7px] rounded-full bg-[#000]"> </span>
           Sort by: Latest Item
         </p>
 
@@ -33,7 +34,7 @@
           size="lg"
           rounded="md"
           @click="isDialogOpen = true"
-          ><CirclePlus class="h-5 w-5 mr-[10px]" /> Create Item</Button
+          ><CirclePlus class="mr-[10px] h-5 w-5" /> Create Item</Button
         >
 
         <client-only>
@@ -60,21 +61,21 @@
           marketplaceLoadingStates.getProducts === API_STATES.LOADING &&
           products?.length === 0
         "
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+        class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4"
       >
         <div
           v-for="(_, i) in 12"
           :key="i"
-          class="rounded-[8px] overflow-hidden min-h-[280px] border-[#EBEBEB] border-[0px]"
+          class="min-h-[280px] overflow-hidden rounded-[8px] border-[0px] border-[#EBEBEB]"
         >
           <Skeleton class="h-[140px]" />
           <div class="px-4">
-            <Skeleton class="h-[20px] mt-4 w-[50%]" />
-            <Skeleton class="h-[15px] mt-3 w-[60%]" />
-            <Skeleton class="h-[15px] mt-3 w-[80%]" />
+            <Skeleton class="mt-4 h-[20px] w-[50%]" />
+            <Skeleton class="mt-3 h-[15px] w-[60%]" />
+            <Skeleton class="mt-3 h-[15px] w-[80%]" />
             <div class="flex justify-between">
-              <Skeleton class="h-[25px] mt-4 w-[25%]" />
-              <Skeleton class="h-[25px] mt-4 w-[25%]" />
+              <Skeleton class="mt-4 h-[25px] w-[25%]" />
+              <Skeleton class="mt-4 h-[25px] w-[25%]" />
             </div>
           </div>
         </div>
@@ -88,17 +89,24 @@
           @action="getAllProducts()"
         />
         <div v-else>
-          <div
-            v-if="products?.length > 0"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
-          >
-            <ItemCard
-              v-for="(item, i) in products"
-              :key="i"
-              :cardData="item"
-              @triggerEdit="triggerEdit"
+          <div v-if="products?.length > 0">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+              <ItemCard
+                v-for="(item, i) in products"
+                :key="i"
+                :cardData="item"
+                @triggerEdit="triggerEdit"
+              />
+            </div>
+            <Pagination
+              :meta="profuctsMeta"
+              :loading="
+                marketplaceLoadingStates.getProducts === API_STATES.LOADING
+              "
+              @paginate="paginateData"
             />
           </div>
+
           <DisplayState
             v-else
             class="my-[80px]"
@@ -125,18 +133,40 @@
 </template>
 
 <script lang="ts" setup>
+import { debounce } from "~/lib/utils";
 import { Search, CirclePlus } from "lucide-vue-next";
 import { API_STATES } from "~/services/constants";
 import { useMarketPlaceStore } from "@/store/useMarketplace";
 
 const marketplaceStore = useMarketPlaceStore();
-const { products, marketplaceLoadingStates } = storeToRefs(marketplaceStore);
+const { products, marketplaceLoadingStates, profuctsMeta } =
+  storeToRefs(marketplaceStore);
 const { getAllProducts } = marketplaceStore;
 
 const isDialogOpen = ref(false);
 
 const mode = ref("create");
 const selectedProduct = ref({});
+const searchTerm = ref("");
+
+const searchProducts = debounce(async () => {
+  await getAllProducts({
+    search: { value: searchTerm.value, fields: ["dropoffNote", "email"] },
+  });
+}, 1500);
+
+const paginateData = (params: { page: number }) => {
+  let payload = { ...params } as Record<string, any>;
+  if (searchTerm.value) {
+    payload = {
+      ...payload,
+      search: { value: searchTerm.value, fields: ["title", "description"] },
+    };
+  }
+  getAllProducts({
+    ...payload,
+  });
+};
 
 const completeProductCreation = () => {
   isDialogOpen.value = false;
@@ -153,7 +183,9 @@ const triggerEdit = (product: any) => {
 };
 
 onMounted(() => {
-  getAllProducts({});
+  getAllProducts({
+    page: 1,
+  });
 });
 </script>
 

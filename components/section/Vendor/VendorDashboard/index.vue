@@ -20,9 +20,9 @@
     <div class="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
       <Skeleton v-for="(_, i) in 4" :key="i" class="h-[130px]" />
     </div>
-    <div class="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 mt-[28px]">
-      <Skeleton class="w-full h-[348px] xl:col-span-2" />
-      <Skeleton class="w-full h-[348px]" />
+    <div class="mt-[28px] grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
+      <Skeleton class="h-[348px] w-full xl:col-span-2" />
+      <Skeleton class="h-[348px] w-full" />
     </div>
   </div>
   <div v-else class="">
@@ -32,35 +32,35 @@
           class="flex flex-row items-center justify-between space-y-0 pb-[10px]"
         >
           <CardTitle
-            class="text-[14px] text-[#6F727A] font-medium"
+            class="text-[14px] font-medium text-[#6F727A]"
             :class="card.titleColor"
           >
             {{ card.title }}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div class="text-[#000000] text-[28px] font-semibold">
+          <div class="text-[28px] font-semibold text-[#000000]">
             {{ card.value }}
           </div>
           <!-- <p class="text-xs text-muted-foreground">+20.1% from last month</p> -->
         </CardContent>
       </Card>
     </div>
-    <div class="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 mt-[28px]">
+    <div class="mt-[28px] grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
       <client-only> <VendorLineChart /></client-only>
-      <Card class="bg-[#FBFBFB] border-[0px]">
+      <Card class="border-[0px] bg-[#FBFBFB]">
         <CardHeader>
           <CardTitle class="text-[14px]">Most sold</CardTitle>
         </CardHeader>
-        <CardContent class="grid gap-3 max-h-[280px] overflow-y-scroll">
+        <CardContent class="grid max-h-[280px] gap-3 overflow-y-scroll">
           <div v-if="dashBoardData.products.length > 0">
             <div
               v-for="(product, i) in dashBoardData.products"
               :key="i"
-              class="border-[#F1F3F7] rounded-[12px] mb-4 flex items-center justify-between border-[2px] py-3 px-4"
+              class="mb-4 flex items-center justify-between rounded-[12px] border-[2px] border-[#F1F3F7] px-4 py-3"
             >
               <div class="flex items-center">
-                <h6 class="text-[16px] mr-3 font-semibold">{{ i + 1 }}</h6>
+                <h6 class="mr-3 text-[16px] font-semibold">{{ i + 1 }}</h6>
                 <Avatar class="mr-3">
                   <AvatarImage :src="product?.banner?.link" alt="Product" />
                   <AvatarFallback>CN</AvatarFallback>
@@ -70,7 +70,7 @@
                     {{ product.title }}
                   </h6>
                   <p
-                    class="text-[#999999] text-[12px] leading-[21px] font-light"
+                    class="text-[12px] font-light leading-[21px] text-[#999999]"
                   >
                     {{ product?.description?.slice(0, 15) }}...
                   </p>
@@ -78,7 +78,7 @@
               </div>
 
               <div>
-                <p class="text-right text-[#001726] leading-[21px] text-[14px]">
+                <p class="text-right text-[14px] leading-[21px] text-[#001726]">
                   {{ product?.meta?.orders }}
                 </p>
                 <img
@@ -172,6 +172,24 @@ const overview = computed(() => [
         ?.length || 0,
   },
 ]);
+
+watch(date, () => {
+  updateRange();
+});
+
+const updateRange = () => {
+  if (date.value === "lastMonth") {
+    getDashboardData({
+      start: new Date($moment().startOf("M").subtract(30, "D")),
+      end: new Date($moment().endOf("M").subtract(30, "D")),
+    });
+  } else {
+    getDashboardData({
+      start: new Date($moment().startOf("M")),
+      end: new Date($moment().endOf("M")),
+    });
+  }
+};
 
 onMounted(() => {
   getDashboardData({
