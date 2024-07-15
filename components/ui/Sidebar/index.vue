@@ -31,7 +31,7 @@
             <div
               v-else
               class="!hover:text-[#ffffff] flex cursor-pointer items-center gap-4 rounded-[4px] px-6 py-2 text-[16px] leading-[28px] !text-[#FF5656] text-muted-foreground transition-all"
-              @click="router.push('/login')"
+              @click="logoutUser"
             >
               <component :is="navItem.icon" class="h-6 w-6" />
 
@@ -56,6 +56,11 @@ import {
 
 import { GP_CONSTANTS } from "~/constants";
 import { GP_ROUTES } from "~/constants/route-names";
+import { useAuthStore } from "@/store/useAuthStore";
+
+const authStore = useAuthStore();
+
+const { getUserProfile, updateUserProfile, logoutUser } = authStore;
 
 const userType = computed(() =>
   JSON.parse(localStorage.getItem(GP_CONSTANTS.USER_TYPE) as string),

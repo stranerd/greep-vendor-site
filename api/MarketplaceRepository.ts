@@ -119,5 +119,12 @@ export default () => {
         method: "GET",
       });
     },
+
+    getRecommendedTags(params?: any) {
+      return useCustomFetch(`${resource}/products/recommendation/tags/items`, {
+        method: "GET",
+        params,
+      });
+    },
   };
 };

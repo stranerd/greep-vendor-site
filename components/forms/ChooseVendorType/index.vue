@@ -48,7 +48,7 @@
                   v-if="field.name === 'banner'"
                   :type="field.type"
                   v-model="banner"
-                  class="rounded-[12px] py-[24px]"
+                  class="rounded-[12]"
                   @change="handleChange"
                 />
                 <Input

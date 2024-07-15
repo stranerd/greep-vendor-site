@@ -192,4 +192,19 @@ export default {
         // border-bottom: 2rem solid transparent;
       } */
 }
+@media (max-width: 600px) {
+  .product-main-slider .smaller-left {
+    transform: scale(0.65) translateX(100px) !important;
+  }
+  .product-main-slider .smaller-right {
+    transform: scale(0.65) translateX(-80px) !important;
+    z-index: -1 !important;
+  }
+  .product-main-slider .big-right {
+    transform: scale(0.75) translateX(-15px) !important;
+  }
+  .product-main-slider .big-left {
+    transform: scale(0.75) translateX(15px) !important;
+  }
+}
 </style>
