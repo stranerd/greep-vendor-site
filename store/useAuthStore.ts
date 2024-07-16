@@ -417,28 +417,13 @@ export const useAuthStore = defineStore(
       }
     };
 
-    const updateVendorRoles = async (payload: "items" | "foods") => {
+    const updateVendorRoles = async (payload: any) => {
       const { $api } = useNuxtApp();
       const { toast } = useToast();
       console.log({ user: user.value });
-      const vendorRole = {
-        type: "vendor",
-        vendorType: payload,
-        mode: "write",
-        name: user.value.name.first ?? "",
-        email: user.value.email,
-        banner: user.value.photo,
-        website: null,
-        location: {
-          coords: [9.065482399999999, 7.4419364],
-          location: "KKTC",
-          description: "Location",
-        },
-        omitEmptyAndOptionalProperties: true,
-      };
 
       apiLoadingStates.value.updateVendorRole = API_STATES.LOADING;
-      const { data, error } = await $api.users.updateVendorType(vendorRole);
+      const { data, error } = await $api.users.updateVendorType(payload);
       if (error.value) {
         toast({
           variant: "destructive",
@@ -448,6 +433,8 @@ export const useAuthStore = defineStore(
         apiLoadingStates.value.updateVendorProfile = API_STATES.ERROR;
       }
       if (data.value) {
+        await getUserProfile();
+
         toast({
           title: "Successful",
           description: error.value?.data?.[0]?.message || "",

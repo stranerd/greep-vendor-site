@@ -4,6 +4,12 @@
   transform: none !important;
 }
 
+.hide-scrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 * {
   ::-webkit-scrollbar {
     width: 4px;
@@ -27,4 +33,8 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #010161;
   }
+}
+
+input::placeholder {
+  color: #a4a8ab !important;
 }

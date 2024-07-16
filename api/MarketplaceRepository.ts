@@ -113,6 +113,13 @@ export default () => {
         method: "GET",
       });
     },
+
+    getRecommendedProductTags(tag: "foods" | "items") {
+      return useCustomFetch(`${resource}/products/recommendation/tags/${tag}`, {
+        method: "GET",
+      });
+    },
+
     getRecommendedTags(params?: any) {
       return useCustomFetch(`${resource}/products/recommendation/tags/items`, {
         method: "GET",

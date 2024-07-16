@@ -94,7 +94,7 @@
               v-for="(item, i) in products"
               :key="i"
               :to="{
-                name: 'ROUTE_NAMES_SINGLE_MENU',
+                name: GP_ROUTES.VENDOR.FOOD.MENU_DETAILS,
                 params: { id: item.id },
               }"
             >
@@ -130,6 +130,7 @@
 import { Search, CirclePlus } from "lucide-vue-next";
 import { API_STATES } from "~/services/constants";
 import { useMarketPlaceStore } from "@/store/useMarketplace";
+import { GP_ROUTES } from "~/constants/route-names";
 
 const marketplaceStore = useMarketPlaceStore();
 const { products, marketplaceLoadingStates } = storeToRefs(marketplaceStore);
