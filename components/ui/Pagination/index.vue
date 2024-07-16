@@ -1,11 +1,11 @@
 <template>
-  <div class="flex items-center justify-between mt-[61px] w-full">
-    <p class="text-[#6B7280] text-[12px] leading-[20px]">
+  <div class="mt-[61px] flex w-full items-center justify-between">
+    <p class="text-[12px] leading-[20px] text-[#6B7280]">
       {{ paginationString }}
     </p>
     <div class="flex items-center">
-      <p class="text-[#6B7280] text-[12px] leading-[20px] mr-[24px]">
-        {{ meta.current || 1 }} of {{ meta.last || 1 }} pages
+      <p class="mr-[24px] text-[12px] leading-[20px] text-[#6B7280]">
+        {{ meta?.current || 1 }} of {{ meta?.last || 1 }} pages
       </p>
       <div class="flex">
         <!-- <button
@@ -23,11 +23,11 @@
         <Button
           variant="ghost"
           size="sm"
-          :disabled="meta.current === 1"
+          :disabled="meta?.current === 1"
           :loading="loading && currentClick === 'prev'"
           @click="
             currentClick = 'prev';
-            emits('paginate', { page: meta.current - 1 });
+            emits('paginate', { page: meta?.current - 1 });
           "
         >
           Prev
@@ -35,11 +35,11 @@
         <Button
           variant="ghost"
           size="sm"
-          :disabled="!meta.next"
+          :disabled="!meta?.next"
           :loading="loading && currentClick === 'next'"
           @click="
             currentClick = 'next';
-            emits('paginate', { page: meta.next });
+            emits('paginate', { page: meta?.next });
           "
         >
           Next
@@ -64,12 +64,12 @@ const props = defineProps({
 const currentClick = ref<"next" | "prev">("next");
 
 const paginationString = computed(() => {
-  const start = (props.meta.current - 1) * props.meta.limit + 1;
+  const start = (props.meta?.current - 1) * props.meta?.limit + 1;
   const last = Math.min(
-    props.meta.current * props.meta.limit,
-    props.meta.total,
+    props.meta?.current * props.meta?.limit,
+    props.meta?.total,
   );
-  return `${start} - ${last} of ${props.meta.total} results`;
+  return `${start} - ${last} of ${props.meta?.total} results`;
 });
 
 const emits = defineEmits(["paginate"]);

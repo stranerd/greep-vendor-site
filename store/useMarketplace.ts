@@ -61,7 +61,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
         { field: "data.vendorId", value: authStore.user.id },
       ]),
       sort: JSON.stringify([{ field: "createdAt", desc: true }]),
-      ...params,
+      // ...params,
       limit: 15,
       lazy: false,
     });
@@ -272,7 +272,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
 
     marketplaceLoadingStates.value.clearCart = API_STATES.LOADING;
     const { data, error } = await $api.marketplace.clearCart(
-      currentCart.value.id,
+      currentCart.value?.id,
     );
 
     if (error.value) {
