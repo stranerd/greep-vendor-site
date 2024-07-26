@@ -22,7 +22,8 @@
 
       <template v-if="ActiveTab === VendorFormCards.STORE_TYPE">
         <Card
-          v-for="vendor in vendorTypes"
+          v-for="(vendor, i) in vendorTypes"
+          :key="i"
           @click="vendorType = vendor"
           :class="{ 'border-green-500': vendorType === vendor }"
           class="cursor-pointer border-2 p-4"

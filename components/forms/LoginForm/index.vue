@@ -132,7 +132,6 @@ const { handleSubmit, resetForm } = useForm({
 });
 
 const onSubmit = handleSubmit((values: any) => {
-  console.log("Form submitted!", values);
   loginUser(values);
 });
 
