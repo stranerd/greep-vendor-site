@@ -112,7 +112,7 @@ export interface IOrders {
         currency: string;
         id: string;
         quantity: number;
-      }
+      },
     ];
   };
   fee: {
@@ -131,4 +131,5 @@ export interface IOrders {
   __type: string;
   hash: string;
   users: Array<OrderUser>;
+  activeStatus: "created" | "accepted" | "shipped";
 }

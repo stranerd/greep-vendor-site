@@ -8,7 +8,7 @@
       :style="{ backgroundColor: getOrderColor(type).primary }"
     >
       <MenuIcon class="h6 w-4" />
-      <h2 class="font-medium">ORDER ID #{{ order.id }}</h2>
+      <h2 class="font-medium">ORDER ID #{{ order.id.slice(0, 7) }}</h2>
     </div>
 
     <div class="p-2 pb-0 font-medium">
@@ -18,7 +18,7 @@
           :style="{ color: getOrderColor(type).primary }"
         />
         <span class="text-[#616161]">Location : </span>
-        <h2 class="">{{ order.location }}</h2>
+        <h2 class="">{{ order.to.location }}</h2>
       </div>
       <div class="flex items-center gap-1 text-sm">
         <Money2Icon
@@ -26,7 +26,9 @@
           :style="{ color: getOrderColor(type).primary }"
         />
         <span class="text-[#616161]">Amount : </span>
-        <h2 class="">${{ order.amount }}</h2>
+        <h2 class="">
+          {{ gpNumbers.formatCurrency(order.data.products[0].amount) }}
+        </h2>
       </div>
       <div class="flex items-center gap-1 text-sm">
         <LayerIcon
@@ -34,22 +36,22 @@
           :style="{ color: getOrderColor(type).primary }"
         />
         <span class="text-[#616161]">No of Plates: </span>
-        <h2 class="">{{ order.no_of_order }}</h2>
+        <h2 class="">{{ order.data.products.length }}</h2>
       </div>
 
       <!-- Customer -->
 
       <div class="mt-8 flex items-center gap-2">
         <img
-          :src="order.customer.picture"
+          :src="order.users[0].bio.photo.link"
           alt=""
           class="h-10 w-10 rounded-[50%]"
         />
         <div class="font-normal">
-          <h2 class="text-sm">{{ order.customer.name }}</h2>
+          <h2 class="text-sm">{{ order.users[0].bio.name.full }}</h2>
           <h2 class="flex text-xs text-gray-400">
-            {{ $moment(order.customer.time as Date).format("MMM Do") }} •
-            {{ $moment(order.customer.time as Date).format("h:mm:ss A") }}
+            {{ $moment(order.status.created.at).format("MMM Do") }} •
+            {{ $moment(order.status.created.at).format("h:mm:ss A") }}
           </h2>
         </div>
       </div>
@@ -76,37 +78,24 @@ import {
   Money2Icon,
   LayerIcon,
 } from "@placetopay/iconsax-vue/bold";
-
-type OrderTypes = "new" | "kitchen" | "delivery";
-
-interface OrderData {
-  id: string | number;
-  type: OrderTypes;
-  location: string;
-  amount: number;
-  no_of_order: number;
-  customer: {
-    name: string;
-    picture: string;
-    time: Date | String;
-  };
-}
+import type { IOrders } from "~/types/modules/marketPlaceModel";
+type OrderTypes = "created" | "accepted" | "shipped";
 
 const props = defineProps({
   type: { type: String as PropType<OrderTypes>, required: true },
-  order: { type: Object as PropType<OrderData>, required: true },
+  order: { type: Object as PropType<IOrders>, required: true },
 });
 
 const openDetailsModal = ref(false);
 
-const getOrderColor = (type: OrderTypes) => {
-  if (type === "new") {
+const getOrderColor = (activeStatus: OrderTypes) => {
+  if (activeStatus === "created") {
     return {
       primary: "#AB68FF",
       secondary: "#F0E3FF",
     };
   }
-  if (type === "kitchen") {
+  if (activeStatus === "accepted") {
     return {
       primary: "#68DBFF",
       secondary: "#E3F8FF",

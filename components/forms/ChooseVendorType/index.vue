@@ -51,6 +51,7 @@
                   class="rounded-[12]"
                   @change="handleChange"
                 />
+                <LocationPicker v-else-if="field.name === 'location'" />
                 <Input
                   v-else
                   :type="field.type"
@@ -149,7 +150,13 @@ const vendorTypeForm = ref([
     label: "Store's Email",
     placeholder: "suppor@goodies-store.com",
   },
-  { name: "banner", type: "file", label: "Store's Banner" },
+  { name: "banner", type: "file", label: "Store's Logo" },
+  {
+    name: "location",
+    type: "text",
+    label: "Store's Location",
+    placeholder: "Wuse, Abuja Nigeria",
+  },
   {
     name: "website",
     type: "text",
