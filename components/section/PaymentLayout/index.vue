@@ -1,35 +1,35 @@
 <template>
-  <div class="max-w-[456px] m-auto w-full">
+  <div class="m-auto w-full max-w-[456px]">
     <img
       src="/images/logos/greep.svg"
       alt="Greep"
-      class="mx-auto w-[45.45px] h-[45.45px] object-contain mb-2"
+      class="mx-auto mb-2 h-[45.45px] w-[45.45px] object-contain"
     />
     <h3
-      class="text-center text-[22px] text-[#001726] leading-[33px] font-semibold"
+      class="text-center text-[22px] font-semibold leading-[33px] text-[#001726]"
     >
       Online Payment
     </h3>
-    <p class="text-center text-[#999999] text-[14px] mb-[10px]">
+    <p class="mb-[10px] text-center text-[14px] text-[#999999]">
       Make payment for your purchase
     </p>
     <div
       class="rounded-[16px] p-5"
       style="box-shadow: 0px 0px 4px 0px #00000040"
     >
-      <h5 class="text-[16px] leading-[24px] font-semibold mb-[26px]">
+      <h5 class="mb-[26px] text-[16px] font-semibold leading-[24px]">
         Order Details
       </h5>
-      <div class="flex items-center justify-between mb-[19px]">
+      <div class="mb-[19px] flex items-center justify-between">
         <div>
           <p class="text-[12px] leading-[20px] text-[#999999]">Customer Name</p>
-          <h6 class="text-[#001726] text-[14px] leading-[20px] font-normal">
+          <h6 class="text-[14px] font-normal leading-[20px] text-[#001726]">
             {{ user?.allNames?.full }}
           </h6>
         </div>
         <div>
           <p class="text-[12px] leading-[20px] text-[#999999]">Order ID</p>
-          <h6 class="text-[#001726] text-[14px] leading-[20px] font-normal">
+          <h6 class="text-[14px] font-normal leading-[20px] text-[#001726]">
             {{ cartLinkDetails?.id?.slice(0, 7) }}...
           </h6>
         </div>
@@ -46,13 +46,13 @@
           City building, apartment 15
         </h6>
       </div> -->
-      <table>
+      <table class="w-full">
         <thead>
           <tr>
             <th
               v-for="(header, i) in tableHeaders"
               :key="i"
-              class="border-t-[1px] border-t-[#E0E2E4] border-b-[1px] border-b-[#E0E2E4] pr-[8px] text-left font-normal py-[9px] text-[12px] leaidng-[18px]"
+              class="leaidng-[18px] border-b-[1px] border-t-[1px] border-b-[#E0E2E4] border-t-[#E0E2E4] py-[9px] pr-[8px] text-left text-[12px] font-normal"
             >
               {{ header }}
             </th>
@@ -63,7 +63,7 @@
             <td class="py-[19px] pr-[8px]">
               <p class="text-[12px] leading-[18px]">
                 {{ pack.title }}
-                <span class="text-[#999999] block">{{ pack.description }}</span>
+                <span class="block text-[#999999]">{{ pack.description }}</span>
               </p>
             </td>
             <td class="py-[19px] pr-[8px]">
@@ -74,7 +74,7 @@
                 {{
                   currencyConverter(
                     pack?.price?.currency,
-                    pack?.price?.amount || 0
+                    pack?.price?.amount || 0,
                   )
                 }}
               </p>
@@ -84,7 +84,7 @@
                 {{
                   currencyConverter(
                     pack?.price?.currency,
-                    pack?.price?.amount * pack?.quantity
+                    pack?.price?.amount * pack?.quantity,
                   )
                 }}
               </p>
@@ -92,9 +92,9 @@
           </tr>
         </tbody>
       </table>
-      <div class="border-t-[1px] border-t-[#E0E2E4] my-[19px]"></div>
-      <div class="max-w-[200px] ml-auto">
-        <div class="flex items-center justify-between gap-[8px] mb-[10px]">
+      <div class="my-[19px] border-t-[1px] border-t-[#E0E2E4]"></div>
+      <div class="ml-auto max-w-[200px]">
+        <div class="mb-[10px] flex items-center justify-between gap-[8px]">
           <p class="text-[12px] leading-[18px] text-[#616161]">Subtotal</p>
           <p class="text-[12px] leading-[18px]">{{ productTotal }}</p>
         </div>

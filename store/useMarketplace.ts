@@ -716,5 +716,6 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     createCartLink,
     getCartLinkDetails,
     checkoutCartLink,
+    getRecommendedProductsTags,
   };
 });
