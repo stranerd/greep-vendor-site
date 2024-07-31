@@ -723,5 +723,6 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     getProductFoodsTags,
     getProductItemsTags,
     createProductCategoryTag,
+    getRecommendedProductsTags,
   };
 });

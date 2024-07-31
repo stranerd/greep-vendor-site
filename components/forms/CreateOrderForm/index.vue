@@ -376,9 +376,6 @@ type SelectItems = {
 const emits = defineEmits(["completed"]);
 
 const onSubmit = handleSubmit(async (values: any) => {
-  console.log("Form submitted!", values);
-  console.log({ productsArray });
-
   const payload = {
     ...values,
     packs: [
@@ -413,7 +410,6 @@ onMounted(async () => {
     search: { value: "", fields: ["title", "description"] },
   });
   products.value = productsResults;
-  console.log({ productsResults });
 });
 
 onBeforeUnmount(() => {

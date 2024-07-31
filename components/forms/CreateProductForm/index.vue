@@ -77,7 +77,7 @@
             <PopoverContent class="w-[350px] p-0">
               <Command loop>
                 <CommandInput
-                  placeholder="Search framework..."
+                  placeholder="Search tag..."
                   v-model="inputValue"
                 />
                 <CommandGroup class="max-h-[145px] overflow-auto">
@@ -209,7 +209,12 @@
                 <span class="text-[#FF5656]">Required</span></FormLabel
               >
               <FormControl>
-                <Input type="file" placeholder="File" @change="handleChange" />
+                <Input
+                  type="file"
+                  placeholder="File"
+                  @change="handleChange"
+                  accept="image/*"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

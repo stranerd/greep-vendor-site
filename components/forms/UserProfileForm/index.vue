@@ -34,18 +34,23 @@
           <FormControl>
             <vue-tel-input
               v-bind="{ ...telProps, ...componentField }"
-              class="!rounded-md py-1 !focus-visible:outline-none !focus-visible:ring-2 !focus-within:border-[#000] !focus-visible:ring-ring !focus-visible:ring-offset-2 !ring-offset-background !border-input !border !shadow-none"
+              class="!focus-visible:outline-none !focus-visible:ring-2 !focus-within:border-[#000] !focus-visible:ring-ring !focus-visible:ring-offset-2 !rounded-md !border !border-input py-1 !shadow-none !ring-offset-background"
               @validate="showOptions"
             ></vue-tel-input>
           </FormControl>
           <FormMessage />
         </FormItem>
       </FormField>
-      <FormField v-slot="{ componentField }" name="photo">
+      <FormField v-slot="{ handleChange }" name="photo">
         <FormItem>
           <FormLabel>Photo </FormLabel>
           <FormControl>
-            <Input type="file" placeholder="File" v-bind="componentField" />
+            <Input
+              type="file"
+              placeholder="File"
+              accept="image/*"
+              @change="handleChange"
+            />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -85,8 +90,8 @@ const formSchema = toTypedSchema(
       message: "Middle name cannot be less than 2 characters",
     }),
     phone: z.string(),
-    banner: z.any().optional(),
-  })
+    photo: z.any().optional(),
+  }),
 );
 
 const emit = defineEmits(["completed"]);
@@ -125,6 +130,9 @@ const { handleSubmit, resetForm } = useForm({
 
 const onSubmit = handleSubmit(async (values: any) => {
   console.log("Form submitted!", values);
+  if (!values.photo) {
+    delete values.photo;
+  }
   const { toast } = useToast();
   if (phoneOptions.value.valid) {
     const formData = new FormData();
@@ -135,7 +143,7 @@ const onSubmit = handleSubmit(async (values: any) => {
           JSON.stringify({
             code: `+${phoneOptions.value.countryCallingCode}`,
             number: phoneOptions.value.nationalNumber,
-          })
+          }),
         );
       } else {
         formData.append(item, values[item]);
