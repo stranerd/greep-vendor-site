@@ -12,6 +12,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       baseURL: process.env.BASE_URL,
+      googleMapApiKey: process.env.GOOGLE_MAPS_API_KEY,
     },
   },
   ssr: false,

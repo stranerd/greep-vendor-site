@@ -10,6 +10,8 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
   const orderMeta = ref({});
   const recentOrders = ref<Array<IOrders>>([]);
   const recentOrderMeta = ref({});
+  const menuOrders = ref([]);
+  const singleMenuOrder = ref();
   const singleOrder = ref<IOrders>();
   const products = ref<Array<IProduct>>([]);
   const profuctsMeta = ref({});
@@ -343,6 +345,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
         lazy: false,
       }),
     ]);
+
     console.log({ productsRes, statsRes });
     if (productsRes?.value?.data?.value?.results) {
       dashBoardData.value.products = productsRes?.value?.data?.value?.results;
@@ -706,6 +709,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     addToCart,
     currentCart,
     clearCart,
+    orderMeta,
     createOrder,
     getSingleOrder,
     singleOrder,
@@ -716,6 +720,9 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     createCartLink,
     getCartLinkDetails,
     checkoutCartLink,
+    getProductFoodsTags,
+    getProductItemsTags,
+    createProductCategoryTag,
     getRecommendedProductsTags,
   };
 });

@@ -2,41 +2,110 @@
   <div class="">
     <h1 class="text-lg font-semibold md:text-2xl">Orders</h1>
   </div>
-
-  <div class="grid w-[96%] grid-cols-3 gap-4">
+  <div
+    class="my-4 grid w-[96%] grid-cols-3 gap-4"
+    v-if="marketplaceLoadingStates.allOrders === API_STATES.LOADING"
+  >
+    <div class="flex w-full flex-col gap-2" v-for="i in 3">
+      <Skeleton class="h-12 w-full bg-gray-200" />
+      <div class="mt-1 animate-pulse bg-gray-200 p-2" v-for="i in 4">
+        <Skeleton class="my-3 h-4 w-4/6 rounded-lg" v-for="i in 3" />
+        <div class="flex w-full items-center gap-x-5">
+          <Skeleton class="h-12 w-12 rounded-[50%]" />
+          <div class="w-fit">
+            <Skeleton class="my-3 h-4 w-[200px] rounded-lg" v-for="i in 2" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="my-2 grid w-[96%] grid-cols-3 gap-4"
+    v-else-if="marketplaceLoadingStates.allOrders === API_STATES.SUCCESS"
+  >
     <div class="flex w-full flex-col gap-2">
       <Button class="w-full bg-[#7C13FF] hover:bg-[#7C13FF]">
-        New ({{ orders.filter(({ type }) => type === "new").length }})</Button
+        New ({{
+          orders.filter(({ activeStatus }) => activeStatus === "created")
+            .length
+        }})</Button
       >
-      <OrderCard
-        :order="order"
-        v-for="order in orders.filter(({ type }) => type === 'new')"
-        :type="order.type"
+
+      <div
+        class=""
+        v-if="
+          orders.filter(({ activeStatus }) => activeStatus === 'created')
+            .length > 0
+        "
+      >
+        <OrderCard
+          :order="order"
+          v-for="order in orders.filter(
+            ({ activeStatus }) => activeStatus === 'created',
+          )"
+          :type="order.activeStatus"
+        />
+      </div>
+      <DisplayState
+        message="No new orders, kindly check back!"
+        hide-button
+        v-else
       />
     </div>
     <div class="flex w-full flex-col gap-2">
       <Button class="hover:bg-bg-[#0250C6] w-full bg-[#0250C6]">
         Kitchen ({{
-          orders.filter(({ type }) => type === "kitchen").length
+          orders.filter(({ activeStatus }) => activeStatus === "accepted")
+            .length
         }})</Button
       >
-
-      <OrderCard
-        :order="order"
-        v-for="order in orders.filter(({ type }) => type === 'kitchen')"
-        :type="order.type"
+      <div
+        class=""
+        v-if="
+          orders.filter(({ activeStatus }) => activeStatus === 'accepted')
+            .length > 0
+        "
+      >
+        <OrderCard
+          :order="order"
+          v-for="order in orders.filter(
+            ({ activeStatus }) => activeStatus === 'accepted',
+          )"
+          :type="order.activeStatus"
+        />
+      </div>
+      <DisplayState
+        message="No current orders, accept orders or check back for new order!"
+        hide-button
+        v-else
       />
     </div>
     <div class="flex w-full flex-col gap-2">
       <Button class="w-full bg-[#006D48] hover:bg-[#006D48]">
-        New ({{
-          orders.filter(({ type }) => type === "delivery").length
+        Delivery ({{
+          orders.filter(({ activeStatus }) => activeStatus === "shipped")
+            .length
         }})</Button
       >
-      <OrderCard
-        :order="order"
-        v-for="order in orders.filter(({ type }) => type === 'delivery')"
-        :type="order.type"
+      <div
+        class=""
+        v-if="
+          orders.filter(({ activeStatus }) => activeStatus === 'shipped')
+            .length > 0
+        "
+      >
+        <OrderCard
+          :order="order"
+          v-for="order in orders.filter(
+            ({ activeStatus }) => activeStatus === 'shipped',
+          )"
+          :type="order.activeStatus"
+        />
+      </div>
+      <DisplayState
+        message="No shipped orders, ship orders or check back for new order!"
+        hide-button
+        v-else
       />
     </div>
   </div>
@@ -44,263 +113,16 @@
 
 <script setup lang="ts">
 import { Search } from "lucide-vue-next";
+import { useMarketPlaceStore } from "~/store/useMarketplace";
+import type { IOrders } from "~/types/modules/marketPlaceModel";
+import { API_STATES } from "~/services/constants";
+const marketplaceStore = useMarketPlaceStore();
+const { orders, marketplaceLoadingStates } = storeToRefs(marketplaceStore);
+type OrderTypes = "created" | "accepted" | "shipped";
 
-type OrderTypes = "new" | "kitchen" | "delivery";
-
-interface OrderData {
-  id: string | number;
-  type: OrderTypes;
-  location: string;
-  amount: number;
-  no_of_order: number;
-  customer: {
-    name: string;
-    picture: string;
-    time: Date | String;
-  };
-}
-const orders = ref<OrderData[]>([
-  {
-    type: "kitchen",
-    id: "ORD19614",
-    location: "Paris, France",
-    amount: 107.0,
-    no_of_order: 5,
-    customer: {
-      name: "Eva Blue",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=female",
-      time: "2024-06-20T20:19:58.131434",
-    },
-  },
-  {
-    type: "new",
-    id: "ORD12511",
-    location: "Tokyo, Japan",
-    amount: 87.0,
-    no_of_order: 3,
-    customer: {
-      name: "Bob Smith",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=male",
-      time: "2024-07-11T20:19:58.131532",
-    },
-  },
-  {
-    type: "kitchen",
-    id: "ORD30304",
-    location: "Berlin, Germany",
-    amount: 132.0,
-    no_of_order: 4,
-    customer: {
-      name: "Eva Blue",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=female",
-      time: "2024-06-26T20:19:58.131559",
-    },
-  },
-  {
-    type: "new",
-    id: "ORD82542",
-    location: "Paris, France",
-    amount: 225.0,
-    no_of_order: 1,
-    customer: {
-      name: "Eva Blue",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=female",
-      time: "2024-07-03T20:19:58.131567",
-    },
-  },
-  {
-    type: "delivery",
-    id: "ORD76151",
-    location: "Berlin, Germany",
-    amount: 233.0,
-    no_of_order: 4,
-    customer: {
-      name: "Bob Smith",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=female",
-      time: "2024-06-26T20:19:58.131574",
-    },
-  },
-  {
-    type: "delivery",
-    id: "ORD34271",
-    location: "London, UK",
-    amount: 136.0,
-    no_of_order: 2,
-    customer: {
-      name: "David Green",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=male",
-      time: "2024-06-19T20:19:58.131583",
-    },
-  },
-  {
-    type: "kitchen",
-    id: "ORD86451",
-    location: "New York, USA",
-    amount: 96.0,
-    no_of_order: 2,
-    customer: {
-      name: "David Green",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=female",
-      time: "2024-06-29T20:19:58.131591",
-    },
-  },
-  {
-    type: "new",
-    id: "ORD91061",
-    location: "Tokyo, Japan",
-    amount: 60.0,
-    no_of_order: 1,
-    customer: {
-      name: "Eva Blue",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=male",
-      time: "2024-06-23T20:19:58.131602",
-    },
-  },
-  {
-    type: "kitchen",
-    id: "ORD12121",
-    location: "Paris, France",
-    amount: 163.0,
-    no_of_order: 3,
-    customer: {
-      name: "David Green",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=male",
-      time: "2024-06-23T20:19:58.131611",
-    },
-  },
-  {
-    type: "new",
-    id: "ORD14708",
-    location: "Paris, France",
-    amount: 259.0,
-    no_of_order: 5,
-    customer: {
-      name: "David Green",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=female",
-      time: "2024-06-20T20:19:58.131619",
-    },
-  },
-  {
-    type: "kitchen",
-    id: "ORD98836",
-    location: "New York, USA",
-    amount: 174.0,
-    no_of_order: 2,
-    customer: {
-      name: "Eva Blue",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=female",
-      time: "2024-06-29T20:19:58.131632",
-    },
-  },
-  {
-    type: "new",
-    id: "ORD14198",
-    location: "Tokyo, Japan",
-    amount: 167.0,
-    no_of_order: 1,
-    customer: {
-      name: "Eva Blue",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=male",
-      time: "2024-06-21T20:19:58.131644",
-    },
-  },
-  {
-    type: "kitchen",
-    id: "ORD19496",
-    location: "Tokyo, Japan",
-    amount: 165.0,
-    no_of_order: 4,
-    customer: {
-      name: "Carol White",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=female",
-      time: "2024-06-18T20:19:58.131655",
-    },
-  },
-  {
-    type: "delivery",
-    id: "ORD90064",
-    location: "Tokyo, Japan",
-    amount: 127.0,
-    no_of_order: 2,
-    customer: {
-      name: "Bob Smith",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=female",
-      time: "2024-06-24T20:19:58.131675",
-    },
-  },
-  {
-    type: "kitchen",
-    id: "ORD15257",
-    location: "London, UK",
-    amount: 173.0,
-    no_of_order: 5,
-    customer: {
-      name: "Alice Johnson",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=male",
-      time: "2024-06-26T20:19:58.131683",
-    },
-  },
-  {
-    type: "kitchen",
-    id: "ORD89250",
-    location: "Berlin, Germany",
-    amount: 166.0,
-    no_of_order: 3,
-    customer: {
-      name: "Bob Smith",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=female",
-      time: "2024-07-01T20:19:58.131690",
-    },
-  },
-  {
-    type: "kitchen",
-    id: "ORD13132",
-    location: "New York, USA",
-    amount: 66.0,
-    no_of_order: 4,
-    customer: {
-      name: "Carol White",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=male",
-      time: "2024-07-03T20:19:58.131701",
-    },
-  },
-  {
-    type: "delivery",
-    id: "ORD20160",
-    location: "Paris, France",
-    amount: 72.0,
-    no_of_order: 3,
-    customer: {
-      name: "Carol White",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=male",
-      time: "2024-07-02T20:19:58.131712",
-    },
-  },
-  {
-    type: "delivery",
-    id: "ORD69761",
-    location: "Tokyo, Japan",
-    amount: 80.0,
-    no_of_order: 4,
-    customer: {
-      name: "Carol White",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=female",
-      time: "2024-06-19T20:19:58.131727",
-    },
-  },
-  {
-    type: "delivery",
-    id: "ORD10966",
-    location: "Tokyo, Japan",
-    amount: 254.0,
-    no_of_order: 5,
-    customer: {
-      name: "Eva Blue",
-      picture: "https://xsgames.co/randomusers/avatar.php?g=male",
-      time: "2024-06-17T20:19:58.131735",
-    },
-  },
-]);
+onMounted(() => {
+  marketplaceStore.getVendorOrders();
+});
 </script>
 
 <style scoped>

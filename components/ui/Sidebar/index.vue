@@ -20,8 +20,11 @@
             <nuxt-link
               v-if="navItem.to"
               :to="{ name: navItem.to }"
-              :class="{}"
-              active-class="bg-[#001726] !text-[#fff]"
+              :class="
+                route.meta.name && route.meta.name.includes(navItem.to)
+                  ? 'bg-[#001726] !text-[#fff]'
+                  : ''
+              "
               class="mb-2 flex items-center gap-4 rounded-[4px] px-6 py-2 text-[16px] leading-[28px] text-muted-foreground transition-all hover:text-primary"
             >
               <component :is="navItem.icon" class="h-6 w-6" />
@@ -67,6 +70,7 @@ const userType = computed(() =>
 );
 
 const router = useRouter();
+const route = useRoute();
 
 const navLinks = ref([
   {
