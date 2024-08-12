@@ -406,18 +406,24 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
       return { error: error.value };
     }
     if (data.value) {
-      const producytIds = data.value?.data?.products?.reduce(
+      const productIds = data.value?.data?.products?.reduce(
         (acc: any, post: any) => {
           return { ...acc, [post.id]: post };
         },
         {},
       );
 
+      console.log({ productIds, products: data.value.products });
       const productRes = await $api.marketplace.getProducts({
         where: JSON.stringify([
-          { field: "id", condition: "in", value: Object.keys(producytIds) },
+          {
+            field: "id",
+            condition: "in",
+            value: Object.keys(data.value.products),
+          },
         ]),
       });
+
       singleOrder.value = {
         ...data.value,
         data: {
@@ -427,7 +433,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
           ).map((product: any) => {
             return {
               ...product,
-              quantity: producytIds?.[product.id]?.quantity || 1,
+              quantity: productIds?.[product.id]?.quantity || 1,
             };
           }),
         },
@@ -491,6 +497,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
         description: "Order updated successfully",
       });
       singleOrder.value = data.value;
+      await getVendorOrders();
       marketplaceLoadingStates.value.rejectOrAcceptOrder = API_STATES.SUCCESS;
       return data.value;
     }
@@ -598,7 +605,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     }
     if (data.value) {
       let response = {} as any;
-      const producytIds = data.value?.packs?.[0]?.reduce(
+      const productIds = data.value?.packs?.[0]?.reduce(
         (acc: any, product: any) => {
           return { ...acc, [product.id]: product };
         },
@@ -606,7 +613,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
       );
       const productRes = await $api.marketplace.getProducts({
         where: JSON.stringify([
-          { field: "id", condition: "in", value: Object.keys(producytIds) },
+          { field: "id", condition: "in", value: Object.keys(productIds) },
         ]),
       });
       response = {
@@ -617,7 +624,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
               (product: any) => {
                 return {
                   ...product,
-                  quantity: producytIds?.[product.id]?.quantity || 1,
+                  quantity: productIds?.[product.id]?.quantity || 1,
                 };
               },
             ),
@@ -713,6 +720,8 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     createOrder,
     getSingleOrder,
     singleOrder,
+    productFoodsTags,
+    productFoodTagItems,
     cancelOrder,
     rejectOrAcceptOrder,
     dispatchOrder,

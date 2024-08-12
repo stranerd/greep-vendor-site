@@ -32,7 +32,7 @@
       >
 
       <div
-        class=""
+        class="flex flex-col gap-4"
         v-if="
           orders.filter(({ activeStatus }) => activeStatus === 'created')
             .length > 0
@@ -60,7 +60,7 @@
         }})</Button
       >
       <div
-        class=""
+        class="flex flex-col gap-4"
         v-if="
           orders.filter(({ activeStatus }) => activeStatus === 'accepted')
             .length > 0
@@ -88,7 +88,7 @@
         }})</Button
       >
       <div
-        class=""
+        class="flex flex-col gap-4"
         v-if="
           orders.filter(({ activeStatus }) => activeStatus === 'shipped')
             .length > 0

@@ -11,10 +11,12 @@
 definePageMeta({
   layout: "dashboard",
   middleware: ["authenticated"],
+  name: GP_ROUTES.VENDOR.ITEMS.ORDER_DETAILS,
 });
 
 const route = useRoute();
 import { useMarketPlaceStore } from "@/store/useMarketplace";
+import { GP_ROUTES } from "~/constants/route-names";
 
 const marketPlaceStore = useMarketPlaceStore();
 const { getSingleOrder } = marketPlaceStore;

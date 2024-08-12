@@ -3,6 +3,7 @@
     v-model="value"
     class="google-location"
     :api-key="GoogleMapApiKey"
+    @set="getPayload"
   />
 </template>
 
@@ -13,4 +14,8 @@ const config = useRuntimeConfig();
 const GoogleMapApiKey = config.public.googleMapApiKey;
 
 const value = ref();
+const modelValue = defineModel();
+const getPayload = (e: any) => {
+  modelValue.value = e;
+};
 </script>

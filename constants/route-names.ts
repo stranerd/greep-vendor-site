@@ -21,13 +21,14 @@ export class GP_ROUTES {
 
     FOOD: {
       ORDERS: "food-orders",
-      ORDER_DETAILS: "food-order-details",
+      ORDER_DETAILS: "food-orders details",
       MENU: "food-menu",
       MENU_DETAILS: "food-menu-details",
     },
 
     ITEMS: {
       ORDERS: "items-orders",
+      ORDER_DETAILS: "items-orders details",
       ITEMS_MANAGER: "items-manager",
     },
   };

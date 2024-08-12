@@ -40,6 +40,14 @@ input::placeholder,
   color: #a4a8ab !important;
 }
 
+input[type="number"] {
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
 .google-location {
   border: 1px solid #e2e8f0;
   width: 100%;

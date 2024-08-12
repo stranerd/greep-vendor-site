@@ -17,7 +17,7 @@
           </TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody v-for="(order, i) in items" :key="i">
+      <TableBody v-for="(order, i) in orderHistory" :key="i">
         <TableRow>
           <TableCell class="text-[12px]">
             #{{ order?.id.slice(0, 9) }}
@@ -54,33 +54,13 @@
             </Badge>
           </TableCell>
           <TableCell class="text-[12px]">
-            {{ order?.fee?.currency }} {{ order?.fee?.payable?.toFixed(3) }}
-          </TableCell>
-          <TableCell>
-            <client-only>
-              <DropdownMenu>
-                <DropdownMenuTrigger as-child>
-                  <Button aria-haspopup="true" size="icon" variant="ghost">
-                    <MoreHorizontal class="h-4 w-4" />
-                    <span class="sr-only">Toggle menu</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                  <DropdownMenuItem
-                    @click="router.push(`/vendor/orders/${order.id}`)"
-                    >View</DropdownMenuItem
-                  >
-                  <DropdownMenuItem>Delete</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </client-only>
+            {{ gpNumbers.formatCurrency(order?.fee?.payable) }}
           </TableCell>
         </TableRow>
       </TableBody>
     </Table>
     <DisplayState
-      v-if="items.length === 0"
+      v-if="orderHistory.length === 0"
       :message="
         source === 'recent'
           ? 'No recent history to display. Come back soon and we`ll show you what you`ve been up to!'
@@ -94,7 +74,18 @@
 <script setup lang="ts">
 import { MoreHorizontal } from "lucide-vue-next";
 import { orderStatus, paymentStatus } from "~/lib/utils";
+
+import { useMarketPlaceStore } from "@/store/useMarketplace";
+import { GP_ROUTES } from "~/constants/route-names";
+
+const marketPlaceStore = useMarketPlaceStore();
+const { marketplaceLoadingStates, orders } = storeToRefs(marketPlaceStore);
+
 const { $moment } = useNuxtApp();
+
+const orderHistory = computed(() => {
+  return orders.value.filter((order) => order.activeStatus === null);
+});
 
 const props = defineProps({
   source: {
