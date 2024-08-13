@@ -34,10 +34,10 @@
           <TableCell>
             <Badge
               variant="outline"
-              class="rounded-[8px] font-normal text-[12px] py-1"
+              class="rounded-[8px] py-1 text-[12px] font-normal"
             >
               <div
-                class="w-[9px] h-[9px] rounded-[3px] mr-2"
+                class="mr-2 h-[9px] w-[9px] rounded-[3px]"
                 :class="paymentStatus(order.status).color"
               ></div>
               {{ paymentStatus(order.status).text }}
@@ -46,19 +46,19 @@
           <TableCell>
             <Badge
               variant="outline"
-              class="rounded-[8px] font-normal text-[12px] py-1"
+              class="rounded-[8px] py-1 text-[12px] font-normal"
             >
               <div
-                class="w-[9px] h-[9px] rounded-[3px] mr-2"
+                class="mr-2 h-[9px] w-[9px] rounded-[3px]"
                 :class="orderStatus(order.status).color"
               ></div>
               {{ orderStatus(order.status).text }}
             </Badge>
           </TableCell>
           <TableCell class="text-[12px]">
-            {{ order?.fee?.currency }} {{ order?.fee?.payable?.toFixed(3) }}
+            {{ gpNumbers.formatCurrency(order?.fee?.payable) }}
           </TableCell>
-          <TableCell>
+          <TableCell v-if="userType === 'items'">
             <client-only>
               <DropdownMenu>
                 <DropdownMenuTrigger as-child>
@@ -70,7 +70,12 @@
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                   <DropdownMenuItem
-                    @click="router.push(`/vendor/orders/${order.id}`)"
+                    @click="
+                      router.push({
+                        name: GP_ROUTES.VENDOR.ITEMS.ORDER_DETAILS,
+                        params: { id: order.id },
+                      })
+                    "
                     >View</DropdownMenuItem
                   >
                   <DropdownMenuItem>Delete</DropdownMenuItem>
@@ -96,15 +101,21 @@
 <script setup lang="ts">
 import { MoreHorizontal } from "lucide-vue-next";
 import { orderStatus, paymentStatus } from "~/lib/utils";
-const { $moment } = useNuxtApp();
+import { GP_ROUTES } from "~/constants/route-names";
+import { GP_CONSTANTS } from "~/constants";
+import type { IOrders } from "~/types/modules/marketPlaceModel";
 
+const { $moment } = useNuxtApp();
+const userType = computed(() =>
+  JSON.parse(localStorage.getItem(GP_CONSTANTS.USER_TYPE) as string),
+);
 const props = defineProps({
   source: {
     type: String,
     default: "recent",
   },
   items: {
-    type: Array,
+    type: Array as PropType<IOrders[]>,
     default: () => [],
   },
 });

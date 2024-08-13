@@ -3,11 +3,14 @@
     Orders > Order #{{ route?.params?.id?.slice(0, 9) || "" }}
   </PageHeader>
   <div class="mx-auto w-full max-w-[848px]">
-    <OrderFoodDetails />
+    <OrderDetails />
   </div>
 </template>
 
 <script lang="ts" setup>
+import { useMarketPlaceStore } from "@/store/useMarketplace";
+import { GP_ROUTES } from "~/constants/route-names";
+
 definePageMeta({
   layout: "dashboard",
   middleware: ["authenticated", "vendor-foods"],
@@ -15,8 +18,6 @@ definePageMeta({
 });
 
 const route = useRoute();
-import { useMarketPlaceStore } from "@/store/useMarketplace";
-import { GP_ROUTES } from "~/constants/route-names";
 
 const marketPlaceStore = useMarketPlaceStore();
 const { getSingleOrder } = marketPlaceStore;

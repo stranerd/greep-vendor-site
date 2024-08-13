@@ -63,7 +63,7 @@ export const orderStatus = (status: any) => {
   if (status.refunded) {
     return {
       text: "Refunded",
-      color: "bg-[bg-[#B91010]]",
+      color: "bg-[#708090]",
     };
   }
 

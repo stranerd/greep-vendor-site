@@ -52,7 +52,10 @@
                   class="rounded-[12]"
                   @change="handleChange"
                 />
-                <LocationPicker v-else-if="field.name === 'location'" />
+                <LocationPicker
+                  v-else-if="field.name === 'location'"
+                  v-model="location"
+                />
                 <Input
                   v-else
                   :type="field.type"
@@ -114,7 +117,7 @@ const VendorFormCards = ref({
   STORE_DETAILS: "store-details",
 });
 const banner = ref<File | null>(null);
-
+const location = ref({});
 const ActiveTab = ref(VendorFormCards.value.STORE_TYPE);
 
 interface Vendor {
@@ -201,14 +204,7 @@ const chooseVendorType = handleSubmit(async (values: any) => {
 
   form.append("type", "vendor");
   form.append("vendorType", vendorType.value?.value ?? "");
-  form.append(
-    "location",
-    JSON.stringify({
-      coords: [9.065482399999999, 7.4419364],
-      location: "KKTC",
-      description: "Location",
-    }),
-  );
+  form.append("location", JSON.stringify(location.value));
   const formFields: any = {};
   for (let [key, value] of form.entries()) {
     formFields[key] = value;

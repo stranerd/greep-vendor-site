@@ -12,8 +12,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   const { getUser, exchangeToken } = authStore;
 
-  const route = useRoute();
-
   if (!authStore.isLoggedIn && !authToken.value && !refreshToken.value) {
     return navigateTo({ name: GP_ROUTES.LOGIN });
   } else if (authToken.value && !authStore.isLoggedIn) {
