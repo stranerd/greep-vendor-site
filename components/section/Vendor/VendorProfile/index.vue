@@ -75,12 +75,16 @@
     <!-- Vendor image part -->
     <div>
       <h1 class="mb-2 text-lg font-medium md:text-2xl">
-        {{ userProfile.vendor?.name || "----" }}
+        {{ userProfile.vendor?.name || userProfile.type?.name || "----" }}
       </h1>
       <div class="mb-[20px] flex gap-[13px]">
         <MapPin />
         <p class="text-[14px] leading-[21px]">
-          {{ userProfile.vendor?.location?.location || "Location not set" }}
+          {{
+            userProfile.vendor?.location?.location ||
+            userProfile.type?.location?.location ||
+            "Location not set"
+          }}
         </p>
       </div>
 
@@ -301,22 +305,32 @@ const profileDetails = computed(() => {
       {
         icon: BuildingIcon,
         title: "Store Name",
-        value: userProfile.value.vendor?.name || "",
+        value:
+          userProfile.value.vendor?.name || userProfile.value.type?.name || "",
       },
       {
         icon: SmsIcon,
         title: "Store’s Email",
-        value: userProfile.value.vendor?.email || "",
+        value:
+          userProfile.value.vendor?.email ||
+          userProfile.value.type?.email ||
+          "",
       },
       {
         icon: GlobalIcon,
         title: "Store’s site",
-        value: userProfile.value.vendor?.website || "",
+        value:
+          userProfile.value.vendor?.website ||
+          userProfile.value.type?.website ||
+          "",
       },
       {
         icon: LocationTickIcon,
         title: "Location",
-        value: userProfile.value.vendor?.location?.location || "",
+        value:
+          userProfile.value.vendor?.location?.location ||
+          userProfile.value.type?.location?.location ||
+          "",
       },
     ],
     "Personal Details": [

@@ -4,6 +4,12 @@
   transform: none !important;
 }
 
+.hide-scrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 * {
   ::-webkit-scrollbar {
     width: 4px;
@@ -26,5 +32,28 @@
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
     background: #010161;
+  }
+}
+
+input::placeholder,
+.input {
+  color: #a4a8ab !important;
+}
+
+input[type="number"] {
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.google-location {
+  border: 1px solid #e2e8f0;
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  &:focus {
+    border: 2px solid black;
   }
 }

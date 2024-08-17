@@ -17,10 +17,12 @@ logs
 .DS_Store
 .fleet
 .idea
-bin
+
 
 
 # Local env files
 .env
 .env.*
 !.env.example
+
+bin

@@ -8,7 +8,7 @@
           @click="$emit('close')"
         />
       </DialogHeader>
-      <DialogDescription>
+      <DialogDescription class="z-10">
         <CreateMenuForm
           @completed="
             isOpenLocal = false;
@@ -21,7 +21,10 @@
 </template>
 
 <script setup lang="ts">
+import { useMarketPlaceStore } from "@/store/useMarketplace";
 import { Search, CirclePlus, X } from "lucide-vue-next";
+
+const marketPlaceStore = useMarketPlaceStore();
 
 const props = defineProps({
   isOpen: {
@@ -42,6 +45,10 @@ watch(
   { immediate: true },
 );
 const emit = defineEmits(["close", "completedCreation"]);
+
+onBeforeMount(async () => {
+  await marketPlaceStore.getProductFoodsTags();
+});
 </script>
 
 <style></style>

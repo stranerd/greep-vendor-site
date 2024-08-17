@@ -4,8 +4,10 @@ import MarketplaceRepository from "./MarketplaceRepository";
 import MessageRepository from "./MessageRepository";
 import PaymentRepository from "./PaymentRepository";
 import UserRepository from "./UserRepository";
+import InteractionRepository from "./InteractionsRepository";
+import NotificationRepository from "./NotificationRepository";
 
-export class ApiQuery {
+class ApiQuery {
   constructor(data: IApiQuery) {
     Object.assign(this, data);
   }
@@ -17,4 +19,7 @@ export default {
   users: UserRepository(),
   payment: PaymentRepository(),
   messaging: MessageRepository(),
+  interactions: InteractionRepository(),
+  notifications: NotificationRepository(),
+  apiQuery: ApiQuery,
 };

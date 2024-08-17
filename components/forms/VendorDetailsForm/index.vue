@@ -59,7 +59,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 
 const authStore = useAuthStore();
 const { apiLoadingStates, userProfile } = storeToRefs(authStore);
-const { updateVendorProfile } = authStore;
+const { updateVendorProfile, updateVendorRoles } = authStore;
 
 const emit = defineEmits(["completed"]);
 
@@ -86,23 +86,41 @@ const vendorFormSchema = toTypedSchema(
 const vendorFormInstance = useForm({
   validationSchema: vendorFormSchema,
   initialValues: {
-    name: userProfile.value.vendor?.name || "",
-    email: userProfile.value.vendor?.email || "",
-    website: userProfile.value.vendor?.website || "",
-    location: userProfile.value.vendor?.location?.location || "",
+    name: userProfile.value.type?.name || userProfile.value.veendor?.name || "",
+    email:
+      userProfile.value.type?.email || userProfile.value.vendor?.email || "",
+    website:
+      userProfile.value.type?.website ||
+      userProfile.value.vendor?.website ||
+      "",
+    location:
+      userProfile.value.type?.location?.location ||
+      userProfile.value.vendor?.location?.location ||
+      "",
   },
 });
 
 const onVendorSubmit = vendorFormInstance.handleSubmit(async (values: any) => {
-  console.log("Form submitted!", values);
-  await updateVendorProfile({
+  // console.log("Form submitted!", values);
+  const form = new FormData();
+
+  const payload = {
+    ...userProfile.value.type,
     ...values,
     location: {
       coords: [9.065482399999999, 7.4419364],
-      location: values.location, // map link copied
+      location: values.location, // map location should be here
       description: "Location",
     },
+  };
+
+  Object.keys(payload).forEach((item) => {
+    if (item === "location") {
+      form.append(item, JSON.stringify(payload[item]));
+    } else form.append(item, payload[item]);
   });
+
+  await updateVendorRoles(form);
   emit("completed", "vendor");
 });
 </script>

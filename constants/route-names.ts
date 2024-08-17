@@ -14,25 +14,22 @@ export class GP_ROUTES {
   static NEWS_PAGE = "news slug";
 
   static VENDOR = {
-    DASHBOARD: "dashboard",
-    USER_TYPE: "types",
+    DASHBOARD: "vendor-dashboard",
+    USER_TYPE: "vendor-types",
+    SETTINGS: "vendor-settings",
+    SUPPORT: "vendor-support",
 
     FOOD: {
-      DASHBOARD: "food-dashboard",
       ORDERS: "food-orders",
-      ORDER_DETAILS: "food-order-details",
+      ORDER_DETAILS: "food-orders details",
       MENU: "food-menu",
       MENU_DETAILS: "food-menu-details",
-      SETTINGS: "food-settings",
-      SUPPORT: "food-support",
     },
 
     ITEMS: {
-      DASHBOARD: "items-dashboard",
       ORDERS: "items-orders",
+      ORDER_DETAILS: "items-orders details",
       ITEMS_MANAGER: "items-manager",
-      SETTINGS: "items-settings",
-      SUPPORT: "items-support",
     },
   };
 }

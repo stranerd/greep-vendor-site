@@ -32,6 +32,7 @@ export const useAuthStore = defineStore(
       updatePassword: API_STATES.IDLE,
       sendVerificationMail: API_STATES.IDLE,
       verifyEmail: API_STATES.IDLE,
+      sendContactMessage: API_STATES.IDLE,
     });
 
     // getter equivalent
@@ -43,11 +44,13 @@ export const useAuthStore = defineStore(
     );
 
     const hasCompletedVendorProfile = computed(
+      // added old key values for backward compatibility
       () =>
-        userProfile.value?.vendor?.email &&
-        userProfile.value?.vendor?.name &&
-        userProfile.value?.vendor?.website &&
-        userProfile.value?.vendor?.location?.location,
+        (userProfile.value?.vendor?.email || userProfile.value?.type?.email) &&
+        (userProfile.value?.vendor?.name || userProfile.value?.type?.name) &&
+        (userProfile.value?.vendor?.website || userProfile.value?.type?.name) &&
+        (userProfile.value?.vendor?.location?.location ||
+          userProfile.value?.type?.location?.location),
     );
 
     const hasVerifiedEmail = computed(() => user.value.isVerified);
@@ -417,28 +420,13 @@ export const useAuthStore = defineStore(
       }
     };
 
-    const updateVendorRoles = async (payload: "items" | "foods") => {
+    const updateVendorRoles = async (payload: any) => {
       const { $api } = useNuxtApp();
       const { toast } = useToast();
       console.log({ user: user.value });
-      const vendorRole = {
-        type: "vendor",
-        vendorType: payload,
-        mode: "write",
-        name: user.value.name.first ?? "",
-        email: user.value.email,
-        banner: user.value.photo,
-        website: null,
-        location: {
-          coords: [9.065482399999999, 7.4419364],
-          location: "KKTC",
-          description: "Location",
-        },
-        omitEmptyAndOptionalProperties: true,
-      };
 
       apiLoadingStates.value.updateVendorRole = API_STATES.LOADING;
-      const { data, error } = await $api.users.updateVendorType(vendorRole);
+      const { data, error } = await $api.users.updateVendorType(payload);
       if (error.value) {
         toast({
           variant: "destructive",
@@ -448,6 +436,8 @@ export const useAuthStore = defineStore(
         apiLoadingStates.value.updateVendorProfile = API_STATES.ERROR;
       }
       if (data.value) {
+        await getUserProfile();
+
         toast({
           title: "Successful",
           description: error.value?.data?.[0]?.message || "",
@@ -464,6 +454,31 @@ export const useAuthStore = defineStore(
       refreshToken.value = null;
       const router = useRouter();
       router.push("/login");
+    };
+
+    const sendMessage = async (payload: any) => {
+      const { $api } = useNuxtApp();
+      const { toast } = useToast();
+
+      apiLoadingStates.value.sendContactMessage = API_STATES.LOADING;
+      const { data, error } =
+        await $api.notifications.sendContactMessage(payload);
+      if (error.value) {
+        toast({
+          variant: "destructive",
+          title: "Something went wrong",
+          description: error.value?.data?.[0]?.message || "",
+        });
+        apiLoadingStates.value.sendContactMessage = API_STATES.ERROR;
+      }
+      if (data.value) {
+        toast({
+          title: "Successful",
+          description: error.value?.data?.[0]?.message || "",
+        });
+        apiLoadingStates.value.sendContactMessage = API_STATES.SUCCESS;
+        return data.value;
+      }
     };
 
     return {
@@ -490,6 +505,7 @@ export const useAuthStore = defineStore(
       sendVerificationMail,
       hasVerifiedEmail,
       logoutUser,
+      sendMessage,
     };
   },
   { persist: true },

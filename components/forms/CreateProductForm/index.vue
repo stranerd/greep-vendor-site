@@ -1,5 +1,5 @@
 <template>
-  <div class="grid gap-4 mt-4">
+  <div class="mt-4 grid gap-4">
     <form class="space-y-8" @submit="onSubmit">
       <div class="grid gap-4">
         <div class="grid gap-2">
@@ -46,10 +46,10 @@
               v-for="framework in selectedValues"
               :key="framework.value"
               variant="outline"
-              class="mr-2 py-2 px-3 mb-2"
+              class="mb-2 mr-2 px-3 py-2"
             >
               {{ framework.label }}
-              <X class="h-[16px] w-[16px] ml-3" />
+              <X class="ml-3 h-[16px] w-[16px]" />
             </Badge>
           </div>
           <Popover v-model:open="openCombobox">
@@ -77,7 +77,7 @@
             <PopoverContent class="w-[350px] p-0">
               <Command loop>
                 <CommandInput
-                  placeholder="Search framework..."
+                  placeholder="Search tag..."
                   v-model="inputValue"
                 />
                 <CommandGroup class="max-h-[145px] overflow-auto">
@@ -115,7 +115,7 @@
         </div>
         <div class="grid grid-cols-3 gap-2">
           <FormField name="currency" class="col-span-1">
-            <FormItem class="flex flex-col col-span-1">
+            <FormItem class="col-span-1 flex flex-col">
               <FormLabel class="mb-[6px] block"
                 >Currency <span class="text-[#FF5656]">*</span></FormLabel
               >
@@ -209,7 +209,12 @@
                 <span class="text-[#FF5656]">Required</span></FormLabel
               >
               <FormControl>
-                <Input type="file" placeholder="File" @change="handleChange" />
+                <Input
+                  type="file"
+                  placeholder="File"
+                  @change="handleChange"
+                  accept="image/*"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -233,8 +238,8 @@
             </FormItem>
           </FormField>
         </div>
-        <div class="flex items-center justify-end mt-4">
-          <Button variant="ghost" class="rounded-[12px] mr-3"> Cancel </Button>
+        <div class="mt-4 flex items-center justify-end">
+          <Button variant="ghost" class="mr-3 rounded-[12px]"> Cancel </Button>
 
           <Button
             type="submit"

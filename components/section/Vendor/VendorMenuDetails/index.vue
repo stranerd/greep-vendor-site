@@ -1,98 +1,141 @@
 <template>
   <div>
-    <div class="flex items-center gap-4 h-72 py-2">
-      <img
-        :src="product?.banner?.link"
-        alt=""
-        class="block h-full w-72 object-cover rounded"
-      />
-      <div class="flex-1 flex flex-col gap-1 text-[#7C7C7C] text-sm">
-        <h2 class="font-bold text-xl text-black">{{ product?.title }}</h2>
-        <h2 class="max-w-[60%] text-xs">
-          {{ product?.description }}
-        </h2>
+    <div
+      class="flex h-72 items-center gap-4 py-2"
+      v-if="marketplaceLoadingStates.getSingleProduct === API_STATES.LOADING"
+    >
+      <Skeleton class="block h-full w-72 rounded object-cover" />
+      <div class="flex flex-1 flex-col gap-1 text-sm text-[#7C7C7C]">
+        <Skeleton class="block h-10 w-4/12 rounded object-cover" />
+        <Skeleton class="block h-16 w-10/12 rounded object-cover" />
+        <Skeleton
+          class="block h-5 w-3/12 rounded object-cover"
+          v-for="i in 3"
+        />
+      </div>
+    </div>
+    <div
+      v-else-if="
+        marketplaceLoadingStates.getSingleProduct === API_STATES.SUCCESS
+      "
+    >
+      <div class="flex h-72 items-center gap-4 py-2">
+        <img
+          :src="product?.banner?.link"
+          alt=""
+          class="block h-full w-72 rounded object-cover"
+        />
+        <div class="flex flex-1 flex-col gap-1 text-sm text-[#7C7C7C]">
+          <h2 class="text-xl font-bold text-black">{{ product?.title }}</h2>
+          <h2 class="max-w-[60%] text-xs">
+            {{ product?.description }}
+          </h2>
 
-        <div class="flex flex-col gap-1">
-          <h2 class="flex gap-2">
-            <span class=""> Rating : </span>
-            <span class="text-black gap-1 flex items-center"
-              ><Star1Icon class="text-[#FDCC0D] h-4 w-4" />
-              <span class="">4.5</span>
-              <span class="text-gray-400"> (3,670)</span>
-            </span>
-          </h2>
-          <h2 class="flex gap-2">
-            <span class=""> Starting Price :</span>
-            <span class="font-bold text-black">
-              {{ product.price?.currency }}
-              {{ product.price?.amount }}
-            </span>
-          </h2>
-          <h2 class="flex gap-2">
-            <span class=""> No of item sold :</span>
-            <span class="font-bold text-black"> 46 </span>
-          </h2>
-        </div>
-
-        <div class="flex w-full mt-4 justify-between items-center">
-          <div class="text-primary flex gap-1">
-            <span class="">Edit</span>
-            <EditIcon class="h5 w-5 mr-4" />
+          <div class="flex flex-col gap-1">
+            <h2 class="flex gap-2">
+              <span class=""> Rating : </span>
+              <span class="flex items-center gap-1 text-black"
+                ><Star1Icon class="h-4 w-4 text-[#FDCC0D]" />
+                <span class="">4.5</span>
+                <span class="text-gray-400"> (3,670)</span>
+              </span>
+            </h2>
+            <h2 class="flex gap-2">
+              <span class=""> Starting Price :</span>
+              <span class="font-bold text-black">
+                {{ product.price?.currency }}
+                {{ product.price?.amount }}
+              </span>
+            </h2>
+            <h2 class="flex gap-2">
+              <span class=""> No of item sold :</span>
+              <span class="font-bold text-black"> 46 </span>
+            </h2>
           </div>
-          <client-only>
-            <div class="flex items-center space-x-2">
-              <Label
-                for="availablity"
-                class="text-sm leading-[20px] font-normal"
-                >Availability</Label
-              >
-              <Switch
-                class="data-[state=checked]:bg-[#10BB76]"
-                id="availablity"
-                :checked="availability"
-              />
+
+          <div class="mt-4 flex w-full items-center justify-between">
+            <div class="flex gap-1 text-primary">
+              <span class="">Edit</span>
+              <EditIcon class="h5 mr-4 w-5" />
             </div>
-          </client-only>
+            <client-only>
+              <div class="flex items-center space-x-2">
+                <Label
+                  for="availablity"
+                  class="text-sm font-normal leading-[20px]"
+                  >Availability</Label
+                >
+                <Switch
+                  class="data-[state=checked]:bg-[#10BB76]"
+                  id="availablity"
+                  v-model:checked="availability"
+                />
+              </div>
+            </client-only>
+          </div>
         </div>
       </div>
     </div>
     <div class="">
-      <h2 class="font-bold text-2xl">Reviews & Rating</h2>
-      <div class="flex flex-col gap-6">
-        <!-- Reviews Table -->
-        <div class="flex flex-col gap-2 mt-4" v-for="review in reviews">
-          <h2 class="font-bold text-lg">{{ review.name }}</h2>
-          <div class="flex items-center text-sm gap-2">
-            <div class="flex gap-1 max-w-24">
-              <Star1Icon
-                type="filled"
-                class="text-[#FDCC0D] h-4 w-4"
-                v-for="i in review.rating"
-              />
+      <div
+        class=""
+        v-if="marketplaceLoadingStates.getSingleProduct === API_STATES.LOADING"
+      >
+        <h2 class="text-2xl font-bold">Reviews & Rating</h2>
+        <div class="flex flex-col gap-6">
+          <div class="mt-4 flex flex-col gap-2" v-for="i in 6">
+            <Skeleton class="h-6 w-2/12" />
+            <Skeleton class="h-6 w-4/12" />
+            <Skeleton class="h-12 w-11/12" />
+            <div class="flex items-center gap-10">
+              <Skeleton class="h-10 w-40 rounded-lg" v-for="i in 2" />
             </div>
-            <h2 class="min-w-5">{{ review.rating }}</h2>
-            <h2 class="text-[#999999] gap-1 flex items-center">
-              <span class="">•</span>{{ review.date }}
-            </h2>
           </div>
-          <h2 class="">{{ review.comment }}</h2>
-          <div class="flex items-center gap-10">
-            <div class="">
-              <HeartIconFill
-                class="h-8 w-8 text-red-500"
-                v-if="review.is_liked"
-                @click="review.is_liked = !review.is_liked"
-              />
-              <HeartIconLine
-                class="h-8 w-8"
-                v-else
-                @click="review.is_liked = !review.is_liked"
-              />
+        </div>
+      </div>
+      <div
+        class=""
+        v-else-if="
+          marketplaceLoadingStates.getSingleProduct === API_STATES.SUCCESS
+        "
+      >
+        <h2 class="text-2xl font-bold">Reviews & Rating</h2>
+        <div class="flex flex-col gap-6">
+          <!-- Reviews Table -->
+          <div class="mt-4 flex flex-col gap-2" v-for="review in reviews">
+            <h2 class="text-lg font-bold">{{ review.name }}</h2>
+            <div class="flex items-center gap-2 text-sm">
+              <div class="flex max-w-24 gap-1">
+                <Star1Icon
+                  type="filled"
+                  class="h-4 w-4 text-[#FDCC0D]"
+                  v-for="i in review.rating"
+                />
+              </div>
+              <h2 class="min-w-5">{{ review.rating }}</h2>
+              <h2 class="flex items-center gap-1 text-[#999999]">
+                <span class="">•</span>{{ review.date }}
+              </h2>
             </div>
-            <div
-              class="bg-[#001726] cursor-pointer w-24 p-1 justify-center rounded items-center flex"
-            >
-              <Send2Icon class="h-8 w-8 text-white" />
+            <h2 class="">{{ review.comment }}</h2>
+            <div class="flex items-center gap-10">
+              <div class="">
+                <HeartIconFill
+                  class="h-8 w-8 text-red-500"
+                  v-if="review.is_liked"
+                  @click="review.is_liked = !review.is_liked"
+                />
+                <HeartIconLine
+                  class="h-8 w-8"
+                  v-else
+                  @click="review.is_liked = !review.is_liked"
+                />
+              </div>
+              <div
+                class="flex w-24 cursor-pointer items-center justify-center rounded bg-[#001726] p-1"
+              >
+                <Send2Icon class="h-8 w-8 text-white" />
+              </div>
             </div>
           </div>
         </div>

@@ -10,10 +10,15 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
   const orderMeta = ref({});
   const recentOrders = ref<Array<IOrders>>([]);
   const recentOrderMeta = ref({});
+  const menuOrders = ref([]);
+  const singleMenuOrder = ref();
   const singleOrder = ref<IOrders>();
   const products = ref<Array<IProduct>>([]);
   const profuctsMeta = ref({});
   const singleProduct = ref<any>({});
+  const productFoodsTags = ref<{ id: string; title: string }[]>([]);
+  const productItemsTags = ref<{ id: string; title: string }[]>([]);
+
   const recommendedTags = ref<any[]>([]);
   const dashBoardData = ref<{ products: Array<IProduct>; stats: any }>({
     products: [],
@@ -44,7 +49,9 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
 
   const currentCart = ref({});
 
-  const getVendorOrders = async (params?: any) => {
+  const productFoodTagItems = computed(() => productFoodsTags.value);
+
+  const getVendorOrders = async (payload?: any) => {
     const { $api } = useNuxtApp();
     const { toast } = useToast();
 
@@ -56,7 +63,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
         { field: "data.vendorId", value: authStore.user.id },
       ]),
       sort: JSON.stringify([{ field: "createdAt", desc: true }]),
-      ...params,
+      // ...params,
       limit: 15,
       lazy: false,
     });
@@ -267,7 +274,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
 
     marketplaceLoadingStates.value.clearCart = API_STATES.LOADING;
     const { data, error } = await $api.marketplace.clearCart(
-      currentCart.value.id,
+      currentCart.value?.id,
     );
 
     if (error.value) {
@@ -338,6 +345,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
         lazy: false,
       }),
     ]);
+
     console.log({ productsRes, statsRes });
     if (productsRes?.value?.data?.value?.results) {
       dashBoardData.value.products = productsRes?.value?.data?.value?.results;
@@ -398,18 +406,24 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
       return { error: error.value };
     }
     if (data.value) {
-      const producytIds = data.value?.data?.products?.reduce(
+      const productIds = data.value?.data?.products?.reduce(
         (acc: any, post: any) => {
           return { ...acc, [post.id]: post };
         },
         {},
       );
 
+      console.log({ productIds, products: data.value.products });
       const productRes = await $api.marketplace.getProducts({
         where: JSON.stringify([
-          { field: "id", condition: "in", value: Object.keys(producytIds) },
+          {
+            field: "id",
+            condition: "in",
+            value: Object.keys(data.value.products),
+          },
         ]),
       });
+
       singleOrder.value = {
         ...data.value,
         data: {
@@ -419,7 +433,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
           ).map((product: any) => {
             return {
               ...product,
-              quantity: producytIds?.[product.id]?.quantity || 1,
+              quantity: productIds?.[product.id]?.quantity || 1,
             };
           }),
         },
@@ -483,6 +497,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
         description: "Order updated successfully",
       });
       singleOrder.value = data.value;
+      await getVendorOrders();
       marketplaceLoadingStates.value.rejectOrAcceptOrder = API_STATES.SUCCESS;
       return data.value;
     }
@@ -590,7 +605,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     }
     if (data.value) {
       let response = {} as any;
-      const producytIds = data.value?.packs?.[0]?.reduce(
+      const productIds = data.value?.packs?.[0]?.reduce(
         (acc: any, product: any) => {
           return { ...acc, [product.id]: product };
         },
@@ -598,7 +613,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
       );
       const productRes = await $api.marketplace.getProducts({
         where: JSON.stringify([
-          { field: "id", condition: "in", value: Object.keys(producytIds) },
+          { field: "id", condition: "in", value: Object.keys(productIds) },
         ]),
       });
       response = {
@@ -609,7 +624,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
               (product: any) => {
                 return {
                   ...product,
-                  quantity: producytIds?.[product.id]?.quantity || 1,
+                  quantity: productIds?.[product.id]?.quantity || 1,
                 };
               },
             ),
@@ -647,10 +662,44 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     }
   };
 
+  const createProductCategoryTag = async (payload: {
+    title: string;
+    type: "productFoods" | "productsItems";
+  }) => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+
+    const { data, error } = $api.interactions.createProductCategoryTag(payload);
+    if (data.value) {
+      await getProductFoodsTags();
+      await getProductItemsTags();
+      toast({
+        title: "Success",
+        description: "Category created successfully",
+      });
+    }
+  };
+
+  const getProductFoodsTags = async () => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+
+    const { data } = $api.marketplace.getRecommendedProductTags("foods");
+
+    if (data.value) {
+      productFoodsTags.value = data.value?.results;
+    }
+  };
+  const getProductItemsTags = async () => {
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+    const { data, error } = $api.marketplace.getRecommendedProductTags("items");
+    console.log({ data });
+  };
+
   return {
     marketplaceLoadingStates,
     orders,
-    orderMeta,
     getVendorOrders,
     createProduct,
     getAllProducts,
@@ -667,9 +716,12 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     addToCart,
     currentCart,
     clearCart,
+    orderMeta,
     createOrder,
     getSingleOrder,
     singleOrder,
+    productFoodsTags,
+    productFoodTagItems,
     cancelOrder,
     rejectOrAcceptOrder,
     dispatchOrder,
@@ -677,8 +729,9 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     createCartLink,
     getCartLinkDetails,
     checkoutCartLink,
+    getProductFoodsTags,
+    getProductItemsTags,
+    createProductCategoryTag,
     getRecommendedProductsTags,
-    recommendedTags,
-    profuctsMeta,
   };
 });

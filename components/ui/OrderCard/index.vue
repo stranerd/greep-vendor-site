@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex h-60 w-full flex-col justify-between overflow-hidden rounded-lg text-[#001726]"
+    class="flex h-[209px] w-full flex-col justify-between overflow-hidden rounded-lg text-[#001726]"
     :style="{ backgroundColor: getOrderColor(type).secondary }"
   >
     <div
@@ -8,60 +8,56 @@
       :style="{ backgroundColor: getOrderColor(type).primary }"
     >
       <MenuIcon class="h6 w-4" />
-      <h2 class="font-medium">ORDER ID #{{ order.id }}</h2>
+      <h2 class="font-medium uppercase">ORDER ID #{{ order.id.slice(-6) }}</h2>
     </div>
 
     <div class="p-2 pb-0 font-medium">
       <div class="flex items-center gap-1 text-sm">
-        <LocationIcon
-          class="h-6 w-6"
-          :style="{ color: getOrderColor(type).primary }"
-        />
+        <img src="/images/orders/location.png" alt="" class="block h-4 w-4" />
         <span class="text-[#616161]">Location : </span>
-        <h2 class="">{{ order.location }}</h2>
+        <h2 class="">{{ order.to.location }}</h2>
       </div>
       <div class="flex items-center gap-1 text-sm">
-        <Money2Icon
-          class="h-6 w-6"
-          :style="{ color: getOrderColor(type).primary }"
-        />
+        <img src="/images/orders/cash.png" alt="" class="block h-4 w-4" />
         <span class="text-[#616161]">Amount : </span>
-        <h2 class="">${{ order.amount }}</h2>
+        <h2 class="">
+          <!-- {{ gpNumbers.formatCurrency(order.data.products[0].amount) }} -->
+        </h2>
       </div>
       <div class="flex items-center gap-1 text-sm">
-        <LayerIcon
-          class="h-6 w-6"
-          :style="{ color: getOrderColor(type).primary }"
-        />
+        <img src="/images/orders/plates.png" alt="" class="block h-4 w-4" />
         <span class="text-[#616161]">No of Plates: </span>
-        <h2 class="">{{ order.no_of_order }}</h2>
+        <!-- <h2 class="">{{ order.data.products.length }}</h2> -->
       </div>
 
       <!-- Customer -->
 
-      <div class="mt-8 flex items-center gap-2">
+      <div class="mt-4 flex items-center gap-2">
         <img
-          :src="order.customer.picture"
+          :src="order.users[order.userId].bio.photo.link"
           alt=""
           class="h-10 w-10 rounded-[50%]"
         />
         <div class="font-normal">
-          <h2 class="text-sm">{{ order.customer.name }}</h2>
+          <h2 class="text-sm">
+            {{ order.users[order.userId].bio.name.full }}
+          </h2>
           <h2 class="flex text-xs text-gray-400">
-            {{ $moment(order.customer.time as Date).format("MMM Do") }} •
-            {{ $moment(order.customer.time as Date).format("h:mm:ss A") }}
+            {{ $moment(order.status.created.at).format("MMM Do") }} •
+            {{ $moment(order.status.created.at).format("h:mm:ss A") }}
           </h2>
         </div>
       </div>
     </div>
     <h2
-      class="w-full self-center pb-1 text-center text-xs text-blue-500 underline"
+      class="w-full self-center pb-4 text-center text-xs text-blue-500 underline"
     >
-      <span class="cursor-pointer" @click="openDetailsModal = true"
+      <span class="cursor-pointer" @click="getSingleCustomerOrder(order.id)"
         >view full details</span
       >
 
-      <OrderDetailsViewModal
+      <OrderDetailsModal
+        :status="type"
         :isOpen="openDetailsModal"
         @close="openDetailsModal = false"
       />
@@ -76,37 +72,30 @@ import {
   Money2Icon,
   LayerIcon,
 } from "@placetopay/iconsax-vue/bold";
+import type { IOrders } from "~/types/modules/marketPlaceModel";
+import { useMarketPlaceStore } from "~/store/useMarketplace";
 
-type OrderTypes = "new" | "kitchen" | "delivery";
-
-interface OrderData {
-  id: string | number;
-  type: OrderTypes;
-  location: string;
-  amount: number;
-  no_of_order: number;
-  customer: {
-    name: string;
-    picture: string;
-    time: Date | String;
-  };
-}
-
+type OrderTypes = "created" | "accepted" | "shipped";
 const props = defineProps({
   type: { type: String as PropType<OrderTypes>, required: true },
-  order: { type: Object as PropType<OrderData>, required: true },
+  order: { type: Object as PropType<IOrders>, required: true },
 });
+const { getSingleOrder } = useMarketPlaceStore();
 
 const openDetailsModal = ref(false);
+const getSingleCustomerOrder = async (id: string) => {
+  await getSingleOrder(id);
+  openDetailsModal.value = true;
+};
 
-const getOrderColor = (type: OrderTypes) => {
-  if (type === "new") {
+const getOrderColor = (activeStatus: OrderTypes) => {
+  if (activeStatus === "created") {
     return {
       primary: "#AB68FF",
       secondary: "#F0E3FF",
     };
   }
-  if (type === "kitchen") {
+  if (activeStatus === "accepted") {
     return {
       primary: "#68DBFF",
       secondary: "#E3F8FF",

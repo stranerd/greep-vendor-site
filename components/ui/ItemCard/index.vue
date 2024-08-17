@@ -1,25 +1,29 @@
 <template>
-  <div class="rounded-[8px] overflow-hidden border-[#EBEBEB] border-[1.5px]">
+  <div class="overflow-hidden rounded-[8px] border-[1.5px] border-[#EBEBEB]">
     <img
       :src="cardData?.banner?.link || '/images/bg-placeholder.avif'"
       :alt="cardData?.title || ''"
-      class="h-[146px] w-full object-cover mb-[10px]"
+      class="mb-[10px] h-[146px] w-full object-cover"
     />
-    <div class="p-[10px] flex flex-col gap-2">
-      <h4 class="text-[14px] leading-[21px] font-semibold">
+    <div class="flex flex-col gap-2 p-[10px]">
+      <h4 class="text-[14px] font-semibold leading-[21px]">
         {{ cardData?.title || "" }}
       </h4>
       <Separator />
 
-      <p class="text-[12px] flex leading-[18px]">
+      <p class="flex text-[12px] leading-[18px]">
         Price:
-        <span class="font-semibold ml-1">
-          {{ cardData?.price?.currency }}
-          {{ cardData?.price?.amount || "-" }}</span
-        >
+        <span class="ml-1 font-semibold">
+          {{
+            gpNumbers.formatCurrency(
+              cardData?.price?.amount ?? 0,
+              cardData?.price?.currency ?? "TRY",
+            )
+          }}
+        </span>
       </p>
 
-      <p class="text-[12px] flex leading-[18px]">
+      <p class="flex text-[12px] leading-[18px]">
         {{ cardData?.description }}
       </p>
 
@@ -31,7 +35,7 @@
           <div class="flex items-center space-x-2">
             <Label
               for="availablity"
-              class="text-[12px] leading-[20px] font-normal"
+              class="text-[12px] font-normal leading-[20px]"
               >Availability</Label
             >
             <Switch
