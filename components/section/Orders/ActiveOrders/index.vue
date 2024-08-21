@@ -63,14 +63,14 @@
       </div>
     </div>
 
-    <div class="my-2 grid gap-4 lg:hidden">
+    <div class="my-2 grid w-full gap-4 lg:hidden">
       <div
-        class="relative grid w-full grid-cols-[40px,1fr] items-center justify-start gap-4"
+        class="relative grid w-full grid-cols-[40px,1fr] items-center justify-start gap-3"
         v-for="order in marketOrders"
       >
         <Button
           :class="order.buttonClass"
-          class="sticky left-4 z-50 flex !h-[209px] w-10 rotate-0 items-center"
+          class="z-50 flex !h-[209px] w-10 rotate-0 items-center"
         >
           <span class="block -rotate-90">
             {{ order.label }} ({{ order.orders.length }})</span
@@ -78,12 +78,12 @@
         >
 
         <div
-          class="hide-scrollbars flex gap-4 overflow-x-auto"
+          class="hide-scrollbar flex gap-2 overflow-x-auto"
           v-if="order.orders.length > 0"
         >
           <OrderCard
             :order="ord"
-            class="min-w-[256px] max-w-[256px]"
+            class="min-w-[232px] max-w-[256px]"
             v-for="ord in order.orders"
             :type="ord.activeStatus"
           />
@@ -91,7 +91,7 @@
 
         <DisplayState
           :message="order.message"
-          class="mr-auto !h-[209px] justify-self-start"
+          class="mr-auto !h-[209px]"
           hide-button
           v-else
         />
@@ -109,6 +109,7 @@ import { API_STATES } from "~/services/constants";
 const marketplaceStore = useMarketPlaceStore();
 const { orders, marketplaceLoadingStates } = storeToRefs(marketplaceStore);
 type OrderTypes = "created" | "accepted" | "shipped";
+
 const marketOrders = computed(() => {
   return [
     {

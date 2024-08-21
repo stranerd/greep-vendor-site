@@ -15,11 +15,13 @@
       </div>
     </div>
   </div>
+
+  <!--  -->
   <div v-else-if="apiLoadingStates.getUserProfile === API_STATES.SUCCESS">
     <div class="flex flex-col justify-between md:flex-row">
       <div class="align-center relative flex h-auto justify-center">
         <div class="relative mt-auto">
-          <Avatar size="lg" class="h-[153px] w-[153px]">
+          <Avatar size="lg" class="h-32 w-32 lg:h-[153px] lg:w-[153px]">
             <AvatarImage src="/images/placeholder.png" alt="User" />
             <AvatarFallback>CNx</AvatarFallback>
           </Avatar>
@@ -79,18 +81,20 @@
 
     <!-- Vendor image part -->
     <div class="">
-      <h1 class="mb-2 hidden text-lg font-medium md:text-2xl lg:block">
-        {{ userProfile.vendor?.name || userProfile.type?.name || "----" }}
-      </h1>
-      <div class="mb-[20px] hidden gap-[13px] lg:flex">
-        <MapPin />
-        <p class="text-[14px] leading-[21px]">
-          {{
-            userProfile.vendor?.location?.location ||
-            userProfile.type?.location?.location ||
-            "Location not set"
-          }}
-        </p>
+      <div class="my-4 flex justify-between lg:my-8 lg:block">
+        <h1 class="mb-2 text-lg font-medium md:text-2xl lg:flex">
+          {{ userProfile.vendor?.name || userProfile.type?.name || "----" }}
+        </h1>
+        <div class="gap-[13px] lg:mb-[20px] lg:flex">
+          <MapPin class="text-primary" />
+          <p class="text-[14px] leading-[21px]">
+            {{
+              userProfile.vendor?.location?.location ||
+              userProfile.type?.location?.location ||
+              "Location not set"
+            }}
+          </p>
+        </div>
       </div>
 
       <!-- Container for vendor Details -->
@@ -213,14 +217,16 @@
         <AlertDescription
           class="flex flex-col items-center justify-between gap-10 text-[14px]"
         >
-          <span class="">
-            <strong class="inline">Secure Your Account </strong>: Two-factor
-            authentication adds an extra layer of security to your account. To
-            log in, in addition you'll need to provide a 6 digit code</span
-          >
-          <Button class="hidden md:ml-auto lg:block">Enable</Button>
+          <span class="flex">
+            <span class="">
+              <strong class="inline">Secure Your Account </strong>: Two-factor
+              authentication adds an extra layer of security to your account. To
+              log in, in addition you'll need to provide a 6 digit code
+            </span>
+            <Button class="hidden md:ml-auto lg:block">Enable</Button>
+          </span>
         </AlertDescription>
-        <Button class="mt-2 w-full">Enable</Button>
+        <Button class="mt-2 w-full lg:hidden">Enable</Button>
       </Alert>
     </div>
   </div>

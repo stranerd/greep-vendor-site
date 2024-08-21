@@ -32,7 +32,7 @@
       {{ tab.name }}
     </button>
   </div>
-  <div class="h-[400px] overflow-y-auto">
+  <div class="overflow-y-auto lg:h-[400px]">
     <component :is="activeOrderTab.component" />
   </div>
 </template>

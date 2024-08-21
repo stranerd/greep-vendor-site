@@ -19,7 +19,9 @@
         marketplaceLoadingStates.getSingleProduct === API_STATES.SUCCESS
       "
     >
-      <div class="flex h-72 items-center gap-4 py-2">
+      <div
+        class="mb-4 flex flex-col gap-4 py-2 lg:mb-0 lg:h-72 lg:flex-row lg:items-center"
+      >
         <img
           :src="product?.banner?.link"
           alt=""
@@ -43,8 +45,12 @@
             <h2 class="flex gap-2">
               <span class=""> Starting Price :</span>
               <span class="font-bold text-black">
-                {{ product.price?.currency }}
-                {{ product.price?.amount }}
+                {{
+                  gpNumbers.formatCurrency(
+                    product.price?.amount,
+                    product.price?.currency,
+                  )
+                }}
               </span>
             </h2>
             <h2 class="flex gap-2">
