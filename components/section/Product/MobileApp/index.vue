@@ -3,20 +3,21 @@
     <div class="container px-[20px] md:px-[2rem]">
       <CursiveTitle> Users </CursiveTitle>
       <h2
-        class="mb-[50px] font-bold text-[24px] md:text-[32px] lg:text-[48px] mt-4"
+        class="mb-[50px] mt-4 text-[24px] font-bold md:text-[32px] lg:text-[48px]"
       >
         Greep Mobile App
       </h2>
       <p
-        class="max-w-[581px] text-left md:text-center mx-auto text-[14px] md:text-[16px] lg:text-[20px] leading-[24px] text-[#000E18]"
+        class="mx-auto max-w-[581px] text-left text-[14px] leading-[24px] text-[#000E18] md:text-center md:text-[16px] lg:text-[20px]"
       >
         <strong>{{ activeIndex + 1 }}.</strong>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra nunc
-        ante velit vitae. Est tellus vitae, nullam lobortis enim. Faucibus amet
-        etiam tincidunt rhoncus, ullamcorper velit. Ullamcorper risus tempor, ac
-        nunc libero urna, feugiat.
+        Browse thousands of products from various vendors with ease using the
+        Greep mobile app. Our app allows you to search, filter, and discover new
+        products from the comfort of your own home. With high-quality product
+        images and detailed descriptions, you'll be able to make informed
+        purchasing decisions on the go.
       </p>
-      <div class="max-w-[1253.84px] mx-auto my-[50px]">
+      <div class="mx-auto my-[50px] max-w-[1253.84px]">
         <client-only>
           <swiper
             class="product-main-slider"

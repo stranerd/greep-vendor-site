@@ -2,21 +2,21 @@
   <section class="">
     <div class="container px-[20px] md:px-[2rem]">
       <div class="bg-[#FCFCFD] py-[40px] md:py-[80px]">
-        <div class="flex items-center w-full justify-center">
+        <div class="flex w-full items-center justify-center">
           <CursiveTitle> Values </CursiveTitle>
         </div>
         <h2
-          class="text-[32px] md:text-[48px] lg:text-[64px] text-center mb-[30px] md:mb-[50px] lg:mb-[80px] font-semibold leading-[48px] md:leading-[60px] lg:leading-[75px] mt-[10px]"
+          class="mb-[30px] mt-[10px] text-center text-[32px] font-semibold leading-[48px] md:mb-[50px] md:text-[48px] md:leading-[60px] lg:mb-[80px] lg:text-[64px] lg:leading-[75px]"
         >
           Our Values & Principles
         </h2>
         <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px] md:gap-[36px] lg:gap-[56px]"
+          class="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[36px] lg:grid-cols-3 lg:gap-[56px]"
         >
           <div
             v-for="(item, i) in items"
             :key="i"
-            class="bg-[#F4F5F6] rounded-[6px] py-[48px] px-[24px] md:p-[48px]"
+            class="rounded-[6px] bg-[#F4F5F6] px-[24px] py-[48px] md:p-[48px]"
           >
             <div>
               <img
@@ -24,10 +24,10 @@
                 :alt="item.title"
                 class="mb-[32px] h-[44px] w-[44px]"
               />
-              <h6 class="text-[16px] leading-[24px] font-medium mb-2">
+              <h6 class="mb-2 text-[16px] font-medium leading-[24px]">
                 {{ item.title }}
               </h6>
-              <p class="text-[14px] text-[#777E90] leading-[24px]">
+              <p class="text-[14px] leading-[24px] text-[#777E90]">
                 {{ item.details }}
               </p>
             </div>
@@ -35,42 +35,42 @@
         </div>
       </div>
       <div class="py-[45px]">
-        <div class="flex items-center w-full justify-center">
+        <div class="flex w-full items-center justify-center">
           <CursiveTitle> Our Vison </CursiveTitle>
         </div>
         <h4
-          class="text-[20px] md:text-[24px] font-bold leading-[33.6px] text-center mx-auto max-w-[768px] mt-4"
+          class="mx-auto mt-4 max-w-[768px] text-center text-[20px] font-bold leading-[33.6px] md:text-[24px]"
         >
           Describe what your company is building towards in the future. This
           vision statement should serve the purpose of selling the dream of the
           company to hiring talent, investors and partners.
         </h4>
       </div>
-      <div class="bg-[#FCFCFD] py-[40px] md:py-[80px]">
-        <div class="flex items-center w-full justify-center">
+      <div class="hidden bg-[#FCFCFD] py-[40px] md:py-[80px]">
+        <div class="flex w-full items-center justify-center">
           <CursiveTitle> Map </CursiveTitle>
         </div>
 
         <h2
-          class="text-[32px] md:text-[48px] lg:text-[64px] text-center mb-[30px] md:mb-[50px] lg:mb-[80px] font-semibold leading-[48px] md:leading-[60px] lg:leading-[75px] mt-[10px]"
+          class="mb-[30px] mt-[10px] text-center text-[32px] font-semibold leading-[48px] md:mb-[50px] md:text-[48px] md:leading-[60px] lg:mb-[80px] lg:text-[64px] lg:leading-[75px]"
         >
           Our Values & Principles
         </h2>
-        <div class="max-w-[800px] mx-auto">
+        <div class="mx-auto max-w-[800px]">
           <div
             v-for="(mapval, i) in itemMap"
             :key="i"
-            class="flex flex-col md:flex-row justify-between py-[24px] md:py-[32px]"
+            class="flex flex-col justify-between py-[24px] md:flex-row md:py-[32px]"
             :class="i > 1 ? '' : 'border-b-[1px] border-[#E6E8EC]'"
           >
             <h3
-              class="max-w-[100%] md:max-w-[180px] text-[18px] md:text-[24px] leading-[32px] font-semibold text-[#333333]"
+              class="max-w-[100%] text-[18px] font-semibold leading-[32px] text-[#333333] md:max-w-[180px] md:text-[24px]"
             >
               {{ mapval.title }}
             </h3>
             <div class="w-full md:w-[360px]">
               <p
-                class="text-[14px] md:text-[16px] font-light text-[#4C4C4D] leading-[24px]"
+                class="text-[14px] font-light leading-[24px] text-[#4C4C4D] md:text-[16px]"
               >
                 {{ mapval.details }}
               </p>

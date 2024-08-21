@@ -3,7 +3,7 @@
     <div class="container px-[20px] md:px-[2rem]">
       <CursiveTitle> Vendor </CursiveTitle>
       <h2
-        class="mb-[50px] font-bold text-[24px] md:text-[32px] lg:text-[48px] mt-4"
+        class="mb-[50px] mt-4 text-[24px] font-bold md:text-[32px] lg:text-[48px]"
       >
         Greep Vendors
       </h2>
@@ -18,29 +18,32 @@
           >
             <swiper-slide v-for="(_, i) in 5" :key="i">
               <div
-                class="flex flex-col lg:flex-row w-full items-center gap-[24px] md:gap-[40px] lg:gap-[69px] justify-between"
+                class="flex w-full flex-col items-center justify-between gap-[24px] md:gap-[40px] lg:flex-row lg:gap-[69px]"
               >
-                <div class="max-w-[1006px] w-full lg:min-w-[500px] grow">
+                <div class="w-full max-w-[1006px] grow lg:min-w-[500px]">
                   <img
                     src="/images/vendor-img.jpg"
                     alt="Vendor admin"
-                    class="w-full h-auto object-cover"
+                    class="h-auto w-full object-cover"
                   />
                 </div>
 
-                <div class="grow max-w-[584px]">
+                <div class="max-w-[584px] grow">
                   <p
-                    class="text-[14px] md:text-[16px] lg:text-[20px] leading-[26px] md:leading-[30px] text-[#000E18] mb-6"
+                    class="mb-6 text-[14px] leading-[26px] text-[#000E18] md:text-[16px] md:leading-[30px] lg:text-[20px]"
                   >
-                    Lorem Ipsum is simply dummy text of the printing and
-                    typesetting industry. Lorem Ipsum been the industry's
-                    standard dummy text ever since the 1500s, when an unknown
-                    printegalley of type and scrambled it to make a type
-                    specimen book. It has survived not only five centuries, but
-                    also the leap into electronic typesetting.
+                    Feature 1: Online Store CreationCreating an online store has
+                    never been easier. With GreepVendor, entrepreneurs can
+                    quickly set up a professional online presence, complete with
+                    customizable templates, easy product uploads, and a secure
+                    payment gateway. Our intuitive store builder guides you
+                    through the process, so you can focus on selling rather than
+                    coding. Whether you're just starting out or expanding your
+                    existing business, our online store creation feature has got
+                    you covered.
                   </p>
                   <button
-                    class="py-[18px] flex items-center px-[24px] bg-[#FFFFFF] border-[1px] rounded-[100px]"
+                    class="flex items-center rounded-[100px] border-[1px] bg-[#FFFFFF] px-[24px] py-[18px]"
                     @click="router.push('/news/curating-a-workspace')"
                   >
                     Get Started Now
@@ -55,12 +58,12 @@
             </swiper-slide>
           </swiper>
 
-          <div class="flex justify-between items-center mb-[80px]">
+          <div class="mb-[80px] flex items-center justify-between">
             <div class="flex items-center gap-[8px]">
               <div
                 v-for="(_, i) in 5"
                 :key="i"
-                class="h-[8px] w-[8px] rounded-full cursor-pointer"
+                class="h-[8px] w-[8px] cursor-pointer rounded-full"
                 :class="
                   swiperInstance?.activeIndex === i
                     ? 'bg-[#000000]'
@@ -73,13 +76,13 @@
               <img
                 src="/images/icons/arrow-left-sm.svg"
                 alt="Left"
-                class="h-[48px] w-[48px] rounded-full object-contain cursor-pointer"
+                class="h-[48px] w-[48px] cursor-pointer rounded-full object-contain"
                 @click="swiperInstance?.slidePrev()"
               />
               <img
                 src="/images/icons/arrow-right-sm.svg"
                 alt="Right"
-                class="h-[48px] w-[48px] rounded-full object-contain cursor-pointer"
+                class="h-[48px] w-[48px] cursor-pointer rounded-full object-contain"
                 @click="swiperInstance?.slideNext()"
               />
             </div>

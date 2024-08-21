@@ -1,6 +1,6 @@
 <template>
-  <form>
-    <div class="mx-auto grid w-[402px] gap-4">
+  <form class="w-full">
+    <div class="mx-auto grid gap-4 lg:w-[402px]">
       <img
         src="/images/logos/greep.svg"
         alt="Greep"

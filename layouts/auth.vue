@@ -24,8 +24,10 @@
           class="h-full w-full object-cover"
         /> -->
       </div>
-      <div class="flex items-center justify-center overflow-auto pb-6 pt-12">
-        <slot />
+      <div
+        class="relative mx-auto flex w-full items-center justify-center overflow-auto px-4 pb-6 pt-12 md:px-0"
+      >
+        <NuxtPage />
       </div>
     </div>
   </main>

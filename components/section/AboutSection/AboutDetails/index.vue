@@ -1,59 +1,59 @@
 <template>
   <section>
-    <div class="container px-[20px] md:px-[2rem] pt-[33px]">
-      <div class="flex flex-col md:flex-row justify-between gap-4">
+    <div class="container px-[20px] pt-[33px] md:px-[2rem]">
+      <div class="flex flex-col justify-between gap-4 md:flex-row">
         <div>
           <CursiveTitle> About Us </CursiveTitle>
           <h3
-            class="text-[#000E18] font-semibold text-[24px] md:text-[28px] lg:text-[35px] mt-4 w-full max-w-[650px]"
+            class="mt-4 w-full max-w-[650px] text-[24px] font-semibold text-[#000E18] md:text-[28px] lg:text-[35px]"
           >
-            We’re on a misson to make logistics & finance better
+            Building bridges and Empowering communities
           </h3>
         </div>
         <div>
           <p
-            class="font-medium text-[#000E18] text-[16px] md:text-[18px] max-w-[758px] leading-[27px]"
+            class="max-w-[758px] text-[16px] font-medium leading-[27px] text-[#000E18] md:text-[18px]"
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce
-            varius faucibus massa sollicitudin amet augue. Nibh metus a semper
-            purus mauris duis. Lorem eu neque, tristique quis duis. Nibh
-            scelerisque ac adipiscing velit non nulla in amet pellentesque.
+            Greep is more than just a company; it's a movement driven by a
+            passion for connecting Africans in the diaspora with the vibrant
+            economies of their home continent. We believe that distance
+            shouldn't hinder the ability to support African businesses,
+            celebrate cultural heritage, and contribute to a thriving Africa.
             <br />
             <br />
-            Sit turpis pretium eget maecenas. Vestibulum dolor mattis
-            consectetur eget commodo vitae. Amet pellentesque sit pulvinar lorem
-            mi a, euismod risus rhoncus. Elementum ullamcorper nec, habitasse
-            vulputate. Eget dictum quis est sed egestas tellus, a lectus. Quam
-            ullamcorper in fringilla arcu aliquet fames arcu.Lacinia eget
-            faucibus urna, nam risus nec elementum cras porta.
+            Our story began with a simple observation: the challenges faced by
+            Africans abroad who want to spend their native currency and support
+            businesses back home. Inspired by this need, we built a unique
+            ecosystem that empowers both users and businesses within the
+            diaspora.
           </p>
         </div>
       </div>
       <img
         src="/images/placeholder.png"
         alt="Placeholder"
-        class="rounded-[18px] w-full h-auto lg:h-[700px] mt-[30px] md:mt-[80px]"
+        class="mt-[30px] h-auto w-full rounded-[18px] md:mt-[80px] lg:h-[700px]"
       />
-      <div class="mx-auto mt-[30px] md:mt-[100px] max-w-[1120px]">
+      <div class="mx-auto mt-[30px] max-w-[1120px] md:mt-[100px]">
         <h6
-          class="italic font-semibold text-[20px] md:text-[28px] lg:text-[32px] md:leading-[40px] mb-[30px] md:mb-[80px] text-center"
+          class="mb-[30px] text-center text-[20px] font-semibold italic md:mb-[80px] md:text-[28px] md:leading-[40px] lg:text-[32px]"
         >
-          “If you allow yourself to learn who you really are by paying attention
-          to that voice and force within you, then you can become what you were
-          fated to become—an individual, a Master.”
+          “We believe that every African, regardless of where they are in the
+          world, deserves the opportunity to empower their communities back
+          home.”
         </h6>
-        <div class="text-center mb-[30px] md:mb-[80px]">
+        <div class="mb-[30px] text-center md:mb-[80px]">
           <img
             src="/images/avatar/02.png"
             alt="Jeremiah Godwin Nwachukwu"
-            class="h-[90px] w-[90px] mx-auto mb-6"
+            class="mx-auto mb-6 h-[90px] w-[90px]"
           />
           <h6
-            class="font-semibold text-[18px] md:text-[24px] md:leading-[32px] text-[#23262F]"
+            class="text-[18px] font-semibold text-[#23262F] md:text-[24px] md:leading-[32px]"
           >
             Jeremiah Godwin Nwachukwu
           </h6>
-          <p class="text-[14px] md:text-[16px] text-[#777E90] leading-[24px]">
+          <p class="text-[14px] leading-[24px] text-[#777E90] md:text-[16px]">
             CEO
           </p>
         </div>

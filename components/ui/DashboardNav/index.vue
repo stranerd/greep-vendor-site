@@ -10,11 +10,11 @@
         </Button>
       </SheetTrigger>
       <SheetContent side="left" class="flex flex-col">
-        <nav class="grid gap-2 text-lg font-medium">
-          <div v-for="(navItem, i) in navLinks" :key="i">
+        <nav class="mt-12 grid gap-2 text-lg font-medium">
+          <SheetClose as-child v-for="(navItem, i) in navLinks" :key="i">
             <nuxt-link
               v-if="navItem.to"
-              :to="navItem.to"
+              :to="{ name: navItem.to }"
               active-class="bg-[#001726] !text-[#fff]"
               class="mb-2 flex items-center gap-4 rounded-[4px] px-2 py-2 text-[16px] leading-[28px] text-muted-foreground transition-all hover:text-primary"
             >
@@ -31,7 +31,7 @@
 
               {{ navItem.name }}
             </div>
-          </div>
+          </SheetClose>
         </nav>
       </SheetContent>
     </Sheet>
@@ -123,6 +123,9 @@ import {
   MessageCircleQuestion,
   LogOut,
 } from "lucide-vue-next";
+
+import { GP_CONSTANTS } from "~/constants";
+import { GP_ROUTES } from "~/constants/route-names";
 import { useAuthStore } from "@/store/useAuthStore";
 
 const authStore = useAuthStore();
@@ -133,31 +136,42 @@ const displayName = computed(
   () => user.value?.allNames?.first || user.value?.username,
 );
 
+const userType = computed(() =>
+  JSON.parse(localStorage.getItem(GP_CONSTANTS.USER_TYPE) as string),
+);
+
 const router = useRouter();
+const route = useRoute();
 
 const navLinks = ref([
   {
-    to: "/vendor",
+    to: GP_ROUTES.VENDOR.DASHBOARD,
     name: "Sales",
     icon: LineChart,
   },
   {
-    to: "/vendor/orders",
+    to:
+      userType.value?.vendorType === "foods"
+        ? GP_ROUTES.VENDOR.FOOD.ORDERS
+        : GP_ROUTES.VENDOR.ITEMS.ORDERS,
     name: "Orders",
     icon: ClipboardList,
   },
   {
-    to: "/vendor/item-manager",
-    name: "Item Manager",
+    to:
+      userType.value?.vendorType === "foods"
+        ? GP_ROUTES.VENDOR.FOOD.MENU
+        : GP_ROUTES.VENDOR.ITEMS.ITEMS_MANAGER,
+    name: userType.value?.vendorType === "foods" ? "Menu" : "Items Manager",
     icon: BookmarkMinus,
   },
   {
-    to: "/vendor/settings",
+    to: GP_ROUTES.VENDOR.SETTINGS,
     name: "Settings",
     icon: Settings,
   },
   {
-    to: "/vendor/support",
+    to: GP_ROUTES.VENDOR.SUPPORT,
     name: "Support",
     icon: MessageCircleQuestion,
   },

@@ -16,7 +16,7 @@
     </div>
   </div>
   <div v-else-if="apiLoadingStates.getUserProfile === API_STATES.SUCCESS">
-    <div class="flex justify-between">
+    <div class="flex flex-col justify-between md:flex-row">
       <div class="align-center relative flex h-auto justify-center">
         <div class="relative mt-auto">
           <Avatar size="lg" class="h-[153px] w-[153px]">
@@ -31,14 +31,19 @@
         </div>
       </div>
 
-      <Card class="min-w-[368px] border-[2px] border-[#E0E2E4]">
+      <Card class="my-4 border-[2px] border-[#E0E2E4] lg:min-w-[368px]">
         <CardHeader class="pb-1 pt-4">
           <CardTitle class="text-[22px]">Estimated Balance</CardTitle>
         </CardHeader>
         <CardContent class="grid max-h-[280px] gap-1 pb-4">
           <div class="flex">
             <h6 class="text-[22px]">
-              {{ wallet?.balance?.currency }} {{ wallet?.balance?.amount }}
+              {{
+                gpNumbers.formatCurrency(
+                  Number(wallet?.balance?.amount),
+                  wallet?.balance?.currency,
+                )
+              }}
             </h6>
           </div>
           <!-- <small class="text-[12px]">TL Rate: ₺1 = 41</small> -->
@@ -73,11 +78,11 @@
     </div>
 
     <!-- Vendor image part -->
-    <div>
-      <h1 class="mb-2 text-lg font-medium md:text-2xl">
+    <div class="">
+      <h1 class="mb-2 hidden text-lg font-medium md:text-2xl lg:block">
         {{ userProfile.vendor?.name || userProfile.type?.name || "----" }}
       </h1>
-      <div class="mb-[20px] flex gap-[13px]">
+      <div class="mb-[20px] hidden gap-[13px] lg:flex">
         <MapPin />
         <p class="text-[14px] leading-[21px]">
           {{
@@ -142,7 +147,7 @@
           <h4 class="mb-[30px] text-[16px] font-medium leading-[20px]">
             {{ profileItem }}
           </h4>
-          <div class="grid w-full grid-cols-2 gap-[35px]">
+          <div class="grid w-full gap-[35px] lg:grid-cols-2">
             <div
               v-for="(item, index) in otherOptions[profileItem]"
               :key="index"
@@ -157,7 +162,7 @@
                 {{ item.title }}
               </p>
               <p
-                class="flex cursor-pointer gap-2 text-[14px] font-light leading-[20px]"
+                class="flex cursor-pointer gap-2 whitespace-nowrap text-[14px] font-light leading-[20px]"
               >
                 {{ item.value || "--" }}
 
@@ -206,13 +211,16 @@
         <CircleAlert class="h-4 w-4" />
         <!-- <AlertTitle>Error</AlertTitle> -->
         <AlertDescription
-          class="flex items-center justify-between gap-10 text-[14px]"
+          class="flex flex-col items-center justify-between gap-10 text-[14px]"
         >
-          <strong>Secure Your Account </strong>: Two-factor authentication adds
-          an extra layer of security to your account. To log in, in addition
-          you'll need to provide a 6 digit code
-          <Button class="ml-auto">Enable</Button>
+          <span class="">
+            <strong class="inline">Secure Your Account </strong>: Two-factor
+            authentication adds an extra layer of security to your account. To
+            log in, in addition you'll need to provide a 6 digit code</span
+          >
+          <Button class="hidden md:ml-auto lg:block">Enable</Button>
         </AlertDescription>
+        <Button class="mt-2 w-full">Enable</Button>
       </Alert>
     </div>
   </div>
