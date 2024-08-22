@@ -1,14 +1,14 @@
 <template>
   <div>
-    <form>
-      <div class="mx-auto grid w-[402px] gap-4">
+    <form class="w-full">
+      <div class="mx-auto grid gap-4 lg:w-[402px]">
         <img
           src="/images/logos/greep.svg"
           alt="Greep"
-          class="mx-auto w-[45.45px] h-[45.45px] object-contain mb-2"
+          class="mx-auto mb-2 h-[45.45px] w-[45.45px] object-contain"
         />
         <div class="grid gap-2">
-          <h1 class="text-[22px] text-center font-semibold">Reset Password</h1>
+          <h1 class="text-center text-[22px] font-semibold">Reset Password</h1>
           <p class="text-left text-[14px] text-muted-foreground">
             We have sent an email with password reset token to
             {{ maskEmail(userEmail || "user@email.com") }}
@@ -26,7 +26,7 @@
                       id="pin-input"
                       v-model="value!"
                       placeholder="-"
-                      class="flex gap-2 items-center mt-1"
+                      class="mt-1 flex items-center gap-2"
                       otp
                       type="number"
                       :name="componentField.name"
@@ -57,7 +57,7 @@
                     <div class="relative">
                       <Input
                         :type="showPassword ? 'text' : 'password'"
-                        class="py-[24px] rounded-[12px]"
+                        class="rounded-[12px] py-[24px]"
                         v-bind="componentField"
                       />
                       <div
@@ -84,7 +84,7 @@
                     <div class="relative">
                       <Input
                         :type="showConfirmPassword ? 'text' : 'password'"
-                        class="py-[24px] rounded-[12px]"
+                        class="rounded-[12px] py-[24px]"
                         v-bind="componentField"
                       />
                       <div
@@ -105,7 +105,7 @@
             </div>
             <Button
               type="submit"
-              class="w-full py-6 rounded-[12px] mt-4"
+              class="mt-4 w-full rounded-[12px] py-6"
               size="lg"
               :loading="apiLoadingStates.resetPassword === API_STATES.LOADING"
             >
@@ -124,7 +124,7 @@
     </form>
     <Button
       variant="secondary"
-      class="w-full py-6 rounded-[12px] mt-4"
+      class="mt-4 w-full rounded-[12px] py-6"
       :disabled="timerCount"
       :loading="apiLoadingStates.forgotPassword === API_STATES.LOADING"
       @click="resendEmail"
@@ -133,7 +133,7 @@
     </Button>
     <Button
       variant="outline"
-      class="w-full py-6 rounded-[12px] mt-4"
+      class="mt-4 w-full rounded-[12px] py-6"
       @click="router.push('/login')"
     >
       Back to login
@@ -175,8 +175,8 @@ const formSchema = toTypedSchema(
       {
         message: "Passwords don't match",
         path: ["confirmPassword"], // path of error
-      }
-    )
+      },
+    ),
 );
 
 const { handleSubmit, resetForm, setFieldValue } = useForm({
@@ -206,7 +206,7 @@ watch(
       }, 1000);
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 onMounted(() => {

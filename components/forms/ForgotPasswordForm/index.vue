@@ -1,9 +1,9 @@
 <template>
-  <div class="mx-auto grid w-[402px] gap-4">
+  <div class="mx-auto grid gap-4 lg:w-[402px]">
     <img
       src="/images/logos/greep.svg"
       alt="Greep"
-      class="mx-auto w-[45.45px] h-[45.45px] object-contain mb-2"
+      class="mx-auto mb-2 h-[45.45px] w-[45.45px] object-contain"
     />
     <div class="grid gap-2 text-center">
       <h1 class="text-[22px] font-semibold">Forgot Password</h1>
@@ -23,7 +23,7 @@
                 <Input
                   type="email"
                   placeholder="m@example.com"
-                  class="py-[24px] rounded-[12px]"
+                  class="rounded-[12px] py-[24px]"
                   v-bind="componentField"
                 />
               </FormControl>
@@ -36,7 +36,7 @@
         </div>
         <Button
           type="submit"
-          class="w-full py-6 rounded-[12px] mt-4"
+          class="mt-4 w-full rounded-[12px] py-6"
           size="lg"
           :loading="apiLoadingStates.forgotPassword === API_STATES.LOADING"
         >
@@ -46,7 +46,7 @@
     </form>
     <Button
       variant="outline"
-      class="w-full py-6 rounded-[12px] mt-4"
+      class="mt-4 w-full rounded-[12px] py-6"
       @click="router.push('/login')"
     >
       Back to login
@@ -73,7 +73,7 @@ const formSchema = toTypedSchema(
         required_error: "Email cannot be empty",
       })
       .email(),
-  })
+  }),
 );
 
 const { handleSubmit, resetForm } = useForm({

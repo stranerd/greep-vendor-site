@@ -15,11 +15,13 @@
       </div>
     </div>
   </div>
+
+  <!--  -->
   <div v-else-if="apiLoadingStates.getUserProfile === API_STATES.SUCCESS">
-    <div class="flex justify-between">
+    <div class="flex flex-col justify-between md:flex-row">
       <div class="align-center relative flex h-auto justify-center">
         <div class="relative mt-auto">
-          <Avatar size="lg" class="h-[153px] w-[153px]">
+          <Avatar size="lg" class="h-32 w-32 lg:h-[153px] lg:w-[153px]">
             <AvatarImage src="/images/placeholder.png" alt="User" />
             <AvatarFallback>CNx</AvatarFallback>
           </Avatar>
@@ -31,14 +33,19 @@
         </div>
       </div>
 
-      <Card class="min-w-[368px] border-[2px] border-[#E0E2E4]">
+      <Card class="my-4 border-[2px] border-[#E0E2E4] lg:min-w-[368px]">
         <CardHeader class="pb-1 pt-4">
           <CardTitle class="text-[22px]">Estimated Balance</CardTitle>
         </CardHeader>
         <CardContent class="grid max-h-[280px] gap-1 pb-4">
           <div class="flex">
             <h6 class="text-[22px]">
-              {{ wallet?.balance?.currency }} {{ wallet?.balance?.amount }}
+              {{
+                gpNumbers.formatCurrency(
+                  Number(wallet?.balance?.amount),
+                  wallet?.balance?.currency,
+                )
+              }}
             </h6>
           </div>
           <!-- <small class="text-[12px]">TL Rate: ₺1 = 41</small> -->
@@ -73,19 +80,21 @@
     </div>
 
     <!-- Vendor image part -->
-    <div>
-      <h1 class="mb-2 text-lg font-medium md:text-2xl">
-        {{ userProfile.vendor?.name || userProfile.type?.name || "----" }}
-      </h1>
-      <div class="mb-[20px] flex gap-[13px]">
-        <MapPin />
-        <p class="text-[14px] leading-[21px]">
-          {{
-            userProfile.vendor?.location?.location ||
-            userProfile.type?.location?.location ||
-            "Location not set"
-          }}
-        </p>
+    <div class="">
+      <div class="my-4 flex justify-between lg:my-8 lg:block">
+        <h1 class="mb-2 text-lg font-medium md:text-2xl lg:flex">
+          {{ userProfile.vendor?.name || userProfile.type?.name || "----" }}
+        </h1>
+        <div class="gap-[13px] lg:mb-[20px] lg:flex">
+          <MapPin class="text-primary" />
+          <p class="text-[14px] leading-[21px]">
+            {{
+              userProfile.vendor?.location?.location ||
+              userProfile.type?.location?.location ||
+              "Location not set"
+            }}
+          </p>
+        </div>
       </div>
 
       <!-- Container for vendor Details -->
@@ -142,7 +151,7 @@
           <h4 class="mb-[30px] text-[16px] font-medium leading-[20px]">
             {{ profileItem }}
           </h4>
-          <div class="grid w-full grid-cols-2 gap-[35px]">
+          <div class="grid w-full gap-[35px] lg:grid-cols-2">
             <div
               v-for="(item, index) in otherOptions[profileItem]"
               :key="index"
@@ -157,7 +166,7 @@
                 {{ item.title }}
               </p>
               <p
-                class="flex cursor-pointer gap-2 text-[14px] font-light leading-[20px]"
+                class="flex cursor-pointer gap-2 whitespace-nowrap text-[14px] font-light leading-[20px]"
               >
                 {{ item.value || "--" }}
 
@@ -206,13 +215,18 @@
         <CircleAlert class="h-4 w-4" />
         <!-- <AlertTitle>Error</AlertTitle> -->
         <AlertDescription
-          class="flex items-center justify-between gap-10 text-[14px]"
+          class="flex flex-col items-center justify-between gap-10 text-[14px]"
         >
-          <strong>Secure Your Account </strong>: Two-factor authentication adds
-          an extra layer of security to your account. To log in, in addition
-          you'll need to provide a 6 digit code
-          <Button class="ml-auto">Enable</Button>
+          <span class="flex">
+            <span class="">
+              <strong class="inline">Secure Your Account </strong>: Two-factor
+              authentication adds an extra layer of security to your account. To
+              log in, in addition you'll need to provide a 6 digit code
+            </span>
+            <Button class="hidden md:ml-auto lg:block">Enable</Button>
+          </span>
         </AlertDescription>
+        <Button class="mt-2 w-full lg:hidden">Enable</Button>
       </Alert>
     </div>
   </div>

@@ -1,6 +1,8 @@
 <template>
   <div class="min-h-[80vh]">
-    <div class="mt-[25px] flex items-center justify-between">
+    <div
+      class="mt-[25px] flex flex-col items-center justify-between gap-4 lg:flex-row"
+    >
       <form class="w-full max-w-[570px]">
         <div class="relative flex w-full">
           <Search

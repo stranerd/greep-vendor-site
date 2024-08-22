@@ -21,13 +21,13 @@
         <img src="/images/orders/cash.png" alt="" class="block h-4 w-4" />
         <span class="text-[#616161]">Amount : </span>
         <h2 class="">
-          <!-- {{ gpNumbers.formatCurrency(order.data.products[0].amount) }} -->
+          {{ gpNumbers.formatCurrency(getAllProductAmounts()) }}
         </h2>
       </div>
       <div class="flex items-center gap-1 text-sm">
         <img src="/images/orders/plates.png" alt="" class="block h-4 w-4" />
         <span class="text-[#616161]">No of Plates: </span>
-        <!-- <h2 class="">{{ order.data.products.length }}</h2> -->
+        <h2 class="">{{ order.data.packs.length }}</h2>
       </div>
 
       <!-- Customer -->
@@ -107,6 +107,15 @@ const getOrderColor = (activeStatus: OrderTypes) => {
     };
   }
 };
+
+function getAllProductAmounts() {
+  return Object.entries(props.order.products).reduce(
+    (total, [key, product]) => {
+      return total + product.price.amount;
+    },
+    0,
+  );
+}
 </script>
 
 <style scoped></style>

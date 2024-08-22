@@ -12,6 +12,7 @@ export interface IUser {
   hash: string;
   id: string;
   email: string;
+  username: string;
   name: {
     first: string;
     middle: string;

@@ -1,20 +1,18 @@
 <template>
   <div
     v-if="supportApiStates.getChatList === API_STATES.LOADING"
-    class="grid grid-cols-5 gap-[30px] h-[85vh] w-full"
+    class="grid h-[85vh] w-full grid-cols-5 gap-[30px]"
   >
-    <Skeleton class="h-full col-span-2 w-full" />
-    <Skeleton class="h-full col-span-3 w-full" />
+    <Skeleton class="col-span-2 h-full w-full" />
+    <Skeleton class="col-span-3 h-full w-full" />
   </div>
   <div
     v-else-if="supportApiStates.getChatList === API_STATES.SUCCESS"
-    class="grid grid-cols-5 gap-[30px] h-[85vh] w-full"
+    class="grid h-[85vh] w-full gap-[30px] lg:grid-cols-[2fr,3fr]"
   >
-    <div
-      class="bg-[#FBFBFB] rounded-[12px] h-full col-span-2 py-[31px] px-[10px]"
-    >
+    <div class="h-full rounded-[12px] bg-[#FBFBFB] px-[10px] py-[31px]">
       <div class="px-[10px]">
-        <h1 class="text-[18px] mb-8 font-semibold leading-[27px]">Messages</h1>
+        <h1 class="mb-8 text-[18px] font-semibold leading-[27px]">Messages</h1>
         <div class="relative mb-6">
           <Input class="bg-[transparent]" />
         </div>
@@ -32,7 +30,7 @@
       </div>
       <DisplayState v-else message="An messages" hideButton />
     </div>
-    <div class="col-span-3 bg-[#FBFBFB] h-full rounded-[12px] py-5 px-4">
+    <div class="hidden h-full rounded-[12px] bg-[#FBFBFB] px-4 py-5 lg:block">
       <MessagesContainer :activeChat="selectedChat" />
     </div>
   </div>

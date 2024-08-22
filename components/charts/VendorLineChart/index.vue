@@ -1,22 +1,22 @@
 <template>
-  <Card class="xl:col-span-2 bg-[#FBFBFB] border-[0px]">
-    <CardHeader class="flex flex-row items-center mb-[31px]">
+  <Card class="border-[0px] bg-[#FBFBFB] xl:col-span-2">
+    <CardHeader class="mb-[31px] flex flex-row items-center">
       <div class="flex items-center gap-4">
         <CardTitle class="text-[14px]">Overview</CardTitle>
         <div
-          class="flex border-s-[1px] border-s-[#E0E2E4] ps-4 items-center gap-[7px]"
+          class="flex items-center gap-[7px] border-s-[1px] border-s-[#E0E2E4] ps-4"
         >
-          <div class="bg-[#10BB76] h-[10px] w-[10px] rounded-full"></div>
+          <div class="h-[10px] w-[10px] rounded-full bg-[#10BB76]"></div>
           <p class="text-[12px]">Today</p>
         </div>
         <div class="flex items-center gap-[7px]">
-          <div class="bg-[#616161] h-[10px] w-[10px] rounded-full"></div>
+          <div class="h-[10px] w-[10px] rounded-full bg-[#616161]"></div>
           <p class="text-[12px]">Yesterday</p>
         </div>
       </div>
     </CardHeader>
-    <CardContent>
-      <Line :data="data" :options="options" class="h-[224.06px]" />
+    <CardContent class="max-w-screen">
+      <Line :data="data" :options="options" class="lg:h-[224.06px]" />
     </CardContent>
   </Card>
 </template>
@@ -41,7 +41,7 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 export default {
   components: {
