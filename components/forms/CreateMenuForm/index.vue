@@ -217,48 +217,50 @@
           </FormField>
         </div>
         <div class="grid gap-2">
-           <h2 class="font-medium">
-            Preparation Time (in Minutes) <span class="text-[#FF5656]">Required</span>   
-        </h2>
-         <div class="grid grid-cols-2 gap-x-10 ">
- <FormField v-slot="{ componentField }" name="from_time">
-            <FormItem>
-              <FormControl>
-                 <FormLabel
-                 class="text-xs"
-                >Minimum Time  <span class="text-[#FF5656]">*</span></FormLabel
-              >
-                <Input
-                  type="number"
-                  placeholder="10"
-                  v-bind="componentField"
-                />
-              </FormControl>
-              <!-- <FormDescription>
+          <h2 class="font-medium">
+            Preparation Time (in Minutes)
+            <span class="text-[#FF5656]">Required</span>
+          </h2>
+          <div class="grid grid-cols-2 gap-x-10">
+            <FormField v-slot="{ componentField }" name="from_time">
+              <FormItem>
+                <FormControl>
+                  <FormLabel class="text-xs"
+                    >Minimum Time
+                    <span class="text-[#FF5656]">*</span></FormLabel
+                  >
+                  <Input
+                    type="number"
+                    placeholder="10"
+                    v-bind="componentField"
+                  />
+                </FormControl>
+                <!-- <FormDescription>
                     This is your public display name.
                   </FormDescription> -->
-              <FormMessage />
-            </FormItem>
-          </FormField>
-           <FormField v-slot="{ componentField }" name="to_time">
-            <FormItem>
-              <FormControl>
-                 <FormLabel   class="text-xs"
-                >Maximum Time <span class="text-[#FF5656]">*</span></FormLabel
-              >
-                <Input
-                  type="number"
-                  :placeholder="30"
-                  v-bind="componentField"
-                />
-              </FormControl>
-              <!-- <FormDescription>
+                <FormMessage />
+              </FormItem>
+            </FormField>
+            <FormField v-slot="{ componentField }" name="to_time">
+              <FormItem>
+                <FormControl>
+                  <FormLabel class="text-xs"
+                    >Maximum Time
+                    <span class="text-[#FF5656]">*</span></FormLabel
+                  >
+                  <Input
+                    type="number"
+                    :placeholder="30"
+                    v-bind="componentField"
+                  />
+                </FormControl>
+                <!-- <FormDescription>
                     This is your public display name.
                   </FormDescription> -->
-              <FormMessage />
-            </FormItem>
-          </FormField>
-         </div>
+                <FormMessage />
+              </FormItem>
+            </FormField>
+          </div>
         </div>
 
         <div class="grid gap-2">
@@ -438,7 +440,7 @@ const createNewFoodProduct = handleSubmit(async (values: any) => {
   const prepTimeInMins = {
     from: 0,
     to: 0,
-  }
+  };
   const tagIds = selectedValues.value.map((tag) => tag.id);
   Object.keys({ ...values, tagIds }).forEach((item) => {
     if (item === "price") {
@@ -449,15 +451,15 @@ const createNewFoodProduct = handleSubmit(async (values: any) => {
     } else if (item === "tagIds") {
       form.append(item, JSON.stringify(tagIds));
     } else if (item === "from_time") {
-     prepTimeInMins.from=values.from_time
+      prepTimeInMins.from = values.from_time;
     } else if (item === "to_time") {
-      prepTimeInMins.to=values.to_time
+      prepTimeInMins.to = values.to_time;
     } else {
       form.append(item, values[item]);
     }
   });
 
-  form.append("data", JSON.stringify({ type: "foods" , prepTimeInMins}));
+  form.append("data", JSON.stringify({ type: "foods", prepTimeInMins }));
   form.append("addOns", JSON.stringify(addOns.value));
 
   await createProduct(form);

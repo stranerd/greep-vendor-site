@@ -1,10 +1,10 @@
 <template>
   <div
     v-if="supportApiStates.getChatList === API_STATES.LOADING"
-    class="grid h-[85vh] w-full grid-cols-5 gap-[30px]"
+    class="grid h-[85vh] w-full gap-[30px] lg:grid-cols-5"
   >
     <Skeleton class="col-span-2 h-full w-full" />
-    <Skeleton class="col-span-3 h-full w-full" />
+    <Skeleton class="col-span-3 hidden h-full w-full lg:block" />
   </div>
   <div
     v-else-if="supportApiStates.getChatList === API_STATES.SUCCESS"

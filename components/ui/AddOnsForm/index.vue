@@ -7,41 +7,45 @@
         v-for="(addOn, addOnIndex) in addOnList"
         :key="addOnIndex"
       >
-        <div class="flex items-center justify-between gap-2">
+        <div class="flex flex-col justify-between gap-2 lg:items-center">
           <h2 class="flex min-w-[140px] flex-1 items-center gap-1">
             <span class="text-4xl"> • </span>
             <Input
               :placeholder="addOn.placeholder"
-              class="h-8 max-w-40 flex-1 rounded border border-black focus:border-none"
+              class="h-8 flex-1 rounded border border-black focus:border-none lg:max-w-40"
               v-model="addOn.title"
             />
           </h2>
 
-          <div class="flex items-center gap-1">
-            <h2 class="">Options</h2>
-            <Select class="border-2 border-black" v-model="addOn.option">
-              <SelectTrigger class="h-8 border border-black focus:border-none">
-                <SelectValue placeholder="Select a fruit" class="text-sm" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="1">Required</SelectItem>
-                  <SelectItem value="0">Optional</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
+          <div class="flex gap-x-4">
+            <div class="flex items-center gap-1">
+              <h2 class="">Options</h2>
+              <Select class="border-2 border-black" v-model="addOn.option">
+                <SelectTrigger
+                  class="h-8 border border-black focus:border-none"
+                >
+                  <SelectValue placeholder="Select a fruit" class="text-sm" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="1">Required</SelectItem>
+                    <SelectItem value="0">Optional</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
 
-          <div class="flex h-8 items-center gap-1">
-            <h2 class="">Selections</h2>
-            <Input
-              placeholder="1"
-              type="number"
-              class="flex h-8 min-w-10 items-start rounded border border-black px-1 focus:border-none"
-              v-model="addOn.maxSelection"
-              :max="addOn.items.length"
-              :min="1"
-            />
+            <div class="flex h-8 items-center gap-1">
+              <h2 class="">Selections</h2>
+              <Input
+                placeholder="1"
+                type="number"
+                class="flex h-8 min-w-10 items-start rounded border border-black px-1 focus:border-none"
+                v-model="addOn.maxSelection"
+                :max="addOn.items.length"
+                :min="1"
+              />
+            </div>
           </div>
         </div>
 
