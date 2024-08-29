@@ -1,24 +1,22 @@
 <template>
   <header class="container px-[20px] md:px-[2rem]">
     <h1
-      class="text-[32px] md:text-[48px] lg:text-[68px] max-w-[956px] mx-auto text-center mb-[14px] font-semibold leading-[48px] md:leading-[60px] lg:leading-[81.6px] mt-[100px]"
+      class="mx-auto mb-[14px] mt-[100px] max-w-[80%] text-center text-[32px] font-semibold leading-[48px] md:text-[48px] md:leading-[60px] lg:text-[68px] lg:leading-[81.6px]"
     >
-      Connecting Africans in the Diaspora to
-      <span class="text-[#009260]">Home</span>
+      Empowering the African diaspora
+      <span class="text-[#009260]">Economy</span>
     </h1>
     <p
-      class="text-[16px] lg:text-[18px] text-[#4C4C4D] mb-[50px] text-center max-w-[1307px] mx-auto font-medium"
+      class="mx-auto mb-[50px] max-w-[80%] text-center text-[16px] font-medium text-[#4C4C4D] lg:text-[18px]"
     >
-      Greep is your go-to platform for ordering affordable and authentic African
-      food items, designed specifically for Africans living in the diaspora. We
-      bring the taste of home right to your doorstep, with a mission to make
-      your favorite African meals accessible, no matter where you are in the
-      world..
+      Greep bridges the gap by connecting Africans in the diaspora with African
+      products & businesses, empowering the diaspora economy one transaction at
+      a time.
     </p>
-    <div class="flex align-center justify-center">
+    <div class="align-center flex justify-center">
       <Button variant="withIcon" size="lg" rounded="lg"
-        >Get Started
-        <div class="bg-[#000E18] rounded-full p-[14px] ml-[10px] mr-[-20px]">
+        >Explore More
+        <div class="ml-[10px] mr-[-20px] rounded-full bg-[#000E18] p-[14px]">
           <MoveUpRight :size="20" />
         </div>
       </Button>

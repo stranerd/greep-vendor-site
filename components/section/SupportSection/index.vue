@@ -28,7 +28,7 @@
           @click="selectChat(chat)"
         />
       </div>
-      <DisplayState v-else message="An messages" hideButton />
+      <DisplayState v-else message="No messages" hideButton />
     </div>
     <div class="hidden h-full rounded-[12px] bg-[#FBFBFB] px-4 py-5 lg:block">
       <MessagesContainer :activeChat="selectedChat" />

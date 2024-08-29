@@ -7,7 +7,9 @@
         v-for="(addOn, addOnIndex) in addOnList"
         :key="addOnIndex"
       >
-        <div class="flex flex-col justify-between gap-2 lg:items-center">
+        <div
+          class="flex flex-col justify-between gap-2 lg:flex-row lg:items-center"
+        >
           <h2 class="flex min-w-[140px] flex-1 items-center gap-1">
             <span class="text-4xl"> • </span>
             <Input

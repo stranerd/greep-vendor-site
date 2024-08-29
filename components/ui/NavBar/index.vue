@@ -1,14 +1,14 @@
 <template>
-  <nav class="container px-[20px] md:px-[2rem] sticky top-0 z-[40] pt-10">
+  <nav class="container sticky top-0 z-[40] px-[20px] pt-10 md:px-[2rem]">
     <div
-      class="flex items-center justify-between p-6 bg-[#FCFCFD bg-[#fff] border-[#F1F1F3] border-[1px] rounded-[100px]"
+      class="bg-[#FCFCFD flex items-center justify-between rounded-[100px] border-[1px] border-[#F1F1F3] bg-[#fff] px-6 py-2"
     >
       <div class="flex items-center">
-        <nuxt-link to="/" class="mr-0 md:mr-[50px] flex items-center">
-          <Avatar size="base" class="h-[44px] w-[44px]">
-            <AvatarImage src="/images/logos/greep.svg" alt="Greep" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+        <nuxt-link to="/" class="mr-0 flex items-center md:mr-[50px]">
+          <!-- <Avatar size="base"> -->
+          <img src="/images/logos/greep.svg" alt="Greep" class="object-cover" />
+          <!-- <AvatarFallback>CN</AvatarFallback> -->
+          <!-- </Avatar> -->
         </nuxt-link>
 
         <div class="hidden lg:block">
@@ -16,8 +16,8 @@
             v-for="(link, i) in navLinks"
             :key="i"
             :to="link.to"
-            class="px-6 py-[14px] rounded-[100px]"
-            active-class="bg-[#F7F7F8] border-[1px] border-[#F1F1F3]"
+            class="rounded-[100px] px-6 py-[14px]"
+            active-class="bg-[#F7F7F8]  font-medium border-[1px] border-[#F1F1F3]"
             >{{ link.name }}</nuxt-link
           >
         </div>
@@ -27,7 +27,7 @@
           <Button
             variant="primary"
             size="icon"
-            class="shrink-0 h-[44px] w-[44px] lg:hidden"
+            class="h-[44px] w-[44px] shrink-0 lg:hidden"
           >
             <img
               src="/images/icons/menu-icon.svg"
@@ -41,16 +41,16 @@
         </SheetTrigger>
         <SheetContent
           side="left"
-          class="flex flex-col rounded-tr-[24px] rounded-br-[24px]"
+          class="flex flex-col rounded-br-[24px] rounded-tr-[24px]"
         >
           <nav
-            class="h-full flex py-[30px] items-center justify-between flex-col w-full"
+            class="flex h-full w-full flex-col items-center justify-between py-[30px]"
           >
             <div class="w-full">
               <SheetClose asChild v-for="(link, i) in navLinks" :key="i">
                 <nuxt-link
                   :to="link.to"
-                  class="px-6 block py-[14px] w-full rounded-[100px]"
+                  class="block w-full rounded-[100px] px-6 py-[14px]"
                   active-class="bg-[#F7F7F8] border-[1px] border-[#F1F1F3]"
                   >{{ link.name }}</nuxt-link
                 >
@@ -64,7 +64,7 @@
               @click="router.push('/login')"
               >Get Started
               <div
-                class="bg-[#000E18] rounded-full p-[14px] ml-auto mr-[-20px]"
+                class="ml-auto mr-[-20px] rounded-full bg-[#000E18] p-[14px]"
               >
                 <img
                   src="/images/icons/mail-white.svg"
@@ -83,7 +83,7 @@
         rounded="lg"
         @click="router.push('/login')"
         >Get Started
-        <div class="bg-[#000E18] rounded-full p-[14px] ml-[10px] mr-[-20px]">
+        <div class="ml-[10px] mr-[-20px] rounded-full bg-[#000E18] p-[14px]">
           <img
             src="/images/icons/mail-white.svg"
             alt="Mail Icon"

@@ -64,6 +64,7 @@ export const orderStatus = (status: any) => {
     return {
       text: "Refunded",
       color: "bg-[#708090]",
+      style: { backgroundColor: "#708090" },
     };
   }
 
@@ -71,6 +72,7 @@ export const orderStatus = (status: any) => {
     return {
       text: "Cancelled",
       color: "bg-[#B91010]",
+      style: { backgroundColor: "#B91010" },
     };
   }
 
@@ -78,6 +80,7 @@ export const orderStatus = (status: any) => {
     return {
       text: "Rejected",
       color: "bg-[#B91010]",
+      style: { backgroundColor: "#B91010" },
     };
   }
 
@@ -85,6 +88,7 @@ export const orderStatus = (status: any) => {
     return {
       text: "Completed",
       color: "bg-[#009260]",
+      style: { backgroundColor: "#009260" },
     };
   }
 
@@ -92,6 +96,7 @@ export const orderStatus = (status: any) => {
     return {
       text: "Driver assigned",
       color: "bg-[#009260]",
+      style: { backgroundColor: "#009260" },
     };
   }
 
@@ -99,6 +104,7 @@ export const orderStatus = (status: any) => {
     return {
       text: "Shipped",
       color: "bg-[#009260]",
+      style: { backgroundColor: "#009260" },
     };
   }
 
@@ -106,12 +112,14 @@ export const orderStatus = (status: any) => {
     return {
       text: "Accepted",
       color: "bg-[#009260]",
+      style: { backgroundColor: "#009260" },
     };
   }
 
   return {
     text: "Pending",
     color: "bg-[#B91010]",
+    style: { backgroundColor: "#B91010" },
   };
 };
 
@@ -120,11 +128,13 @@ export const paymentStatus = (status: any) => {
     return {
       text: "Paid",
       color: "bg-[#009260]",
+      style: { backgroundColor: "#009260" },
     };
   } else {
     return {
       text: "Await Cash",
       color: "bg-[#B91010]",
+      style: { backgroundColor: "#B91010" },
     };
   }
 };

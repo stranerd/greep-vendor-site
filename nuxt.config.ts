@@ -15,6 +15,13 @@ export default defineNuxtConfig({
       googleMapApiKey: process.env.GOOGLE_MAPS_API_KEY,
     },
   },
+
+  // vue: {
+  //   compilerOptions: {
+  //     isCustomElement: (tag) => tag.startsWith("swiper-"),
+  //   },
+  // },
+
   ssr: false,
   shadcn: {
     /**

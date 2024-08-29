@@ -28,7 +28,12 @@
       </p>
 
       <div class="flex items-center justify-between">
-        <Button variant="ghost" size="dense" @click="editProduct">
+        <Button
+          variant="ghost"
+          size="dense"
+          @click.self="editProduct"
+          class="p-1"
+        >
           Edit <img src="/images/icons/edit.svg" alt="Edit" class="ml-2" />
         </Button>
         <client-only>

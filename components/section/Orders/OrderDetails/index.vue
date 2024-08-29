@@ -18,7 +18,7 @@
           >
             <div
               class="mr-2 h-[9px] w-[9px] rounded-[3px]"
-              :class="paymentStatus(singleOrder?.status).color"
+              :style="paymentStatus(singleOrder?.status).style"
             ></div>
             {{ paymentStatus(singleOrder?.status).text }}
           </Badge>

@@ -10,29 +10,31 @@
     class="bg-[#000E18] pt-[114px]"
   >
     <div class="container px-[20px] md:px-[2rem]">
-      <div class="flex items-center w-full justify-center">
+      <div class="flex w-full items-center justify-center">
         <CursiveTitle> Features </CursiveTitle>
       </div>
 
       <h2
-        class="text-center font-semibold text-[24px] md:text-[48px] lg:text-[64px] mb-[34px] text-[white] max-w-[732px] mx-auto"
+        class="mx-auto mb-[34px] max-w-[732px] text-center text-[24px] font-semibold text-[white] md:text-[48px] lg:text-[64px]"
       >
         The features <br />Both familiar and new.
       </h2>
       <div
-        class="hidden lg:flex items-center justify-center gap-[58px] text-[white]"
+        class="hidden items-center justify-center gap-[58px] text-[white] lg:flex"
       >
         <div class="flex flex-col gap-[86px]">
           <div
             v-for="(feature, i) in featuresOne"
             :key="i"
-            class="bg-[#001726] p-4 rounded-[12px] min-h-[194px]"
+            @click="activeFeature = feature"
+            :class="{ '!bg-white text-[#001726]': activeFeature === feature }"
+            class="min-h-[194px] cursor-pointer rounded-[12px] bg-[#001726] p-4 duration-1000"
           >
-            <div class="flex items-center gap-[10px] mb-[36px]">
+            <div class="mb-[36px] flex items-center gap-[10px]">
               <img
                 :src="feature.img"
                 :alt="feature.name"
-                class="w-[35px] h-[35px]"
+                class="h-[35px] w-[35px]"
               />
               <h6 class="text-[22px] font-semibold">
                 {{ feature.name }}
@@ -43,22 +45,26 @@
             </p>
           </div>
         </div>
-        <img
-          src="/images/features.png"
-          alt="App features"
-          class="max-w-[298.21px] w-full"
-        />
+        <transition mode="out-in" name="fade" :duration="400">
+          <img
+            :src="activeFeature.featureImage"
+            :key="activeFeature.featureImage"
+            alt="App features"
+            class="w-full max-w-[298.21px] bg-black mix-blend-screen"
+        /></transition>
         <div class="flex flex-col gap-[86px]">
           <div
             v-for="(feature, i) in featuresTwo"
             :key="i"
-            class="bg-[#001726] p-4 rounded-[12px] min-h-[194px]"
+            @click="activeFeature = feature"
+            :class="{ '!bg-white text-[#001726]': activeFeature === feature }"
+            class="min-h-[194px] cursor-pointer rounded-[12px] bg-[#001726] p-4 duration-1000"
           >
-            <div class="flex items-center gap-[10px] mb-[36px]">
+            <div class="mb-[36px] flex items-center gap-[10px]">
               <img
                 :src="feature.img"
                 :alt="feature.name"
-                class="w-[35px] h-[35px]"
+                class="h-[35px] w-[35px]"
               />
               <h6 class="text-[22px] font-semibold">
                 {{ feature.name }}
@@ -71,13 +77,13 @@
         </div>
       </div>
       <div
-        class="lg:hidden flex flex-col md:flex-row justify-center gap-[58px] relative text-[white]"
+        class="relative flex flex-col justify-center gap-[58px] text-[white] md:flex-row lg:hidden"
       >
         <div>
           <img
             src="/images/features.png"
             alt="App features"
-            class="max-w-[298.21px] mx-auto h-auto w-full sticky top-[240px]"
+            class="sticky top-[240px] mx-auto h-auto w-full max-w-[298.21px]"
           />
         </div>
 
@@ -85,13 +91,13 @@
           <div
             v-for="(feature, i) in featuresOne"
             :key="i"
-            class="bg-[#001726] p-4 rounded-[12px] min-h-[194px]"
+            class="min-h-[194px] rounded-[12px] bg-[#001726] p-4"
           >
-            <div class="flex items-center gap-[10px] mb-[36px]">
+            <div class="mb-[36px] flex items-center gap-[10px]">
               <img
                 :src="feature.img"
                 :alt="feature.name"
-                class="w-[35px] h-[35px]"
+                class="h-[35px] w-[35px]"
               />
               <h6 class="text-[22px] font-semibold">
                 {{ feature.name }}
@@ -104,13 +110,13 @@
           <div
             v-for="(feature, i) in featuresTwo"
             :key="i"
-            class="bg-[#001726] p-4 rounded-[12px] min-h-[194px]"
+            class="min-h-[194px] rounded-[12px] bg-[#001726] p-4"
           >
-            <div class="flex items-center gap-[10px] mb-[36px]">
+            <div class="mb-[36px] flex items-center gap-[10px]">
               <img
                 :src="feature.img"
                 :alt="feature.name"
-                class="w-[35px] h-[35px]"
+                class="h-[35px] w-[35px]"
               />
               <h6 class="text-[22px] font-semibold">
                 {{ feature.name }}
@@ -122,18 +128,18 @@
           </div>
         </div>
       </div>
-      <div class="text-[white] pt-[40px] md:pt-[80px] mt-[70px] lg:mt-[156px]">
+      <div class="mt-[70px] pt-[40px] text-[white] md:pt-[80px] lg:mt-[156px]">
         <div class="flex items-center justify-center md:justify-start">
           <CursiveTitle> Our Company </CursiveTitle>
         </div>
 
         <h2
-          class="text-[24px] text-center md:text-left md:text-[32px] lg:text-[48px] md:mt-4 font-bold leading-[57.6px]"
+          class="text-center text-[24px] font-bold leading-[57.6px] md:mt-4 md:text-left md:text-[32px] lg:text-[48px]"
         >
           Greep Company
         </h2>
         <p
-          class="text-[16px] md:text-[18px] text-center mt-[10px] max-w-[1182px] mb-[63px] mx-auto"
+          class="mx-auto mb-[63px] mt-[10px] max-w-[1182px] text-center text-[16px] md:text-[18px]"
         >
           This company is dedicated to celebrating and promoting the cultural
           heritage of the African diaspora while also economically empowering
@@ -144,11 +150,11 @@
       </div>
       <div class="relative">
         <div
-          class="absolute bottom-0 h-[65%] left-[-50%] w-[250%] bg-[#fff] z-0"
+          class="absolute bottom-0 left-[-50%] z-0 h-[65%] w-[250%] bg-[#fff]"
         ></div>
         <video
           id="video1"
-          class="main-vid z-[1] relative max-w-[1147px] w-full mx-auto rounded-[20px] overflow-hidden w-auto lg:h-[607px]"
+          class="main-vid relative z-[1] mx-auto w-auto max-w-[1147px] overflow-hidden rounded-[20px] lg:h-[607px]"
           playsinline
         >
           <source
@@ -164,35 +170,48 @@
 </template>
 
 <script setup lang="ts">
-const featuresOne = ref([
+interface FeatureCard {
+  name: string;
+  img: string;
+  description: string;
+  featureImage: string;
+}
+
+const featuresOne = ref<FeatureCard[]>([
   {
     name: "Authenticity at Your Fingertips",
     img: "/images/llustrations/food-delivery.png",
+    featureImage: "/images/products/2.jpg",
     description:
       "Explore a rich catalog of African food items from local suppliers, ensuring the authenticity of every dish. From jollof rice to suya, Greep has it all!",
   },
   {
     name: "Reliable Delivery",
     img: "/images/llustrations/truck.png",
+    featureImage: "/images/products/3.jpg",
     description:
       "Our efficient logistics system ensures your orders are handled with care and delivered to your doorstep promptly. Track your packages in real-time for added peace of mind.",
   },
 ]);
 
-const featuresTwo = ref([
+const featuresTwo = ref<FeatureCard[]>([
   {
     name: "Stellar-Powered Payments",
     img: "/images/llustrations/corruption.png",
+    featureImage: "/images/products/4.jpg",
     description:
       "Say goodbye to currency conversion headaches! Greep integrates with Stellar blockchain for seamless transactions in your local African currency, reducing costs and simplifying payments.",
   },
   {
     name: "Global Marketplace",
     img: "/images/llustrations/globe.png",
+    featureImage: "/images/products/1.jpg",
     description:
       "Discover a global marketplace connecting businesses and individuals. Greep opens the door to a world of possibilities for those wanting to share their love for African cuisine on a global scale.",
   },
 ]);
+
+const activeFeature = ref<FeatureCard>(featuresOne.value[0]);
 </script>
 
 <style></style>

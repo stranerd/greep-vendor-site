@@ -12,9 +12,9 @@
           <TableHead>Status</TableHead>
           <TableHead>Total</TableHead>
 
-          <TableHead>
+          <!-- <TableHead>
             <span class="sr-only">Actions</span>
-          </TableHead>
+          </TableHead> -->
         </TableRow>
       </TableHeader>
       <TableBody v-for="(order, i) in orderHistory" :key="i">
@@ -26,7 +26,7 @@
             >{{ $moment(order.createdAt).format("MMM DD, h:mm a") }}
           </TableCell>
           <TableCell class="text-[12px]">
-            {{ order.users?.[0]?.publicName }}
+            {{ order.users?.[order.userId]?.publicName }}
           </TableCell>
           <TableCell class="text-[12px]"> {{ order?.to?.location }} </TableCell>
           <TableCell>
@@ -36,7 +36,7 @@
             >
               <div
                 class="mr-2 h-[9px] w-[9px] rounded-[3px]"
-                :class="paymentStatus(order.status).color"
+                :style="paymentStatus(order.status).style"
               ></div>
               {{ paymentStatus(order.status).text }}
             </Badge>
@@ -48,7 +48,7 @@
             >
               <div
                 class="mr-2 h-[9px] w-[9px] rounded-[3px]"
-                :class="orderStatus(order.status).color"
+                :style="orderStatus(order.status).style"
               ></div>
               {{ orderStatus(order.status).text }}
             </Badge>

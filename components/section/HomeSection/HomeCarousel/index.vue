@@ -1,5 +1,5 @@
 <template>
-  <div class="flex align-center justify-center overflow-hidden">
+  <div class="align-center flex justify-center overflow-hidden">
     <svg height="0" width="0">
       <defs>
         <clipPath id="svgPath" clipPathUnits="objectBoundingBox">
@@ -11,77 +11,39 @@
       </defs>
     </svg>
     <div
-      class="flex mt-[60px] align-center justify-center overflow-hidden w-full element"
+      class="align-center element max-w-screen flexs mt-[60px] w-full justify-center overflow-hidden"
     >
-      <swiper
-        items
-        :slides-per-view="'auto'"
-        class="team-slider"
-        :space-between="20"
-        :navigation="true"
-        :modules="modules"
-        :loop="true"
-        :autoplay="{
-          delay: 1500,
-          disableOnInteraction: true,
-        }"
-        @swiper="onSwiper"
-        @slideChange="onSlideChange"
+      <Carousel
+        :items-to-show="6"
+        :autoplay="1"
+        :transition="1200"
+        :wrap-around="true"
+        :autoplay-hover-pause="false"
+        :speed="10"
       >
-        <swiper-slide
-          v-for="(img, i) in images"
-          :key="i"
-          class="w-auto md:min-w-[300px] max-w-[200px] md:max-w-[300px] lg:min-w-[500px] lg:max-w-[500px]"
-        >
+        <Slide v-for="(img, i) in images" :key="i">
           <img
             :src="img"
-            class="object-cover w-full md:min-w-[300px] md:max-w-[300px] lg:min-w-[500px] lg:max-w-[500px] min-h-[300px] h-[300px] md:min-h-[500px] lg:min-h-[811px]"
             alt="Carousel"
+            class="carousel__item h-[300px] min-h-[300px] w-full object-cover md:min-h-[500px] lg:min-h-[511px]"
           />
-        </swiper-slide>
-      </swiper>
+        </Slide>
+      </Carousel>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { Swiper, SwiperSlide } from "swiper/vue";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
+<script lang="ts" setup>
+import "vue3-carousel/dist/carousel.css";
+import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 
-export default {
-  components: {
-    Swiper,
-    SwiperSlide,
-  },
-  setup() {
-    const swiperInstance = ref<any>(null);
-    const onSwiper = (swiper: any) => {
-      console.log(swiper);
-      swiperInstance.value = swiper;
-    };
-    const onSlideChange = (swiper: any) => {
-      console.log("slide change", { swiper });
-      swiperInstance.value = swiper;
-    };
-    const images = ref([
-      "/images/carousel-0.jpg",
-      "/images/carousel-1.jpg",
-      "/images/carousel-2.jpg",
-      "/images/carousel-3.jpg",
-      "/images/carousel-4.jpg",
-    ]);
-    return {
-      images,
-      onSlideChange,
-      onSwiper,
-      modules: [Navigation, Pagination, Autoplay],
-      swiperInstance,
-    };
-  },
-};
+const images = ref([
+  "/images/carousel-0.jpg",
+  "/images/carousel-1.jpg",
+  "/images/carousel-2.jpg",
+  "/images/carousel-3.jpg",
+  "/images/carousel-4.jpg",
+]);
 </script>
 
 <style>
@@ -101,8 +63,11 @@ export default {
 }
 @media (min-width: 1024px) {
   .element {
-    min-width: 2200px;
-    min-height: 800px;
+    min-width: 2000px;
+    min-height: 500px;
   }
+}
+.carousel__slide {
+  padding: 0 10px;
 }
 </style>

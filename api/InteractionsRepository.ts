@@ -4,7 +4,8 @@ export default () => {
   return {
     createProductCategoryTag(payload: {
       title: string;
-      type: "productFoods" | "productsItems";
+      type: "productsFoods" | "productsItems";
+      photo: any;
     }) {
       return useCustomFetch(`${resource}/tags`, {
         body: payload,

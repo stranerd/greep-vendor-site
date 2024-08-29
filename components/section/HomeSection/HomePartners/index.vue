@@ -2,14 +2,14 @@
   <section>
     <div class="container px-[20px] md:px-[2rem]">
       <h3
-        class="text-center text-[#1A1A1A] text-[20px] md:text-[28px] lg:text-[35px] font-semibold italic"
+        class="text-center text-[20px] font-semibold italic text-[#1A1A1A] md:text-[28px] lg:text-[35px]"
       >
         “Trusted by some of the world's best companies”
       </h3>
     </div>
 
     <div
-      class="flex align-center relative justify-center mt-[43px] h-[52px] mb-[40px] md:mb-[92px] partners-img-container"
+      class="align-center partners-img-container relative mb-[40px] mt-[43px] flex h-[52px] justify-center md:mb-[92px]"
     >
       <div class="partners-img"></div>
       <div class="partners-blur"></div>
@@ -22,42 +22,35 @@
       /> -->
     </div>
     <div
-      class="container px-[20px] md:px-[2rem] flex justify-between w-full mb-[60px] xl:mb-0 flex-col xl:flex-row"
+      class="container flex w-full flex-col justify-between px-[20px] pb-[60px] md:px-[2rem] xl:mb-0 xl:flex-row"
     >
-      <div class="grow max-w-[391px] mr-[30px] mb-[30px] xl:mr-[98px]">
-        <div class="flex items-center">
-          <div
-            class="h-[16px] w-[16px] border-[2px] border-[#10BB76] bg-[#04D28C14] rounded-full mr-1"
-          ></div>
-          <h4
-            class="text-[#CBCBCB] font-cursive text-[18px] md:text-[24px] lg:text-[32px]"
-          >
-            What we do
-          </h4>
-        </div>
+      <div
+        class="mb-[30px] mr-[30px] flex max-w-[391px] grow flex-col justify-center xl:mr-[80px]"
+      >
+        <CursiveTitle>What we do</CursiveTitle>
         <h5
-          class="text-[24px] md:text-[28px] text-center md:text-left lg:text-[35px] font-semibold text-[#000E18]"
+          class="text-center text-[24px] font-semibold text-[#000E18] md:text-left md:text-[28px] lg:text-[35px]"
         >
           Safe & Reliable Cargo Solutions
         </h5>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-[89px] gap-y-[70px]">
+      <div class="grid grid-cols-1 gap-x-[40px] gap-y-[70px] md:grid-cols-2">
         <div v-for="(property, i) in properties" :key="i" class="flex w-full">
           <img
             :src="property.img"
             :alt="property.title"
-            class="mr-[4px] w-auto h-[40px] md:w-[62px] md:h-auto"
+            class="mr-[4px] h-[40px] w-auto md:h-auto md:w-[62px]"
           />
           <div
-            class="border-r-[1px] border-[#D8D8D8] h-full md:h-[139px] mx-[14px] md:mx-[25px]"
+            class="mx-[14px] h-full border-r-[1px] border-[#D8D8D8] md:mx-[25px] md:h-[139px]"
           ></div>
           <div>
-            <h6 class="mb-[13px] text-[20px] md:text-[25px] font-semibold">
+            <h6 class="mb-[13px] text-[20px] font-semibold md:text-[25px]">
               {{ property.title }}
             </h6>
             <p
-              class="text-[#777E90] text-[14px] md:text-[16px] font-medium md:max-w-[320px]"
+              class="text-[14px] font-medium text-[#777E90] md:max-w-[400px] md:text-[14px]"
             >
               {{ property.description }}
             </p>

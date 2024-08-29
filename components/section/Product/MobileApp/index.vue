@@ -10,13 +10,26 @@
       <p
         class="mx-auto max-w-[581px] text-left text-[14px] leading-[24px] text-[#000E18] md:text-center md:text-[16px] lg:text-[20px]"
       >
-        <strong>{{ activeIndex + 1 }}.</strong>
-        Browse thousands of products from various vendors with ease using the
-        Greep mobile app. Our app allows you to search, filter, and discover new
-        products from the comfort of your own home. With high-quality product
-        images and detailed descriptions, you'll be able to make informed
-        purchasing decisions on the go.
+        <!-- <strong>{{ activeIndex + 1 }}.</strong> -->
+        {{ productItems[activeIndex].description }}
       </p>
+
+      <swiper
+        :modules="[Navigation, Pagination, Autoplay, Keyboard, Virtual]"
+        :slides-per-view="5"
+        :navigation="true"
+        :virtual="true"
+        :pagination="true"
+      >
+        <swiper-slide v-for="i in 20">
+          <div class="h-40 w-40 bg-green-500">{{ i }}</div>
+        </swiper-slide>
+        <template v-slot:container-start><span>Container start</span></template>
+        <template v-slot:container-end><span>Container end</span></template>
+        <template v-slot:wrapper-start><span>Wrapper start</span></template>
+        <template v-slot:wrapper-end><span>Wrapper end</span></template>
+      </swiper>
+
       <div class="mx-auto my-[50px] max-w-[1253.84px]">
         <client-only>
           <swiper
@@ -29,11 +42,11 @@
             @slideChange="onSlideChange"
           >
             <swiper-slide
-              v-for="(img, i) in items"
+              v-for="(img, i) in productItems"
               :key="i"
               :class="i === activeIndex + 2 ? 'active-slide' : getClass(i)"
             >
-              <img :src="img" :alt="img" class="max-h-[622px]" />
+              <img :src="img.image" :alt="img.image" class="max-h-[622px]" />
             </swiper-slide>
           </swiper>
         </client-only>
@@ -42,9 +55,15 @@
   </section>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Swiper, SwiperSlide } from "swiper/vue";
-import { Navigation, Pagination } from "swiper/modules";
+import {
+  Navigation,
+  Pagination,
+  Autoplay,
+  Keyboard,
+  Virtual,
+} from "swiper/modules";
 
 // Import Swiper styles
 //:centeredSlides="true"
@@ -52,59 +71,88 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-export default {
-  components: {
-    Swiper,
-    SwiperSlide,
+const activeIndex = ref(0);
+const onSwiper = (swiper: any) => {
+  console.log(swiper);
+};
+const onSlideChange = (swiper: any) => {
+  console.log("slide change", { swiper });
+  activeIndex.value = swiper.activeIndex;
+};
+
+const modules = [Navigation, Pagination];
+
+const productItems = ref([
+  {
+    image: "/images/products/4.jpg",
+    description:
+      "Browse thousands of products from various vendors with ease using the Greep mobile app. Our app allows you to search, filter, and discover new products from the comfort of your own home. With high-quality product images and detailed descriptions, you'll be able to make informed purchasing decisions on the go.",
   },
-  setup() {
-    const activeIndex = ref(0);
-    const onSwiper = (swiper: any) => {
-      console.log(swiper);
-    };
-    const onSlideChange = (swiper: any) => {
-      console.log("slide change", { swiper });
-      activeIndex.value = swiper.activeIndex;
-    };
-
-    const items = [
-      "/images/products/4.jpg",
-      "/images/products/5.jpg",
-      "/images/products/1.jpg",
-      "/images/products/2.jpg",
-      "/images/products/3.jpg",
-      "/images/products/1.jpg",
-      "/images/products/4.jpg",
-      "/images/products/5.jpg",
-      "/images/products/1.jpg",
-      "/images/products/2.jpg",
-      "/images/products/3.jpg",
-    ];
-
-    const getClass = (i: number) => {
-      const middleNum = activeIndex.value + 2;
-
-      const smallerleft = middleNum - 2;
-      const higherRight = middleNum + 2;
-      const isRight = i > middleNum;
-      if (i === smallerleft) {
-        return `smaller-left`;
-      }
-      if (i === higherRight) {
-        return "smaller-right";
-      }
-      return `${isRight ? "big-right" : "big-left"}`;
-    };
-
-    return {
-      onSwiper,
-      onSlideChange,
-      items,
-      modules: [Navigation, Pagination],
-      activeIndex,
-      getClass,
-    };
+  {
+    image: "/images/products/5.jpg",
+    description:
+      "Discover a world of quality products at your fingertips with the Greep mobile app. Our user-friendly interface makes it easy to find exactly what you need, whether you're shopping for electronics, fashion, or home goods.",
   },
+  {
+    image: "/images/products/1.jpg",
+    description:
+      "Enjoy the convenience of online shopping with the Greep mobile app. Our secure payment options and fast shipping ensure a hassle-free experience. Plus, with exclusive deals and discounts, you'll always get the best value for your money.",
+  },
+  {
+    image: "/images/products/2.jpg",
+    description:
+      "Greep is more than just an app; it's your personal shopping assistant. Our personalized recommendations and saved favorites make it easy to find the products you love.",
+  },
+  {
+    image: "/images/products/3.jpg",
+    description:
+      "Upgrade your shopping experience with the Greep mobile app. Our intuitive design and seamless navigation make it a joy to use. Whether you're a seasoned shopper or just starting out, Greep has something for everyone.",
+  },
+  {
+    image: "/images/products/1.jpg",
+    description:
+      "Enjoy the convenience of online shopping with the Greep mobile app. Our secure payment options and fast shipping ensure a hassle-free experience. Plus, with exclusive deals and discounts, you'll always get the best value for your money.",
+  },
+  {
+    image: "/images/products/4.jpg",
+    description:
+      "Browse thousands of products from various vendors with ease using the Greep mobile app. Our app allows you to search, filter, and discover new products from the comfort of your own home. With high-quality product images and detailed descriptions, you'll be able to make informed purchasing decisions on the go.",
+  },
+  {
+    image: "/images/products/5.jpg",
+    description:
+      "Discover a world of quality products at your fingertips with the Greep mobile app. Our user-friendly interface makes it easy to find exactly what you need, whether you're shopping for electronics, fashion, or home goods.",
+  },
+  {
+    image: "/images/products/1.jpg",
+    description:
+      "Enjoy the convenience of online shopping with the Greep mobile app. Our secure payment options and fast shipping ensure a hassle-free experience. Plus, with exclusive deals and discounts, you'll always get the best value for your money.",
+  },
+  {
+    image: "/images/products/2.jpg",
+    description:
+      "Greep is more than just an app; it's your personal shopping assistant. Our personalized recommendations and saved favorites make it easy to find the products you love.",
+  },
+  {
+    image: "/images/products/3.jpg",
+    description:
+      "Upgrade your shopping experience with the Greep mobile app. Our intuitive design and seamless navigation make it a joy to use. Whether you're a seasoned shopper or just starting out, Greep has something for everyone.",
+  },
+]);
+
+const getClass = (i: number) => {
+  const middleNum = activeIndex.value + 2;
+
+  const smallerleft = middleNum - 2;
+  const higherRight = middleNum + 2;
+  const isRight = i > middleNum;
+  if (i === smallerleft) {
+    return `smaller-left`;
+  }
+  if (i === higherRight) {
+    return "smaller-right";
+  }
+  return `${isRight ? "big-right" : "big-left"}`;
 };
 </script>
 

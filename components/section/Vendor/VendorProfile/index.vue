@@ -1,6 +1,11 @@
 <template>
   <div v-if="apiLoadingStates.getUserProfile === API_STATES.LOADING">
-    <Skeleton class="mb-2 h-[153px] w-[153px] rounded-full" />
+    <div class="relative mb-0 flex flex-col">
+      <Skeleton class="mb-2 h-[153px] w-full" />
+      <Skeleton
+        class="relative -top-20 left-10 h-[153px] w-[153px] rounded-full border-8 border-white lg:left-20"
+      />
+    </div>
     <Skeleton class="mb-9 h-7 w-[250px]" />
     <div class="flex justify-between">
       <div class="flex items-center space-x-4">
@@ -17,11 +22,24 @@
   </div>
 
   <!--  -->
-  <div v-else-if="apiLoadingStates.getUserProfile === API_STATES.SUCCESS">
+  <div
+    v-else-if="apiLoadingStates.getUserProfile === API_STATES.SUCCESS"
+    class="duration-500"
+  >
     <div class="flex flex-col justify-between md:flex-row">
-      <div class="align-center relative flex h-auto justify-center">
-        <div class="relative mt-auto">
-          <Avatar size="lg" class="h-32 w-32 lg:h-[153px] lg:w-[153px]">
+      <div
+        class="align-center relative mb-20 flex h-auto w-full justify-start rounded-lg bg-[url(/images/vendor-profile.png)] bg-cover object-cover pt-10"
+      >
+        <div
+          class="absolute bottom-4 right-4 flex items-center justify-center rounded-full bg-[#000000] p-[14px]"
+        >
+          <Camera class="text-[#fff]" />
+        </div>
+        <div class="relative left-10 top-20 mt-auto lg:left-20">
+          <Avatar
+            size="lg"
+            class="h-32 w-32 border-8 border-white lg:h-[153px] lg:w-[153px]"
+          >
             <AvatarImage src="/images/placeholder.png" alt="User" />
             <AvatarFallback>CNx</AvatarFallback>
           </Avatar>
@@ -33,7 +51,7 @@
         </div>
       </div>
 
-      <Card class="my-4 border-[2px] border-[#E0E2E4] lg:min-w-[368px]">
+      <Card hidden class="my-4 border-[2px] border-[#E0E2E4] lg:min-w-[368px]">
         <CardHeader class="pb-1 pt-4">
           <CardTitle class="text-[22px]">Estimated Balance</CardTitle>
         </CardHeader>
@@ -81,11 +99,11 @@
 
     <!-- Vendor image part -->
     <div class="">
-      <div class="my-4 flex justify-between lg:my-8 lg:block">
+      <div class="flexs my-4 justify-between lg:my-8 lg:block">
         <h1 class="mb-2 text-lg font-medium md:text-2xl lg:flex">
           {{ userProfile.vendor?.name || userProfile.type?.name || "----" }}
         </h1>
-        <div class="gap-[13px] lg:mb-[20px] lg:flex">
+        <div class="flex gap-[13px] lg:mb-[20px]">
           <MapPin class="text-primary" />
           <p class="text-[14px] leading-[21px]">
             {{
@@ -148,9 +166,15 @@
           :key="i"
           class="p-5"
         >
-          <h4 class="mb-[30px] text-[16px] font-medium leading-[20px]">
-            {{ profileItem }}
-          </h4>
+          <div class="mb-[30px] flex items-center justify-between">
+            <h4 class="text-[16px] font-medium leading-[20px]">
+              {{ profileItem }}
+            </h4>
+            <Button class="" size="icon" @click="openDialog(profileItem)">
+              <EditIcon class="h-5 w-5"
+            /></Button>
+          </div>
+
           <div class="grid w-full gap-[35px] lg:grid-cols-2">
             <div
               v-for="(item, index) in otherOptions[profileItem]"
@@ -169,8 +193,6 @@
                 class="flex cursor-pointer gap-2 whitespace-nowrap text-[14px] font-light leading-[20px]"
               >
                 {{ item.value || "--" }}
-
-                <EditIcon class="h-5 w-5" />
               </p>
             </div>
           </div>
@@ -196,10 +218,12 @@
               :key="index"
               class="flex items-center justify-between"
             >
-              <component :is="item.icon" class="h-5 w-5 text-primary" />
-              <p class="text-[14px] font-medium leading-[20px]">
-                {{ item.title }}
-              </p>
+              <div class="flex gap-2 text-[14px] font-medium leading-[20px]">
+                <component :is="item.icon" class="h-5 w-5 text-primary" />
+                <p class="text-[14px] font-medium leading-[20px]">
+                  {{ item.title }}
+                </p>
+              </div>
 
               <p
                 class="flex cursor-pointer text-[14px] font-light leading-[20px]"
@@ -210,6 +234,8 @@
           </div>
         </div>
       </div>
+
+      <BusinessHours />
 
       <Alert variant="warning" class="">
         <CircleAlert class="h-4 w-4" />

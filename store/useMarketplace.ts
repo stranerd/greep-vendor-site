@@ -45,6 +45,8 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     getCartLinkDetails: API_STATES.IDLE,
     checkoutCartLink: API_STATES.IDLE,
     getRecommendedProductsTags: API_STATES.IDLE,
+    getRecommendedFoodsTags: API_STATES.IDLE,
+    createProductCategory: API_STATES.IDLE,
   });
 
   const currentCart = ref({});
@@ -664,17 +666,20 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
 
   const createProductCategoryTag = async (payload: {
     title: string;
-    type: "productFoods" | "productsItems";
+    type: "productsFoods" | "productsItems";
+    photo: any;
   }) => {
+    marketplaceLoadingStates.value.createProductCategory = API_STATES.LOADING;
     const { $api } = useNuxtApp();
     const { toast } = useToast();
 
     const { data, error } = $api.interactions.createProductCategoryTag(payload);
-    if (data.value) {
+    if (data) {
       await getProductFoodsTags();
       await getProductItemsTags();
+      marketplaceLoadingStates.value.createProductCategory = API_STATES.SUCCESS;
       toast({
-        title: "Success",
+        title: "success",
         description: "Category created successfully",
       });
     }
@@ -685,9 +690,11 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     const { toast } = useToast();
 
     const { data } = $api.marketplace.getRecommendedProductTags("foods");
-
+    marketplaceLoadingStates.value.getRecommendedFoodsTags = API_STATES.LOADING;
     if (data.value) {
       productFoodsTags.value = data.value?.results;
+      marketplaceLoadingStates.value.getRecommendedFoodsTags =
+        API_STATES.SUCCESS;
     }
   };
   const getProductItemsTags = async () => {

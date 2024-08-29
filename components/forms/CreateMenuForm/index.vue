@@ -65,7 +65,10 @@
         </div>
 
         <div>
-          <Label>Set Category </Label>
+          <Label
+            >Set Category
+            {{ marketplaceLoadingStates.getRecommendedFoodsTags }}
+          </Label>
           <div class="relative mt-3 h-auto overflow-y-auto">
             <Badge
               v-for="(framework, index) in selectedValues"
@@ -104,22 +107,28 @@
             </PopoverTrigger>
             <PopoverContent class="w-[350px] p-0">
               <Command loop>
-                <CommandInput placeholder="Search category..." />
-                <CommandEmpty>
-                  <div class="">
-                    <h2 class="my-2">No category found.</h2>
-                    <button
-                      variant="outline"
-                      class="mx-auto flex w-[98%] justify-center rounded-sm bg-[#F1F5F9] p-2 text-center text-xs text-muted-foreground"
-                      @click="openCreateCategoryModal = true"
-                    >
-                      <div class="mr-2 h-4 w-4"></div>
-                      <CirclePlus class="mr-2 h-4 w-4" />
-                      Create a new category
-                    </button>
+                <CommandInput
+                  placeholder="Search category..."
+                  v-if="
+                    marketplaceLoadingStates.getRecommendedFoodsTags !==
+                    API_STATES.LOADING
+                  "
+                />
+                <template
+                  v-if="
+                    marketplaceLoadingStates.getRecommendedFoodsTags ===
+                    API_STATES.LOADING
+                  "
+                >
+                  <div class="grid gap-1 p-4">
+                    <Skeleton
+                      class="h-[20px] w-full bg-gray-200"
+                      v-for="i in 5"
+                    />
                   </div>
-                </CommandEmpty>
-                <CommandList>
+                </template>
+
+                <CommandList v-else>
                   <CommandGroup class="max-h-[145px] overflow-auto">
                     <CommandItem
                       v-for="tag in productFoodTagItems"
@@ -147,6 +156,25 @@
                     </CommandItem>
                   </CommandGroup>
                 </CommandList>
+                <CommandEmpty
+                  v-if="
+                    marketplaceLoadingStates.getRecommendedFoodsTags !==
+                    API_STATES.LOADING
+                  "
+                >
+                  <div class="">
+                    <h2 class="my-2">No category found.</h2>
+                    <button
+                      variant="outline"
+                      class="mx-auto flex w-[98%] justify-center rounded-sm bg-[#F1F5F9] p-2 text-center text-xs text-muted-foreground"
+                      @click="openCreateCategoryModal = true"
+                    >
+                      <div class="mr-2 h-4 w-4"></div>
+                      <CirclePlus class="mr-2 h-4 w-4" />
+                      Create a new category
+                    </button>
+                  </div>
+                </CommandEmpty>
                 <CommandSeparator alwaysRender />
                 <CommandGroup>
                   <CommandItem
@@ -340,7 +368,8 @@
           <Button
             type="submit"
             class="rounded-[12px]"
-            @click="createFoodCategoryTag"
+            :disabled="!newCategoryTitle"
+            @click="openConfirmCreateCategoryModal"
           >
             Create Category
           </Button>
@@ -348,7 +377,7 @@
       </DialogContent>
     </Dialog>
 
-    <AlertDialog>
+    <AlertDialog v-model:open="confirmCreateCategoryTag">
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Create New Item</AlertDialogTitle>
@@ -358,7 +387,15 @@
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction @click="null">Continue</AlertDialogAction>
+          <AlertDialogAction @click="createFoodCategoryTag"
+            ><Button
+              :loading="
+                marketplaceLoadingStates.createProductCategory ===
+                API_STATES.LOADING
+              "
+              >Continue</Button
+            ></AlertDialogAction
+          >
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -373,10 +410,11 @@ import { useForm } from "vee-validate";
 import { API_STATES } from "~/services/constants";
 import { useMarketPlaceStore } from "@/store/useMarketplace";
 import { ReserveIcon } from "@placetopay/iconsax-vue/outline";
+import { useToast } from "@/components/library/toast/use-toast";
 
 const marketPlaceStore = useMarketPlaceStore();
 const { marketplaceLoadingStates, productFoodsTags, productFoodTagItems } =
-  storeToRefs(marketPlaceStore);
+  storeToRefs(useMarketPlaceStore());
 
 const { createProduct, getProductFoodsTags, createProductCategoryTag } =
   marketPlaceStore;
@@ -386,6 +424,7 @@ const file = ref(null);
 const emits = defineEmits(["completed"]);
 const openCombobox = ref<boolean>(false);
 const openCreateCategoryModal = ref<boolean>(false);
+const confirmCreateCategoryTag = ref<boolean>(false);
 const newCategoryTitle = ref<string>("");
 const selectedValues = ref<any[]>([]);
 const openConfirmDialog = ref(false);
@@ -401,6 +440,12 @@ const toggleCategory = (tag: any) => {
   }
 };
 
+const openConfirmCreateCategoryModal = () => {
+  if (newCategoryTitle.value) {
+    openCreateCategoryModal.value = false;
+    confirmCreateCategoryTag.value = true;
+  }
+};
 const formSchema = toTypedSchema(
   z.object({
     title: z.string().min(3, {
@@ -484,12 +529,20 @@ const categorySchema = toTypedSchema(
 const createFoodCategoryTag = async () => {
   await createProductCategoryTag({
     title: newCategoryTitle.value,
-    type: "productFoods",
+    type: "productsFoods",
+    photo: null,
   });
+
+  newCategoryTitle.value = "";
+  await getProductFoodsTags();
 };
 
-onMounted(() => {
-  getProductFoodsTags();
+onMounted(async () => {
+  await getProductFoodsTags();
+});
+
+onUpdated(async () => {
+  await getProductFoodsTags();
 });
 </script>
 
