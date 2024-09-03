@@ -1,5 +1,5 @@
 <template>
-  <card class="my-8 grid gap-2">
+  <card class="my-8 grid gap-2 duration-500">
     <div class="flex items-center justify-between gap-x-4 bg-[#F1F3F76B] p-4">
       <div class="flex gap-x-4">
         <ClockIcon class="block h-6 w-6 text-primary" />
@@ -20,15 +20,16 @@
       mode="out-in"
       enter-active-class="animate__animated animate__fadeInUp"
       leave-active-class="animate__animated animate__fadeOutDown"
+      move-active-class="animate__animated animate__fadeInUp"
     >
       <div class="p-4" v-if="availability">
-        <div class="my-5 flex items-center justify-between gap-x-60">
+        <div class="my-5 items-center justify-between gap-x-60 lg:flex">
           <div class="min-w-max text-sm">
             <h2 class="font-medium">Timezone</h2>
             <p class="text-[#999999]">Set your timezone</p>
           </div>
           <div
-            class="flex h-10 w-full items-center justify-between rounded-lg text-[#999999]"
+            class="flex h-10 items-center justify-between rounded-lg text-[#999999] lg:w-full"
           >
             <Select v-model="timezone" class="">
               <SelectTrigger class="border border-[#999]">
@@ -48,9 +49,9 @@
             </Select>
           </div>
         </div>
-        <div class="grid gap-2.5">
+        <div class="grid gap-5 lg:gap-2.5">
           <div
-            class="flex items-center"
+            class="flex lg:items-center"
             v-for="(activity, days) in activeBusinessHours"
           >
             <div class="flex w-48 gap-x-3">
@@ -62,10 +63,10 @@
               <span class="capitalize">{{ days }}</span>
             </div>
 
-            <transition mode="out-in" name="fade">
+            <transition mode="out-in" name="fade" class="">
               <div
                 v-if="activity.active === true"
-                class="flex flex-1 gap-x-4 text-xs"
+                class="grid flex-1 gap-x-4 gap-y-2 text-xs lg:flex"
               >
                 <div
                   class="flex h-10 w-full items-center justify-between rounded-lg text-[#999999]"

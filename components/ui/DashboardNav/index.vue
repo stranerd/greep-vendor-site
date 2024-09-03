@@ -4,7 +4,7 @@
   >
     <Sheet>
       <SheetTrigger as-child>
-        <Button variant="outline" size="icon" class="shrink-0 md:hidden">
+        <Button variant="outline" size="icon" class="ml-4 shrink-0 md:hidden">
           <Menu class="h-5 w-5" />
           <span class="sr-only">Toggle navigation menu</span>
         </Button>
@@ -128,6 +128,7 @@ import {
   LogOut,
 } from "lucide-vue-next";
 
+import { TicketDiscountIcon } from "@placetopay/iconsax-vue/outline";
 import { GP_CONSTANTS } from "~/constants";
 import { GP_ROUTES } from "~/constants/route-names";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -168,6 +169,11 @@ const navLinks = ref([
         : GP_ROUTES.VENDOR.ITEMS.ITEMS_MANAGER,
     name: userType.value?.vendorType === "foods" ? "Menu" : "Items Manager",
     icon: BookmarkMinus,
+  },
+  {
+    to: GP_ROUTES.VENDOR.PROMOTIONS,
+    name: "Promo Manager",
+    icon: TicketDiscountIcon,
   },
   {
     to: GP_ROUTES.VENDOR.SETTINGS,

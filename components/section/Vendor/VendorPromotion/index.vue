@@ -10,7 +10,7 @@
         <span class="">Run new promo</span>
       </Button>
     </div>
-    <div class="grid grid-cols-3 gap-4 md:gap-8">
+    <div class="grid gap-4 md:gap-8 lg:grid-cols-3">
       <Card v-for="(card, i) in overview" :key="i" style="overflow: hidden">
         <CardHeader
           class="flex flex-row items-center justify-between space-y-0 pb-[10px]"

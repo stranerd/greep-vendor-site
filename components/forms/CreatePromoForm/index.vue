@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <div class="grid max-w-[60%] gap-4">
+    <div class="grid gap-4 lg:max-w-[60%]">
       <FormField v-slot="{ componentField, handleChange }" name="promoType">
         <FormItem>
           <FormLabel>Promo Type</FormLabel>
@@ -95,7 +95,7 @@
         </FormItem>
       </FormField>
     </div>
-    <div class="mt-20 grid grid-cols-2 gap-10">
+    <div class="mt-20 grid gap-10 lg:grid-cols-2">
       <Card class="">
         <CardHeader>
           <CardTitle class="space-x-5 text-lg"
