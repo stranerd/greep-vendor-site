@@ -51,16 +51,16 @@
           <h2 class="text-sm text-destructive" v-if="maxFileExceeded">
             You can only upload a maximum of 2MB file
           </h2>
-          <div class="flex gap-6">
+          <div class="flex justify-center gap-6">
             <Button
               @click="open"
-              class="my-4 h-10 w-20 rounded-full border-2 !py-3 font-semibold hover:border-primary hover:bg-white hover:text-black lg:w-48"
+              class="my-4 h-10 w-36 rounded-full border-2 !py-3 font-semibold hover:border-primary hover:bg-white hover:text-black lg:w-48"
               >Choose Files
             </Button>
             <Button
               :loading="uploading"
               :disabled="files.length < 1 || maxFileExceeded"
-              class="my-4 h-10 w-20 rounded-full bg-primary !py-3 font-semibold md:my-4 lg:w-48"
+              class="my-4 h-10 w-36 rounded-full bg-primary !py-3 font-semibold md:my-4 lg:w-48"
               @click="emits('upload')"
               >Upload
             </Button>
