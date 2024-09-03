@@ -24,10 +24,23 @@
       </form>
       <div class="flex">
         <p
-          class="mr-[31px] flex w-[150px] items-center gap-[10px] text-[14px] leading-[21px]"
+          class="fit mr-[31px] flex w-[224px] items-center gap-[10px] text-[14px] leading-[21px]"
         >
-          <span class="h-[7px] w-fit rounded-full bg-[#000]"> </span>
-          Sort by: Latest&nbsp;Item
+          Sort&nbsp;by:
+          <Select>
+            <SelectTrigger>
+              <SelectValue placeholder="Lastest Item" class="border-none" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem
+                  :value="value"
+                  v-for="{ label, value } in sortOptions"
+                  >{{ label }}
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </p>
 
         <Button
@@ -41,7 +54,9 @@
         <client-only>
           <CreateMenuModal
             :isOpen="isDialogOpen"
-            @close="isDialogOpen = false"
+            :mode="mode"
+            :selectedProduct="selectedProduct"
+            @close="closeModal"
             @completedCreation="completeProductCreation"
           />
         </client-only>
@@ -92,16 +107,18 @@
             v-if="products?.length > 0"
             class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4"
           >
-            <RouterLink
+            <ItemCard
               v-for="(item, i) in products"
-              :key="i"
-              :to="{
-                name: GP_ROUTES.VENDOR.FOOD.MENU_DETAILS,
-                params: { id: item.id },
-              }"
-            >
-              <ItemCard :cardData="item" @click="getSingleProduct(item.id)" />
-            </RouterLink>
+              :cardData="item"
+              @view="
+                getSingleProduct(item.id);
+                router.push({
+                  name: GP_ROUTES.VENDOR.FOOD.MENU_DETAILS,
+                  params: { id: item.id },
+                });
+              "
+              @trigger-edit="triggerEdit"
+            />
           </div>
           <DisplayState
             v-else
@@ -111,6 +128,15 @@
           />
         </div>
       </div>
+      <!-- <client-only>
+        <CreateMenuModal
+          :isOpen="isEditDialogOpen"
+          @close="isEditDialogOpen = false"
+          mode="edit"
+          :selectedProduct="selectedProduct"
+          @completedCreation="completeProductCreation"
+        />
+      </client-only> -->
     </div>
 
     <!-- <div>
@@ -138,13 +164,35 @@ const marketplaceStore = useMarketPlaceStore();
 const { products, marketplaceLoadingStates } = storeToRefs(marketplaceStore);
 const { getAllProducts, getSingleProduct } = marketplaceStore;
 
+const router = useRouter();
 const isDialogOpen = ref(false);
 
-const completeProductCreation = () => {
-  isDialogOpen.value = false;
-  console.log("called");
+const mode = ref<"create" | "edit">("create");
+const selectedProduct = ref({});
+const searchTerm = ref("");
 
+const sortOptions = [
+  { label: "Latest Item", value: "latest" },
+  { label: "Most Sold", value: "most sold" },
+  { label: "Highest In Price", value: "highest" },
+  { label: "Lowest In Price", value: "lowest" },
+];
+
+const closeModal = () => {
+  isDialogOpen.value = false;
+  mode.value = "create";
+  selectedProduct.value = {};
+};
+
+const completeProductCreation = () => {
+  closeModal();
   getAllProducts({});
+};
+
+const triggerEdit = (product: any) => {
+  mode.value = "edit";
+  selectedProduct.value = product;
+  isDialogOpen.value = true;
 };
 
 onMounted(() => {

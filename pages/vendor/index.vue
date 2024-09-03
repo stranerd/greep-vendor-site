@@ -12,6 +12,9 @@ definePageMeta({
   middleware: ["authenticated"],
   name: GP_ROUTES.VENDOR.DASHBOARD,
 });
+useHead({
+  title: "Vendors Dashboard",
+});
 </script>
 
 <style></style>

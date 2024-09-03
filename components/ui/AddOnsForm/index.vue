@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <h2 class="font-medium">Create add on Categories</h2>
-    <form class="flex flex-col gap-2">
+    <transition-group tag="form" name="slide" class="flex flex-col gap-2">
       <div
         class="w-full"
         v-for="(addOn, addOnIndex) in addOnList"
@@ -52,33 +52,35 @@
         </div>
 
         <div class="ml-10 mt-2 flex flex-col gap-2">
-          <div class="" v-for="(item, itemIndex) in addOn.items">
-            <div class="flex items-center justify-between gap-4">
-              <h2 class="flex max-w-[70%] flex-1 items-center gap-1">
-                <span class="text-3xl"> • </span>
-                <Input
-                  :placeholder="item.placeholder"
-                  class="h-8 flex-1 rounded border border-black focus:border-none"
-                  v-model="item.name"
-                />
-              </h2>
+          <transition-group name="slide">
+            <div class="" v-for="(item, itemIndex) in addOn.items" :key="item">
+              <div class="flex items-center justify-between gap-4">
+                <h2 class="flex max-w-[70%] flex-1 items-center gap-1">
+                  <span class="text-3xl"> • </span>
+                  <Input
+                    :placeholder="item.placeholder"
+                    class="h-8 flex-1 rounded border border-black focus:border-none"
+                    v-model="item.name"
+                  />
+                </h2>
 
-              <div class="flex items-center gap-4">
-                <h2 class="">Price</h2>
-                <Input
-                  type="number"
-                  :min="1"
-                  class="h-8 w-[100px] flex-1 rounded border border-black focus:border-none"
-                  v-model="item.price.amount"
+                <div class="flex items-center gap-4">
+                  <h2 class="">Price</h2>
+                  <Input
+                    type="number"
+                    :min="1"
+                    class="h-8 w-[100px] flex-1 rounded border border-black focus:border-none"
+                    v-model="item.price.amount"
+                  />
+                </div>
+
+                <TrashIcon
+                  class="h-6 w-6 text-rose-500"
+                  @click="deleteAddOnItem(addOnIndex, itemIndex)"
                 />
               </div>
-
-              <TrashIcon
-                class="h-6 w-6 text-rose-500"
-                @click="deleteAddOnItem(addOnIndex, itemIndex)"
-              />
             </div>
-          </div>
+          </transition-group>
           <h2
             class="my-1 flex cursor-pointer items-center justify-start gap-x-2 text-blue-700"
             @click.prevent="addAddOnItem(addOnIndex)"
@@ -88,7 +90,7 @@
           </h2>
         </div>
       </div>
-    </form>
+    </transition-group>
 
     <h2
       class="my-2 flex cursor-pointer items-center justify-start gap-x-2 text-blue-700"
@@ -105,6 +107,12 @@ import { AddCircleIcon, TrashIcon } from "@placetopay/iconsax-vue/outline";
 import { currencyConverter } from "@/lib/utils";
 
 const emit = defineEmits(["create-addons"]);
+const props = defineProps({
+  initialAddOnList: {
+    type: Object,
+    default: () => {},
+  },
+});
 
 interface AddOn {
   title: string;
@@ -113,7 +121,7 @@ interface AddOn {
   placeholder: string;
   items: {
     name: string;
-    price: { amount: number; currency: "TRY" | "NGN" };
+    price: { amount: number; currency: string | "TRY" | "NGN" };
     placeholder: string;
   }[];
 }
@@ -199,10 +207,58 @@ watch(
   },
   { deep: true },
 );
+
 onMounted(() => {
-  addAddOn();
-  addAddOnItem(0);
+  function isObjectTruthy(obj: object) {
+    // Check if the object is not null, is an object, and has properties
+    return obj && typeof obj === "object" && Object.keys(obj).length > 0;
+  }
+  if (!isObjectTruthy(props.initialAddOnList)) {
+    addAddOn();
+    addAddOnItem(0);
+  } else {
+    const initialAddons = Object.entries(props.initialAddOnList).map(
+      (addOn: any) => {
+        const items = Object.entries(addOn[1].items);
+        const addOnList = {
+          title: addOn[0],
+          option: Number(addOn[1].minSelection).toString(),
+          maxSelection: addOn[1].maxSelection,
+          placeholder: "e.g toppings",
+          items: items.map((item: any) => ({
+            name: item[0],
+            placeholder: "e.g meat",
+            price: {
+              amount: item[1].price.amount,
+              currency: item[1].price.currency,
+            },
+            inStock: item[1].inStock,
+          })),
+        };
+        return addOnList;
+      },
+    );
+    addOnList.push(...initialAddons);
+  }
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.slide-move, /* apply transition to moving elements */
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  opacity: 0;
+  transform: translate(30px, 0);
+}
+
+/* 3. ensure leaving items are taken out of layout flow so that moving
+      animations can be calculated correctly. */
+.slide-leave-active {
+  position: absolute;
+}
+</style>

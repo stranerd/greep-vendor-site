@@ -25,7 +25,7 @@
             </FormItem>
           </FormField>
         </div>
-        <div class="grid gap-2">
+        <div class="grids hidden gap-2">
           <FormField v-slot="{ componentField }" name="no_of_items">
             <FormItem>
               <FormLabel>
@@ -65,10 +65,7 @@
         </div>
 
         <div>
-          <Label
-            >Set Category
-            {{ marketplaceLoadingStates.getRecommendedFoodsTags }}
-          </Label>
+          <Label>Set Category </Label>
           <div class="relative mt-3 h-auto overflow-y-auto">
             <Badge
               v-for="(framework, index) in selectedValues"
@@ -140,15 +137,17 @@
                         class="mr-2 h-4 w-4 text-black"
                         :class="{
                           'stroke-primary stroke-1 text-primary opacity-100':
-                            selectedValues.includes(tag),
-                          'opacity-100': !selectedValues.includes(tag),
+                            selectedValues.some((i) => i.id === tag.id),
+                          'opacity-100': !selectedValues.some(
+                            (i) => i.id === tag.id,
+                          ),
                         }"
                       />
                       <div
                         class="flex-1 capitalize"
                         :class="{
                           'font-semibold text-primary opacity-100':
-                            selectedValues.includes(tag),
+                            selectedValues.some((i) => i.id === tag.id),
                         }"
                       >
                         {{ tag.title }}
@@ -191,18 +190,22 @@
             </PopoverContent>
           </Popover>
         </div>
+
         <div class="grids gap-2">
           <FormField v-slot="{ componentField }" name="add_ons">
             <FormItem>
               <FormLabel>Add On settings</FormLabel>
               <FormDescription>
                 Create side items that come with your food
-                <AddOnsForm @create-addons="(val) => (addOns = val)" />
+                <AddOnsForm
+                  @create-addons="(val) => (addOns = val)"
+                  :initialAddOnList="selectedProduct.addOns"
+                />
               </FormDescription>
             </FormItem>
           </FormField>
         </div>
-        <div class="grid gap-2">
+        <div class="grid gap-2" v-if="mode === 'create'">
           <FormField name="banner" v-slot="{ handleChange }">
             <FormItem>
               <FormLabel
@@ -324,12 +327,18 @@
             type="submit"
             class="rounded-[12px]"
             :loading="
-              marketplaceLoadingStates.createProduct === API_STATES.LOADING
+              marketplaceLoadingStates.createProduct === API_STATES.LOADING ||
+              marketplaceLoadingStates.updateProduct === API_STATES.LOADING
             "
             @click="openConfirmDialog = true"
-            :disabled="Object.keys(errors).length > 0 || file === null"
+            :disabled="
+              Object.keys(errors).length > 0 ||
+              (mode === 'create' && file === null) ||
+              marketplaceLoadingStates.createProduct === API_STATES.LOADING ||
+              marketplaceLoadingStates.updateProduct === API_STATES.LOADING
+            "
           >
-            Submit Item
+            {{ mode === "create" ? "Submit" : "Update" }} Item
           </Button>
         </div>
       </div>
@@ -412,14 +421,32 @@ import { useMarketPlaceStore } from "@/store/useMarketplace";
 import { ReserveIcon } from "@placetopay/iconsax-vue/outline";
 import { useToast } from "@/components/library/toast/use-toast";
 
+const props = defineProps({
+  mode: {
+    type: String as PropType<"create" | "edit">,
+    default: "create",
+  },
+  selectedProduct: {
+    type: Object,
+    default: () => {},
+  },
+});
+
+// const { $api,  } = useNuxtApp();
+
+const { toast } = useToast();
 const marketPlaceStore = useMarketPlaceStore();
 const { marketplaceLoadingStates, productFoodsTags, productFoodTagItems } =
   storeToRefs(useMarketPlaceStore());
-
-const { createProduct, getProductFoodsTags, createProductCategoryTag } =
-  marketPlaceStore;
-
-const file = ref(null);
+const {
+  createProduct,
+  updateProduct,
+  getProductFoodsTags,
+  getAllProducts,
+  createProductCategoryTag,
+} = marketPlaceStore;
+const file = ref<File | null>(null);
+const initialAddOnList = ref<any>({});
 
 const emits = defineEmits(["completed"]);
 const openCombobox = ref<boolean>(false);
@@ -431,7 +458,7 @@ const openConfirmDialog = ref(false);
 const addOns = ref<any[]>([]);
 
 const toggleCategory = (tag: any) => {
-  if (!selectedValues.value.includes(tag)) {
+  if (!selectedValues.value.some((i) => i.id === tag.id)) {
     selectedValues.value = [...selectedValues.value, tag];
   } else {
     selectedValues.value = selectedValues.value.filter(
@@ -446,28 +473,50 @@ const openConfirmCreateCategoryModal = () => {
     confirmCreateCategoryTag.value = true;
   }
 };
-const formSchema = toTypedSchema(
-  z.object({
-    title: z.string().min(3, {
-      message: "Title cannot be less than 3 characters",
-    }),
-    no_of_items: z.number().optional(),
-    description: z.string().optional(),
-    price: z.number({
-      required_error: "Price cannot be empty",
-    }),
-    from_time: z.number({
-      required_error: "Minimum time cannot be  empty",
-    }),
-    to_time: z.number({
-      required_error: "Maximum time cannot be  empty",
-    }),
-    banner: z.any({
-      required_error: "Image is required",
-    }),
-    inStock: z.boolean(),
+
+const schemaShape = ref({
+  title: z.string().min(3, {
+    message: "Title cannot be less than 3 characters",
   }),
-);
+  no_of_items: z.number().optional(),
+  description: z.string().optional(),
+  price: z.number({
+    required_error: "Price cannot be empty",
+  }),
+  from_time: z.number({
+    required_error: "Minimum time cannot be  empty",
+  }),
+  to_time: z.number({
+    required_error: "Maximum time cannot be empty",
+  }),
+  inStock: z.boolean(),
+});
+
+const toTimeRefinement = (data: any, ctx: any) => {
+  if (data.to_time < data.from_time + 15) {
+    ctx.addIssue({
+      path: ["to_time"],
+      message:
+        "Maximum time must be at least 15 minutes higher than the minimum time",
+    });
+  }
+};
+
+let formSchema =
+  props.mode === "edit"
+    ? toTypedSchema(
+        z.object({ ...schemaShape.value }).superRefine(toTimeRefinement),
+      )
+    : toTypedSchema(
+        z
+          .object({
+            ...schemaShape.value,
+            banner: z.any({
+              required_error: "Image is required",
+            }),
+          })
+          .superRefine(toTimeRefinement),
+      );
 
 const { handleSubmit, resetForm, setFieldValue, errors } = useForm({
   validationSchema: formSchema,
@@ -506,8 +555,20 @@ const createNewFoodProduct = handleSubmit(async (values: any) => {
 
   form.append("data", JSON.stringify({ type: "foods", prepTimeInMins }));
   form.append("addOns", JSON.stringify(addOns.value));
+  console.log({ banner: values.banner });
 
-  await createProduct(form);
+  if (props.mode === "edit") {
+    await updateProduct(props.selectedProduct.id, form);
+    toast({
+      description: "Product updated successfully!",
+    });
+  } else {
+    await createProduct(form);
+    toast({
+      description: "Product added successfully!",
+    });
+  }
+  await getAllProducts();
   emits("completed");
 });
 
@@ -539,6 +600,32 @@ const createFoodCategoryTag = async () => {
 
 onMounted(async () => {
   await getProductFoodsTags();
+});
+
+onMounted(async () => {
+  if (props.mode === "edit" && props.selectedProduct) {
+    const { inStock, title, description, price, banner, data, tagIds, addOns } =
+      props.selectedProduct;
+    selectedValues.value = productFoodTagItems.value.filter((tag) =>
+      tagIds.includes(tag.id),
+    );
+
+    initialAddOnList.value = addOns;
+
+    resetForm({
+      values: {
+        inStock,
+        title,
+        description,
+        from_time: data?.prepTimeInMins?.from,
+        to_time: data?.prepTimeInMins?.to,
+        price: price.amount,
+      },
+    });
+
+    // .map((tag) => tag.id);
+    console.log({ selectedProduct: props.selectedProduct });
+  }
 });
 
 onUpdated(async () => {

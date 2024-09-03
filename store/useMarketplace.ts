@@ -14,7 +14,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
   const singleMenuOrder = ref();
   const singleOrder = ref<IOrders>();
   const products = ref<Array<IProduct>>([]);
-  const profuctsMeta = ref({});
+  const productsMeta = ref({});
   const singleProduct = ref<any>({});
   const productFoodsTags = ref<{ id: string; title: string }[]>([]);
   const productItemsTags = ref<{ id: string; title: string }[]>([]);
@@ -107,6 +107,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     if (data.value) {
       marketplaceLoadingStates.value.createProduct = API_STATES.SUCCESS;
       console.log(data.value);
+      await getAllProducts();
     }
   };
 
@@ -162,7 +163,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     if (data.value) {
       marketplaceLoadingStates.value.getProducts = API_STATES.SUCCESS;
       products.value = data.value.results;
-      profuctsMeta.value = { ...data.value.pages, ...data.value.docs };
+      productsMeta.value = { ...data.value.pages, ...data.value.docs };
     }
   };
   const getRecommendedProductsTags = async () => {
@@ -313,8 +314,9 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     if (data.value) {
       marketplaceLoadingStates.value.updateProduct = API_STATES.SUCCESS;
       console.log(data.value);
+      await getAllProducts();
       // products.value = data.value.results;
-      // profuctsMeta.value = data.value.pages;
+      // productsMeta.value = data.value.pages;
     }
   };
 
@@ -711,6 +713,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     createProduct,
     getAllProducts,
     getSingleProduct,
+    productsMeta,
     singleProduct,
     products,
     updateProduct,
@@ -735,6 +738,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     markOrderAsShipped,
     createCartLink,
     getCartLinkDetails,
+    recommendedTags,
     checkoutCartLink,
     getProductFoodsTags,
     getProductItemsTags,

@@ -9,6 +9,9 @@ definePageMeta({
   middleware: ["authenticated"],
   name: GP_ROUTES.VENDOR.USER_TYPE,
 });
+useHead({
+  title: "Vendors Types",
+});
 </script>
 
 <style></style>

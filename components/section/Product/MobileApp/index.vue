@@ -14,22 +14,6 @@
         {{ productItems[activeIndex].description }}
       </p>
 
-      <swiper
-        :modules="[Navigation, Pagination, Autoplay, Keyboard, Virtual]"
-        :slides-per-view="5"
-        :navigation="true"
-        :virtual="true"
-        :pagination="true"
-      >
-        <swiper-slide v-for="i in 20">
-          <div class="h-40 w-40 bg-green-500">{{ i }}</div>
-        </swiper-slide>
-        <template v-slot:container-start><span>Container start</span></template>
-        <template v-slot:container-end><span>Container end</span></template>
-        <template v-slot:wrapper-start><span>Wrapper start</span></template>
-        <template v-slot:wrapper-end><span>Wrapper end</span></template>
-      </swiper>
-
       <div class="mx-auto my-[50px] max-w-[1253.84px]">
         <client-only>
           <swiper

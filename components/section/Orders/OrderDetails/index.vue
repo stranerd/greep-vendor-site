@@ -22,6 +22,7 @@
             ></div>
             {{ paymentStatus(singleOrder?.status).text }}
           </Badge>
+
           <Badge
             variant="outline"
             class="rounded-[8px] py-1 text-[12px] font-normal"

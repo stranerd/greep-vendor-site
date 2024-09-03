@@ -34,7 +34,7 @@
             <div
               v-else
               class="!hover:text-[#ffffff] flex cursor-pointer items-center gap-4 rounded-[4px] px-6 py-2 text-[16px] leading-[28px] !text-[#FF5656] text-muted-foreground transition-all"
-              @click="logoutUser"
+              @click="showLogoutModal = true"
             >
               <component :is="navItem.icon" class="h-6 w-6" />
 
@@ -44,6 +44,17 @@
         </nav>
       </div>
     </div>
+    <AlertDialog v-model:open="showLogoutModal">
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Do you really want to logout ?</AlertDialogTitle>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction @click="logoutUser">Continue</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   </div>
 </template>
 
@@ -57,12 +68,14 @@ import {
   LogOut,
 } from "lucide-vue-next";
 
+import { TicketDiscountIcon } from "@placetopay/iconsax-vue/outline";
+
 import { GP_CONSTANTS } from "~/constants";
 import { GP_ROUTES } from "~/constants/route-names";
 import { useAuthStore } from "@/store/useAuthStore";
 
 const authStore = useAuthStore();
-
+const showLogoutModal = ref(false);
 const { getUserProfile, updateUserProfile, logoutUser } = authStore;
 
 const userType = computed(() =>
@@ -93,6 +106,11 @@ const navLinks = ref([
         : GP_ROUTES.VENDOR.ITEMS.ITEMS_MANAGER,
     name: userType.value?.vendorType === "foods" ? "Menu" : "Items Manager",
     icon: BookmarkMinus,
+  },
+  {
+    to: GP_ROUTES.VENDOR.PROMOTIONS,
+    name: "Promo Manager",
+    icon: TicketDiscountIcon,
   },
   {
     to: GP_ROUTES.VENDOR.SETTINGS,

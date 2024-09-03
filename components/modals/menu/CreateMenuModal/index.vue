@@ -10,6 +10,8 @@
       </DialogHeader>
       <DialogDescription class="z-10">
         <CreateMenuForm
+          :mode="mode"
+          :selectedProduct="selectedProduct"
           @completed="
             isOpenLocal = false;
             $emit('completedCreation');
@@ -30,6 +32,14 @@ const props = defineProps({
   isOpen: {
     type: Boolean,
     default: false,
+  },
+  mode: {
+    type: String as PropType<"create" | "edit">,
+    default: "create",
+  },
+  selectedProduct: {
+    type: Object,
+    default: () => {},
   },
 });
 

@@ -13,8 +13,12 @@ definePageMeta({
   middleware: ["authenticated"],
   name: GP_ROUTES.VENDOR.ITEMS.ORDER_DETAILS,
 });
-
 const route = useRoute();
+
+useHead({
+  title: "Vendors Order - " + route?.params?.id,
+});
+
 import { useMarketPlaceStore } from "@/store/useMarketplace";
 import { GP_ROUTES } from "~/constants/route-names";
 

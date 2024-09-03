@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/store/useAuthStore";
 
+import { useUploadStore } from "~/store/useUploadStore";
+
+const uploadStore = useUploadStore();
 const authStore = useAuthStore();
 const { hasCompletedVendorProfile, hasCompletedProfile, hasVerifiedEmail } =
   storeToRefs(authStore);
@@ -23,7 +26,7 @@ onMounted(async () => {
 
         <div
           v-if="!hasVerifiedEmail"
-          class="py-3 bg-[#009260] sticky top-[75px] z-[10] text-[#fff] flex justify-center text-[14px]"
+          class="sticky top-[75px] z-[10] flex justify-center bg-[#009260] py-3 text-[14px] text-[#fff]"
         >
           ⚠️ Please verify your email address to continue
           <nuxt-link class="ml-2 underline" to="/vendor/settings">
@@ -32,7 +35,7 @@ onMounted(async () => {
         </div>
         <div
           v-else-if="!hasCompletedVendorProfile || !hasCompletedProfile"
-          class="py-3 bg-[#009260] sticky top-[75px] z-[10] text-[#fff] flex justify-center text-[14px]"
+          class="sticky top-[75px] z-[10] flex justify-center bg-[#009260] py-3 text-[14px] text-[#fff]"
         >
           ⚠️ Please update your profile
           <nuxt-link
@@ -43,13 +46,13 @@ onMounted(async () => {
             Here
           </nuxt-link>
         </div>
-        <main class="flex flex-1 flex-col gap-4 py-6 lg:gap-6 relative">
+        <main class="relative flex flex-1 flex-col gap-4 py-6 lg:gap-6">
           <div
             v-if="
               (!hasCompletedVendorProfile || !hasCompletedProfile) &&
               route.path !== '/vendor/settings'
             "
-            class="absolute top-0 left-0 z-[5] h-full w-full"
+            class="absolute left-0 top-0 z-[5] h-full w-full"
             style="
               /* From https://css.glass */
               background: rgba(255, 255, 255, 0.34);
@@ -61,12 +64,18 @@ onMounted(async () => {
           ></div>
 
           <div
-            class="container px-[20px] md:px-[2rem] flex flex-1 flex-col gap-4 lg:gap-6"
+            class="container flex flex-1 flex-col gap-4 px-[20px] md:px-[2rem] lg:gap-6"
           >
             <slot />
           </div>
         </main>
       </div>
     </div>
+
+    <FileUploader
+      @upload="uploadStore.upload()"
+      @cancelled="uploadStore.cancel()"
+      @close="uploadStore.cancel()"
+    />
   </div>
 </template>

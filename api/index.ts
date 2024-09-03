@@ -6,6 +6,7 @@ import PaymentRepository from "./PaymentRepository";
 import UserRepository from "./UserRepository";
 import InteractionRepository from "./InteractionsRepository";
 import NotificationRepository from "./NotificationRepository";
+import UtilsRepository from "./UtilsRepository";
 
 class ApiQuery {
   constructor(data: IApiQuery) {
@@ -21,5 +22,6 @@ export default {
   messaging: MessageRepository(),
   interactions: InteractionRepository(),
   notifications: NotificationRepository(),
+  utils: UtilsRepository(),
   apiQuery: ApiQuery,
 };

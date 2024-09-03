@@ -49,7 +49,7 @@
           <div class="grid gap-2">
             <FormField v-slot="{ componentField }" name="password">
               <FormItem>
-                <FormLabel class="font-normal">Password</FormLabel>
+                <FormLabel>Password</FormLabel>
                 <FormControl>
                   <div class="relative">
                     <Input

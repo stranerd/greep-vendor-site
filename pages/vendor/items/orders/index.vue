@@ -12,4 +12,7 @@ definePageMeta({
   middleware: ["authenticated", "vendor-items"],
   name: GP_ROUTES.VENDOR.ITEMS.ORDERS,
 });
+useHead({
+  title: "Vendors Orders",
+});
 </script>

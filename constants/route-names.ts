@@ -18,6 +18,8 @@ export class GP_ROUTES {
     USER_TYPE: "vendor-types",
     SETTINGS: "vendor-settings",
     SUPPORT: "vendor-support",
+    PROMOTIONS: "vendor-promotions",
+    PROMOTIONS_CREATE: "vendor-promotions create",
 
     FOOD: {
       ORDERS: "food-orders",

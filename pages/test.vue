@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BusinessHours />
+    <FileUploader />
   </div>
 </template>
 

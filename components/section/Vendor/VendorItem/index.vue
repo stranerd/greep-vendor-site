@@ -99,7 +99,7 @@
               />
             </div>
             <Pagination
-              :meta="profuctsMeta"
+              :meta="productsMeta"
               :loading="
                 marketplaceLoadingStates.getProducts === API_STATES.LOADING
               "
@@ -139,7 +139,7 @@ import { API_STATES } from "~/services/constants";
 import { useMarketPlaceStore } from "@/store/useMarketplace";
 
 const marketplaceStore = useMarketPlaceStore();
-const { products, marketplaceLoadingStates, profuctsMeta } =
+const { products, marketplaceLoadingStates, productsMeta } =
   storeToRefs(marketplaceStore);
 const { getAllProducts } = marketplaceStore;
 

@@ -11,7 +11,10 @@ definePageMeta({
   layout: "dashboard",
   middleware: ["authenticated", "vendor-items"],
   name: GP_ROUTES.VENDOR.ITEMS.ITEMS_MANAGER,
-}); 
+});
+useHead({
+  title: "Vendors Items",
+});
 </script>
 
 <style></style>

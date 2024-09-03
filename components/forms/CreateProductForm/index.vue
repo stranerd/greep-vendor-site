@@ -308,7 +308,7 @@ const { handleSubmit, resetForm, setFieldValue, values } = useForm({
   validationSchema: formSchema,
   initialValues: {
     inStock: true,
-    currency: "NGN",
+    currency: "TRY",
   },
 });
 
@@ -361,7 +361,7 @@ const onSubmit = handleSubmit(async (values: any) => {
   emits("completed");
 });
 
-onMounted(() => {
+onMounted(async () => {
   if (props.mode === "edit") {
     const { inStock, title, description, price, banner } =
       props.selectedProduct;
@@ -372,6 +372,7 @@ onMounted(() => {
         description,
         price: price.amount,
         currency: price.currency,
+        banner,
       },
     });
   }

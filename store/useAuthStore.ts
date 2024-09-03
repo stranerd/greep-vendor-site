@@ -66,7 +66,6 @@ export const useAuthStore = defineStore(
 
       const { data, error } = await $api.auth.signin(payload);
       if (error.value) {
-        console.log(error.value?.data);
         toast({
           variant: "destructive",
           title: "Authorization Error",

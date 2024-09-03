@@ -48,6 +48,9 @@ definePageMeta({
   middleware: ["authenticated", "vendor-foods"],
   name: GP_ROUTES.VENDOR.FOOD.ORDERS,
 });
+useHead({
+  title: "Vendors Menu",
+});
 
 const orderTabs = shallowRef([
   { name: "Active", component: ActiveOrders },

@@ -33,7 +33,7 @@
         <div
           class="absolute bottom-4 right-4 flex items-center justify-center rounded-full bg-[#000000] p-[14px]"
         >
-          <Camera class="text-[#fff]" />
+          <Camera class="text-[#fff]" @click="updateCoverImage" />
         </div>
         <div class="relative left-10 top-20 mt-auto lg:left-20">
           <Avatar
@@ -46,7 +46,7 @@
           <div
             class="absolute bottom-0 right-0 flex items-center justify-center rounded-full bg-[#000000] p-[14px]"
           >
-            <Camera class="text-[#fff]" />
+            <Camera class="text-[#fff]" @click="updateProfilePicture" />
           </div>
         </div>
       </div>
@@ -170,7 +170,7 @@
             <h4 class="text-[16px] font-medium leading-[20px]">
               {{ profileItem }}
             </h4>
-            <Button class="" size="icon" @click="openDialog(profileItem)">
+            <Button class="hidden" size="icon" @click="openDialog(profileItem)">
               <EditIcon class="h-5 w-5"
             /></Button>
           </div>
@@ -193,6 +193,7 @@
                 class="flex cursor-pointer gap-2 whitespace-nowrap text-[14px] font-light leading-[20px]"
               >
                 {{ item.value || "--" }}
+                <EditIcon class="h-5 w-5" @click="item.uploadFunction" />
               </p>
             </div>
           </div>
@@ -310,17 +311,20 @@ import {
   DocumentText1Icon,
 } from "@placetopay/iconsax-vue/outline";
 
+import { useUploadStore } from "~/store/useUploadStore";
 import { API_STATES } from "~/services/constants";
 import { useAuthStore } from "@/store/useAuthStore";
 import { usePaymentStore } from "@/store/usePayment";
+import { useToast } from "@/components/library/toast/use-toast";
 
+const uploadStore = useUploadStore();
 const authStore = useAuthStore();
 const paymentStore = usePaymentStore();
 const { apiLoadingStates, userProfile, user } = storeToRefs(authStore);
 const { getUserProfile } = authStore;
 const { getUserWallet } = paymentStore;
 const { wallet } = storeToRefs(paymentStore);
-
+const { toast } = useToast();
 const editDetails = ref<{
   title: string;
 }>({
@@ -338,6 +342,20 @@ const openDialog = (modalType: any) => {
     isProfileDialogOpen.value = true;
   }
 };
+
+const updateProfilePicture = () =>
+  fileUploader({
+    fieldName: "profile_picture",
+    message: "Profile picture update successful",
+    uploadFunction: (cb: any) => null,
+  });
+
+const updateCoverImage = () =>
+  fileUploader({
+    fieldName: "cover_image",
+    message: "Cover image update successful",
+    uploadFunction: (cb: any) => null,
+  });
 
 const profileDetails = computed(() => {
   return {
@@ -437,11 +455,37 @@ const otherOptions = computed(() => {
         title: "Passport",
         value: "Add your passport",
         type: "user",
+        uploadFunction: () =>
+          fileUploader({
+            fieldName: "passport",
+            message: "passport update successful",
+            uploadFunction: (cb: any) => null,
+            dataTypes: [
+              "image/jpeg",
+              "image/jpg",
+              "image/png",
+              "application/pdf",
+            ],
+            acceptedTypes: "image/jpeg,image/jpg,image/png,application/pdf",
+          }),
       },
       {
         title: "Residents Permit",
         value: "Add your permit",
         type: "user",
+        uploadFunction: () =>
+          fileUploader({
+            fieldName: "Residence permit",
+            message: "Residence permit update successful",
+            uploadFunction: (cb: any) => null,
+            dataTypes: [
+              // "image/jpeg",
+              // "image/jpg",
+              // "image/png",
+              "application/pdf",
+            ],
+            acceptedTypes: "image/jpeg,image/jpg,image/png,application/pdf",
+          }),
       },
       // {
       //   title: 'Email Info',
@@ -465,6 +509,38 @@ onMounted(() => {
   getUserProfile();
   getUserWallet();
 });
+
+const fileUploader = async (data: {
+  fieldName: string;
+  uploadFunction: Function;
+  message?: string;
+  callbacks?: Function[];
+  dataTypes?: string | string[];
+  acceptedTypes?: string | string[];
+}) => {
+  try {
+    if (data.dataTypes) uploadStore.dataTypes = data.dataTypes;
+    if (data.acceptedTypes) uploadStore.acceptedTypes = data.acceptedTypes;
+
+    const result = await uploadStore.openModal();
+    if (result) {
+      const formData = new FormData();
+      formData.append(data.fieldName, result[0]);
+      const res = true;
+      await data.uploadFunction(formData);
+      if (res) {
+        if (data.callbacks) data.callbacks.map((cb) => cb());
+
+        toast({ description: data.message ?? " file upload successful" });
+        uploadStore.uploadComplete();
+      } else {
+        toast({ description: "file upload failed" });
+        uploadStore.uploadFailed();
+        fileUploader(data);
+      }
+    }
+  } catch (error) {}
+};
 </script>
 
 <style></style>

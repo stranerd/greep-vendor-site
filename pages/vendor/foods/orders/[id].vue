@@ -17,6 +17,10 @@ definePageMeta({
   name: GP_ROUTES.VENDOR.FOOD.ORDER_DETAILS,
 });
 
+useHead({
+  title: "Vendors Orders",
+});
+
 const route = useRoute();
 
 const marketPlaceStore = useMarketPlaceStore();
