@@ -47,7 +47,7 @@
             <Label
               for="availablity"
               class="text-[12px] font-normal leading-[20px]"
-              >Availability</Label
+              >Availability {{ localData.inStock }}</Label
             >
             <Switch
               class="data-[state=checked]:bg-[#10BB76]"
@@ -95,27 +95,39 @@ const editProduct = () => {
 
 const handleChange = async (e: any) => {
   localData.value.inStock = e;
-  const payload = localData.value;
+  const { banner, ...payload } = localData.value;
   console.log(e);
-  await updateProduct(localData.value.id, { ...localData.value, inStock: e });
+  const data = { ...payload, inStock: e };
+  const form = new FormData();
+
+  Object.keys(data).forEach((item, key) => {
+    form.append(item, JSON.stringify(data[item]));
+  });
+
+  await updateProduct(localData.value.id, form);
 };
 
 onMounted(() => (localData.value = props.cardData));
 
 const updateCoverImage = async () => {
   try {
-    const result = await uploadStore.openModal();
+    const result = await uploadStore.openModal({
+     
+    });
     if (result) {
-      const formData = new FormData();
-      formData.append("cover-image", result[0]);
+      const { banner, ...data } = localData.value;
+
+      const form = new FormData();
+      Object.keys(data).forEach((item, key) => {
+        form.append(item, JSON.stringify(data[item]));
+      });
+      form.append("banner", result[0]);
+      await updateProduct(localData.value.id, form);
+
       const res = true;
-      // await UPDATE_COVER_IMAGE(formData);
       if (res) {
-        // getCurrentCompany();
-        // qhToast.success("update successful");
         uploadStore.uploadComplete();
       } else {
-        // qhToast.error("cover image update failed");
         uploadStore.uploadFailed();
         updateCoverImage();
       }

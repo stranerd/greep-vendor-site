@@ -28,7 +28,13 @@
   >
     <div class="flex flex-col justify-between md:flex-row">
       <div
-        class="align-center relative mb-20 flex h-auto w-full justify-start rounded-lg bg-[url(/images/vendor-profile.png)] bg-cover object-cover pt-10"
+        :style="{
+          backgroundImage:
+            userProfile.type.banner !== null
+              ? `url(${userProfile.type.banner})`
+              : `url('/images/vendor-profile.png')`,
+        }"
+        class="align-center relative mb-20 flex h-auto w-full justify-start rounded-lg bg-cover object-cover pt-10"
       >
         <div
           class="absolute bottom-4 right-4 flex items-center justify-center rounded-full bg-[#000000] p-[14px]"
@@ -40,8 +46,8 @@
             size="lg"
             class="h-32 w-32 border-8 border-white lg:h-[153px] lg:w-[153px]"
           >
-            <AvatarImage src="/images/placeholder.png" alt="User" />
-            <AvatarFallback>CNx</AvatarFallback>
+            <AvatarImage :src="user.photo.link" alt="User" />
+            <AvatarFallback class="text-black">CNx</AvatarFallback>
           </Avatar>
           <div
             class="absolute bottom-0 right-0 flex items-center justify-center rounded-full bg-[#000000] p-[14px]"
@@ -96,7 +102,7 @@
         </CardContent>
       </Card>
     </div>
-
+    <!-- {{ userProfile.type }} -->
     <!-- Vendor image part -->
     <div class="">
       <div class="flexs my-4 justify-between lg:my-8 lg:block">
@@ -272,7 +278,7 @@
     </DialogContent>
   </Dialog>
   <Dialog :open="isDialogOpen">
-    <DialogContent class="sm:max-w-[425px]" :hideClose="true">
+    <DialogContent class="h-fit sm:max-w-[425px]" :hideClose="true">
       <DialogHeader>
         <DialogTitle>Edit {{ editDetails.title }}</DialogTitle>
 
@@ -321,7 +327,8 @@ const uploadStore = useUploadStore();
 const authStore = useAuthStore();
 const paymentStore = usePaymentStore();
 const { apiLoadingStates, userProfile, user } = storeToRefs(authStore);
-const { getUserProfile } = authStore;
+const { getUserProfile, updateUserProfile, updateVendorRoles } = authStore;
+
 const { getUserWallet } = paymentStore;
 const { wallet } = storeToRefs(paymentStore);
 const { toast } = useToast();
@@ -343,19 +350,25 @@ const openDialog = (modalType: any) => {
   }
 };
 
-const updateProfilePicture = () =>
+const updateProfilePicture = () => {
+  const { name, username, phone } = user.value;
   fileUploader({
-    fieldName: "profile_picture",
+    fieldName: "photo",
     message: "Profile picture update successful",
-    uploadFunction: (cb: any) => null,
+    data: { firstName: name.first, lastName: name.last, username, phone },
+    uploadFunction: updateUserProfile,
   });
+};
 
-const updateCoverImage = () =>
+const updateCoverImage = () => {
+  const { banner, ...data } = userProfile.value.type;
   fileUploader({
-    fieldName: "cover_image",
+    fieldName: "banner",
+    data,
     message: "Cover image update successful",
-    uploadFunction: (cb: any) => null,
+    uploadFunction: updateVendorRoles,
   });
+};
 
 const profileDetails = computed(() => {
   return {
@@ -428,7 +441,7 @@ const authOptions = computed(() => {
   return {
     "Sign In method": [
       {
-        title: user.value?.authTypes?.includes["email"]
+        title: user.value?.authTypes?.includes("email")
           ? "Email"
           : user.value?.authTypes?.[0],
         value: user.value?.email,
@@ -459,7 +472,7 @@ const otherOptions = computed(() => {
           fileUploader({
             fieldName: "passport",
             message: "passport update successful",
-            uploadFunction: (cb: any) => null,
+            uploadFunction: () => null,
             dataTypes: [
               "image/jpeg",
               "image/jpg",
@@ -514,6 +527,7 @@ const fileUploader = async (data: {
   fieldName: string;
   uploadFunction: Function;
   message?: string;
+  data?: object | any;
   callbacks?: Function[];
   dataTypes?: string | string[];
   acceptedTypes?: string | string[];
@@ -522,10 +536,19 @@ const fileUploader = async (data: {
     if (data.dataTypes) uploadStore.dataTypes = data.dataTypes;
     if (data.acceptedTypes) uploadStore.acceptedTypes = data.acceptedTypes;
 
-    const result = await uploadStore.openModal();
+    const result = await uploadStore.openModal({
+      dataTypes: ["image/jpeg", "image/jpg", "image/png"],
+      acceptedTypes: "image/jpeg,image/jpg,image/png",
+    });
     if (result) {
       const formData = new FormData();
+      if (data.data) {
+        Object.keys(data.data).map((item) =>
+          formData.append(item, JSON.stringify(data.data[item])),
+        );
+      }
       formData.append(data.fieldName, result[0]);
+
       const res = true;
       await data.uploadFunction(formData);
       if (res) {

@@ -1,7 +1,7 @@
 <template>
   <GoogleAutocomplete
     v-model="value"
-    class="google-location"
+    class="google-location z-[100000]"
     :api-key="GoogleMapApiKey"
     @set="getPayload"
   />
@@ -17,5 +17,6 @@ const value = ref();
 const modelValue = defineModel();
 const getPayload = (e: any) => {
   modelValue.value = e;
+  console.log({ location: e });
 };
 </script>

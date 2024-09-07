@@ -411,6 +411,7 @@ export const useAuthStore = defineStore(
         apiLoadingStates.value.updateVendorProfile = API_STATES.ERROR;
       }
       if (data.value) {
+        await getUserProfile();
         toast({
           title: "Successful",
           description: error.value?.data?.[0]?.message || "",
@@ -433,6 +434,7 @@ export const useAuthStore = defineStore(
           description: error.value?.data?.[0]?.message || "",
         });
         apiLoadingStates.value.updateVendorProfile = API_STATES.ERROR;
+        return false;
       }
       if (data.value) {
         await getUserProfile();
@@ -442,6 +444,7 @@ export const useAuthStore = defineStore(
           description: error.value?.data?.[0]?.message || "",
         });
         apiLoadingStates.value.updateVendorProfile = API_STATES.SUCCESS;
+        return true;
       }
     };
 

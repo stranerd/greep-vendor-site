@@ -1,10 +1,12 @@
 <template>
   <Dialog :open="showModal" @close="emits('cancelled', 'close')">
     <DialogContent :hideClose="true">
-      <DialogHeader>
-        <!-- <DialogTitle>{{ dataTypes }} {{ acceptedTypes }}</DialogTitle> -->
+      <DialogHeader class="">
+        <DialogTitle>
+          <img src="/images/logos/greep.svg" alt="" class="h-12 w-12" />
+        </DialogTitle>
         <CloseCircleIcon
-          class="2-4 absolute right-4 top-4 h-6 cursor-pointer rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+          class="2-4 absolute right-4 top-8 h-6 cursor-pointer rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
           @click="$emit('close')"
         />
       </DialogHeader>
@@ -13,7 +15,7 @@
         ref="dropZone"
         @click.self.stop.prevent="open()"
         :class="{ 'bg-green-200 bg-opacity-50': isOverDropZone }"
-        class="border-brand relative mt-8 min-h-40 flex-col border-2 border-dotted p-6"
+        class="border-brand relative mt-0 min-h-40 flex-col rounded-lg border-2 border-dotted p-6"
       >
         <CloudAddIcon class="mx-auto h-20 w-60 text-primary" />
         <div class="qh-flex-center z-10 flex-col gap-5 text-center">
@@ -78,6 +80,8 @@ import { useUploadStore } from "~/store/useUploadStore";
 import { CloseCircleIcon } from "@placetopay/iconsax-vue/outline";
 import { CloseCircleIcon as closeIcon } from "@placetopay/iconsax-vue/bold";
 
+import { useToast } from "@/components/library/toast/use-toast";
+
 // const uploadStore = useUploadStore();
 const emits = defineEmits(["upload", "close", "cancelled"]);
 
@@ -86,6 +90,7 @@ const { files, uploading, showModal, dataTypes, acceptedTypes } =
 
 const dropZone = ref<HTMLElement>();
 const maxFileExceeded = ref(false);
+
 const { open, reset, onChange } = useFileDialog({
   accept: acceptedTypes.value,
   multiple: false,
@@ -116,11 +121,8 @@ onChange((filesData) => {
   }
 });
 
-const { isOverDropZone } = useDropZone(
-  dropZone,
-  // {
+const { isOverDropZone } = useDropZone(dropZone, {
   onDrop,
-  // dataTypes: dataTypes.value,
-  // }
-);
+  dataTypes: dataTypes.value as any,
+});
 </script>

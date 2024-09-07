@@ -20,14 +20,18 @@ export const useUploadStore = defineStore("upload", {
     resolve: null,
     reject: null,
     dataTypes: ["image/jpeg", "image/jpg", "image/png"],
-    acceptedTypes: "image/jpeg,image/jpg,image/png,application/pdf",
+    acceptedTypes: "image/jpeg,image/jpg,image/png",
   }),
 
   getters: {},
 
   actions: {
-    async openModal() {
+    async openModal(data?: { dataTypes?: string[]; acceptedTypes?: string }) {
       this.showModal = true;
+
+      if (data?.dataTypes) this.dataTypes = data.dataTypes;
+      if (data?.acceptedTypes) this.acceptedTypes = data.acceptedTypes;
+
       return new Promise<File[]>((resolve, reject) => {
         this.resolve = resolve;
         this.reject = reject;

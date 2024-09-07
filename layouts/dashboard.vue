@@ -76,6 +76,7 @@ onMounted(async () => {
       @upload="uploadStore.upload()"
       @cancelled="uploadStore.cancel()"
       @close="uploadStore.cancel()"
+      v-if="uploadStore.showModal"
     />
   </div>
 </template>

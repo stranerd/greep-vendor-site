@@ -31,14 +31,11 @@
       <FormField v-slot="{ componentField }" name="location">
         <FormItem>
           <FormLabel class="font-normal">Location</FormLabel>
-          <FormControl>
-            <Input type="text" v-bind="componentField" />
-          </FormControl>
+          <LocationPicker v-model="location" />
           <FormMessage />
         </FormItem>
       </FormField>
     </div>
-
     <Button
       type="submit"
       @click="onVendorSubmit"
@@ -62,6 +59,11 @@ const { apiLoadingStates, userProfile } = storeToRefs(authStore);
 const { updateVendorProfile, updateVendorRoles } = authStore;
 
 const emit = defineEmits(["completed"]);
+// const location = ref(
+//   userProfile.value.type?.location || userProfile.value.vendor?.location,
+// );
+
+const location = ref({});
 
 const vendorFormSchema = toTypedSchema(
   z.object({
@@ -79,23 +81,18 @@ const vendorFormSchema = toTypedSchema(
         /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g,
       )
       .optional(),
-    location: z.string(),
   }),
 );
 
 const vendorFormInstance = useForm({
   validationSchema: vendorFormSchema,
   initialValues: {
-    name: userProfile.value.type?.name || userProfile.value.veendor?.name || "",
+    name: userProfile.value.type?.name || userProfile.value.vendor?.name || "",
     email:
       userProfile.value.type?.email || userProfile.value.vendor?.email || "",
     website:
       userProfile.value.type?.website ||
       userProfile.value.vendor?.website ||
-      "",
-    location:
-      userProfile.value.type?.location?.location ||
-      userProfile.value.vendor?.location?.location ||
       "",
   },
 });
@@ -107,11 +104,7 @@ const onVendorSubmit = vendorFormInstance.handleSubmit(async (values: any) => {
   const payload = {
     ...userProfile.value.type,
     ...values,
-    location: {
-      coords: [9.065482399999999, 7.4419364],
-      location: values.location, // map location should be here
-      description: "Location",
-    },
+    location: location.value,
   };
 
   Object.keys(payload).forEach((item) => {
