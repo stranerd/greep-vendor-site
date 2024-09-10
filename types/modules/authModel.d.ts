@@ -106,3 +106,9 @@ export interface IUserProfile {
   hash: string;
   publicName: string;
 }
+
+interface ITimezone {
+  id: string;
+  name: string;
+  offset: string;
+}

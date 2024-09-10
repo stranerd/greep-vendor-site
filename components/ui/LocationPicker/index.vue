@@ -1,6 +1,9 @@
 <template>
   <GoogleAutocomplete
-    v-model="value"
+    v-model:model-value="initialValue"
+    :value="initialValue?.name ?? initialValue?.location"
+    v-bind="$attrs"
+    placeholder="select your location"
     class="google-location z-[100000]"
     :api-key="GoogleMapApiKey"
     @set="getPayload"
@@ -12,11 +15,11 @@ import { ref } from "vue";
 import { GoogleAutocomplete } from "vue3-google-autocomplete";
 const config = useRuntimeConfig();
 const GoogleMapApiKey = config.public.googleMapApiKey;
-
-const value = ref();
+const props = defineProps(["value"]);
+const initialValue = ref(props.value);
 const modelValue = defineModel();
 const getPayload = (e: any) => {
   modelValue.value = e;
-  console.log({ location: e });
+  initialValue.value = e;
 };
 </script>

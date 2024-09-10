@@ -41,8 +41,11 @@
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Timezones</SelectLabel>
-                  <SelectItem :value="time" v-for="(time, index) in timezones">
-                    {{ time }}
+                  <SelectItem
+                    :value="time.id"
+                    v-for="(time, index) in supportedTimezones"
+                  >
+                    {{ time.id.replaceAll("_", " ") }} — {{ time.offset }}
                   </SelectItem>
                 </SelectGroup>
               </SelectContent>
@@ -136,30 +139,21 @@
 
 <script setup lang="ts">
 import { MoonIcon, ClockIcon } from "@placetopay/iconsax-vue/outline";
+import * as z from "zod";
+import { toTypedSchema } from "@vee-validate/zod";
+import { useForm } from "vee-validate";
+import { API_STATES } from "~/services/constants";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useToast } from "@/components/library/toast/use-toast";
+
+const authStore = useAuthStore();
+const { apiLoadingStates, userProfile, user, supportedTimezones } =
+  storeToRefs(authStore);
+const { getUserProfile, getSupportedTimezones } = authStore;
 
 const availability = ref(true);
 
-const timezones = ref([
-  "(UTC-11:00) Coordinated Universal Time-11",
-  "(UTC-10:00) Hawaii",
-  "(UTC-09:00) Alaska",
-  "(UTC-08:00) Pacific Time (US & Canada)",
-  "(UTC-07:00) Mountain Time (US & Canada)",
-  "(UTC-06:00) Central Time (US & Canada)",
-  "(UTC-05:00) Eastern Time (US & Canada)",
-  "(UTC-04:00) Atlantic Time (Canada)",
-  "(UTC+00:00) Coordinated Universal Time",
-  "(UTC+01:00) Central European Time",
-  "(UTC+02:00) Eastern European Time",
-  "(UTC+03:00) Moscow Time",
-  "(UTC+05:30) India Standard Time",
-  "(UTC+08:00) China Standard Time",
-  "(UTC+09:00) Japan Standard Time",
-  "(UTC+10:00) Australian Eastern Standard Time",
-  "(UTC+12:00) New Zealand Standard Time",
-]);
-
-const timezone = ref(timezones.value[3]);
+const timezone = ref(supportedTimezones.value[3].id);
 const activeBusinessHours = ref({
   monday: {
     active: true,
@@ -253,6 +247,72 @@ const filteredHours = (selectedTime: string) => {
   const startIndex = availableHours.value.indexOf(selectedTime);
   return availableHours.value.slice(startIndex + 1);
 };
+
+function timeStringToObject(timeStr: string) {
+  const [hour, mins, period] = timeStr.match(/(\d+):(\d+)(AM|PM)/).slice(1);
+  let hr = parseInt(hour);
+  const min = parseInt(mins, 10);
+  if (period === "PM" && hr !== 12) hr += 12;
+  if (period === "AM" && hr === 12) hr = 0;
+  console.log(hr);
+  return { hr, min };
+}
+
+watch(activeBusinessHours, (schedule) => {
+  function convertTime({ hr, min }: { hr: number; min: number }) {
+    const period = hr >= 12 ? "PM" : "AM";
+    const hour = hr % 12 === 0 ? 12 : hr % 12; // Convert 0/24 to 12, and other values to 12-hour format
+    const minute = min.toString().padStart(2, "0");
+    return `${hour}:${minute}${period}`;
+  }
+
+  // Mapping from short day names to full day names
+  const dayMap = {
+    mon: "monday",
+    tue: "tuesday",
+    wed: "wednesday",
+    thu: "thursday",
+    fri: "friday",
+    sat: "saturday",
+    sun: "sunday",
+  };
+
+  const convertedDays = Object.keys(schedule).reduce((acc: any, day: any) => {
+    const shortDay = day.slice(0, 3); // Convert full day names to abbreviations
+    const { active, from, to } = schedule[day];
+
+    acc[shortDay] =
+      active === true
+        ? {
+            from: timeStringToObject(from),
+            to: timeStringToObject(to),
+          }
+        : null;
+
+    return acc;
+  }, {});
+
+  const activeBusinessPeriods = Object.keys(hours).reduce(
+    (acc: any, day: any) => {
+      const schedule = hours[day];
+      const fullDayName = dayMap[day];
+
+      acc[fullDayName] = {
+        active: schedule !== null,
+        from: schedule ? convertTime(schedule.from) : "8:00AM",
+        to: schedule ? convertTime(schedule.to) : "6:00PM",
+      };
+
+      return acc;
+    },
+    {},
+  );
+
+  console.log({ activeBusinessPeriods, convertedDays });
+});
+onBeforeMount(async () => {
+  await getSupportedTimezones();
+});
 </script>
 
 <style scoped></style>

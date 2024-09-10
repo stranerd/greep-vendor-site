@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
 import { API_STATES } from "~/services/constants";
-import type {
-  IUser,
-  LoginPayload,
-  SignUpPayload,
-  IUserProfile,
+import {
+  type IUser,
+  type LoginPayload,
+  type SignUpPayload,
+  type IUserProfile,
+  type ITimezone,
 } from "~/types/modules/authModel";
 import { getCookieExpiration } from "~/lib/utils";
 import { useToast } from "@/components/library/toast/use-toast";
@@ -17,6 +18,8 @@ export const useAuthStore = defineStore(
     const user = ref({}) as Ref<IUser>;
     const userProfile = ref({}) as Ref<IUserProfile>;
     const isLoggedIn = ref(false) as Ref<boolean>;
+    const vendorSchedule = ref<any>();
+    const supportedTimezones = ref<ITimezone[]>([]);
     const apiLoadingStates = ref({
       login: API_STATES.IDLE,
       signup: API_STATES.IDLE,
@@ -433,17 +436,13 @@ export const useAuthStore = defineStore(
           title: "Something went wrong",
           description: error.value?.data?.[0]?.message || "",
         });
-        apiLoadingStates.value.updateVendorProfile = API_STATES.ERROR;
+        apiLoadingStates.value.updateVendorRole = API_STATES.ERROR;
         return false;
       }
       if (data.value) {
         await getUserProfile();
 
-        toast({
-          title: "Successful",
-          description: error.value?.data?.[0]?.message || "",
-        });
-        apiLoadingStates.value.updateVendorProfile = API_STATES.SUCCESS;
+        apiLoadingStates.value.updateVendorRole = API_STATES.SUCCESS;
         return true;
       }
     };
@@ -482,6 +481,42 @@ export const useAuthStore = defineStore(
         return data.value;
       }
     };
+    const setVendorSchedule = async (payload: any) => {
+      const { $api } = useNuxtApp();
+      const { toast } = useToast();
+
+      // apiLoadingStates.value.sendContactMessage = API_STATES.LOADING;
+      const { data, error } = await $api.users.setVendorSchedule(payload);
+      if (error.value) {
+        toast({
+          variant: "destructive",
+          title: "Something went wrong",
+          description: error.value?.data?.[0]?.message || "",
+        });
+        // apiLoadingStates.value.sendContactMessage = API_STATES.ERROR;
+      }
+      if (data.value) {
+        vendorSchedule.value = data.value;
+        await getUserProfile();
+        toast({
+          title: "Successful",
+          description: error.value?.data?.[0]?.message || "",
+        });
+        // apiLoadingStates.value.sendContactMessage = API_STATES.SUCCESS;
+        return data.value;
+      }
+    };
+
+    const getSupportedTimezones = async () => {
+      const { $api } = useNuxtApp();
+
+      const { data, error } = await $api.users.getSupportedTimezones();
+
+      if (error.value) {
+      } else if (data.value) {
+        supportedTimezones.value = data.value;
+      }
+    };
 
     return {
       user,
@@ -508,6 +543,10 @@ export const useAuthStore = defineStore(
       hasVerifiedEmail,
       logoutUser,
       sendMessage,
+      getSupportedTimezones,
+      setVendorSchedule,
+      vendorSchedule,
+      supportedTimezones,
     };
   },
   { persist: true },

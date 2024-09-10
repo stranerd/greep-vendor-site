@@ -31,7 +31,7 @@
       <FormField v-slot="{ componentField }" name="location">
         <FormItem>
           <FormLabel class="font-normal">Location</FormLabel>
-          <LocationPicker v-model="location" />
+          <LocationPicker v-model="location" :value="location" />
           <FormMessage />
         </FormItem>
       </FormField>
@@ -40,7 +40,7 @@
       type="submit"
       @click="onVendorSubmit"
       class="mt-4 w-full"
-      :loading="apiLoadingStates.updateVendorProfile === API_STATES.LOADING"
+      :loading="apiLoadingStates.updateVendorRole === API_STATES.LOADING"
     >
       Save changes
     </Button>
@@ -59,11 +59,11 @@ const { apiLoadingStates, userProfile } = storeToRefs(authStore);
 const { updateVendorProfile, updateVendorRoles } = authStore;
 
 const emit = defineEmits(["completed"]);
-// const location = ref(
-//   userProfile.value.type?.location || userProfile.value.vendor?.location,
-// );
+const location = ref(
+  userProfile.value.type?.location || userProfile.value.vendor?.location,
+);
 
-const location = ref({});
+const changedLocation = ref(userProfile.value.type?.location);
 
 const vendorFormSchema = toTypedSchema(
   z.object({
@@ -97,20 +97,26 @@ const vendorFormInstance = useForm({
   },
 });
 
-const onVendorSubmit = vendorFormInstance.handleSubmit(async (values: any) => {
-  // console.log("Form submitted!", values);
-  const form = new FormData();
+watch(location, (newLocation) => {
+  changedLocation.value = {
+    location: location.value.name,
+    description: `${location.value.city} ${location.value.state}, ${location.value.country}`,
+    coords: [location.value.latitude, location.value.longitude],
+  };
+});
 
+const onVendorSubmit = vendorFormInstance.handleSubmit(async (values: any) => {
+  const { banner, residentPermit, passport, ...data } = userProfile.value.type;
+
+  const form = new FormData();
   const payload = {
-    ...userProfile.value.type,
+    ...data,
     ...values,
-    location: location.value,
+    location: changedLocation.value,
   };
 
   Object.keys(payload).forEach((item) => {
-    if (item === "location") {
-      form.append(item, JSON.stringify(payload[item]));
-    } else form.append(item, payload[item]);
+    form.append(item, JSON.stringify(payload[item]));
   });
 
   await updateVendorRoles(form);

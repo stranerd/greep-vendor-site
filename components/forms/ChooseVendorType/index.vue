@@ -171,22 +171,21 @@ const vendorTypeForm = ref([
 
 const vendorTypeSchema = toTypedSchema(
   z.object({
-    name: z.string({ message: "store name is required" }).min(3, {
+    name: z.string({ message: "Store name is required" }).min(3, {
       message: "store name cannot be less than 3 characters",
     }),
     email: z
       .string({
         message: "Store email is required",
       })
-      .email({ message: "please enter a valid email address" }),
-
+      .email({ message: "Please enter a valid email address" }),
     banner: z.any({
       required_error: "Image is required",
     }),
-
     website: z
-      .string({ message: "store website is required" })
-      .url({ message: "please enter a valid URL" }),
+      .string({ message: "Store website is required" })
+      .url({ message: "Websites should start with https:// or http://" })
+      .optional(),
   }),
 );
 

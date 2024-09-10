@@ -31,17 +31,17 @@
         :style="{
           backgroundImage:
             userProfile.type.banner !== null
-              ? `url(${userProfile.type.banner})`
+              ? `url(${userProfile.type.banner.link})`
               : `url('/images/vendor-profile.png')`,
         }"
-        class="align-center relative mb-20 flex h-auto w-full justify-start rounded-lg bg-cover object-cover pt-10"
+        class="align-center relative mb-20 flex h-28 w-full justify-start rounded-lg bg-cover object-cover pt-10 lg:h-auto"
       >
         <div
           class="absolute bottom-4 right-4 flex items-center justify-center rounded-full bg-[#000000] p-[14px]"
         >
           <Camera class="text-[#fff]" @click="updateCoverImage" />
         </div>
-        <div class="relative left-10 top-20 mt-auto lg:left-20">
+        <div class="relative left-10 top-4 mt-auto lg:left-20 lg:top-20">
           <Avatar
             size="lg"
             class="h-32 w-32 border-8 border-white lg:h-[153px] lg:w-[153px]"
@@ -102,21 +102,19 @@
         </CardContent>
       </Card>
     </div>
-    <!-- {{ userProfile.type }} -->
+
+    <!-- {{ userProfile.type?.location?.location }} -->
+    <!-- {{ userProfile.vendor }} -->
     <!-- Vendor image part -->
     <div class="">
       <div class="flexs my-4 justify-between lg:my-8 lg:block">
         <h1 class="mb-2 text-lg font-medium md:text-2xl lg:flex">
-          {{ userProfile.vendor?.name || userProfile.type?.name || "----" }}
+          {{ userProfile.type?.name || "----" }}
         </h1>
         <div class="flex gap-[13px] lg:mb-[20px]">
           <MapPin class="text-primary" />
           <p class="text-[14px] leading-[21px]">
-            {{
-              userProfile.vendor?.location?.location ||
-              userProfile.type?.location?.location ||
-              "Location not set"
-            }}
+            {{ userProfile.type?.location?.location || "Location not set" }}
           </p>
         </div>
       </div>
@@ -264,7 +262,30 @@
     </div>
   </div>
 
-  <Dialog :open="isProfileDialogOpen" class="max-h-[78vh] overflow-y-auto">
+  <div
+    v-if="isDialogOpen"
+    class="fixed left-0 top-0 z-50 flex h-screen w-screen items-center justify-center overflow-hidden bg-black/50"
+  >
+    <transition name="fade" appear>
+      <Card class="w-[400px] px-5 py-4" v-if="isDialogOpen">
+        <div
+          class="relative mb-5 flex items-center justify-between text-xl font-semibold"
+        >
+          <h2 class="flex items-center justify-start">
+            Edit {{ editDetails.title }}
+          </h2>
+
+          <X
+            class="2-4 absolute right-4 h-4 cursor-pointer rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+            @click="isDialogOpen = false"
+          />
+        </div>
+        <VendorDetailsForm @completed="closeDialog" />
+      </Card>
+    </transition>
+  </div>
+
+  <Dialog :open="isProfileDialogOpen">
     <DialogContent class="sm:max-w-[425px]" :hideClose="true">
       <DialogHeader>
         <DialogTitle>Edit {{ editDetails.title }}</DialogTitle>
@@ -275,19 +296,6 @@
         />
       </DialogHeader>
       <UserProfileForm @completed="closeDialog" />
-    </DialogContent>
-  </Dialog>
-  <Dialog :open="isDialogOpen">
-    <DialogContent class="h-fit sm:max-w-[425px]" :hideClose="true">
-      <DialogHeader>
-        <DialogTitle>Edit {{ editDetails.title }}</DialogTitle>
-
-        <X
-          class="2-4 absolute right-4 top-4 h-4 cursor-pointer rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
-          @click="isDialogOpen = false"
-        />
-      </DialogHeader>
-      <VendorDetailsForm @completed="closeDialog" />
     </DialogContent>
   </Dialog>
 </template>
@@ -361,7 +369,7 @@ const updateProfilePicture = () => {
 };
 
 const updateCoverImage = () => {
-  const { banner, ...data } = userProfile.value.type;
+  const { banner, residentPermit, passport, ...data } = userProfile.value.type;
   fileUploader({
     fieldName: "banner",
     data,
@@ -377,30 +385,30 @@ const profileDetails = computed(() => {
         icon: BuildingIcon,
         title: "Store Name",
         value:
-          userProfile.value.vendor?.name || userProfile.value.type?.name || "",
+          userProfile.value.type?.name || userProfile.value.vendor?.name || "",
       },
       {
         icon: SmsIcon,
         title: "Store’s Email",
         value:
-          userProfile.value.vendor?.email ||
           userProfile.value.type?.email ||
+          userProfile.value.vendor?.email ||
           "",
       },
       {
         icon: GlobalIcon,
         title: "Store’s site",
         value:
-          userProfile.value.vendor?.website ||
           userProfile.value.type?.website ||
+          userProfile.value.vendor?.website ||
           "",
       },
       {
         icon: LocationTickIcon,
         title: "Location",
         value:
-          userProfile.value.vendor?.location?.location ||
           userProfile.value.type?.location?.location ||
+          userProfile.value.vendor?.location?.location ||
           "",
       },
     ],
@@ -462,42 +470,33 @@ const authOptions = computed(() => {
 });
 
 const otherOptions = computed(() => {
+  const { banner, passport, residentPermit, ...data } = userProfile.value.type;
   return {
     Authentication: [
       {
         title: "Passport",
-        value: "Add your passport",
+        value: userProfile.value?.type?.passport?.name ?? "Add your passport",
         type: "user",
+
         uploadFunction: () =>
           fileUploader({
             fieldName: "passport",
+            data,
             message: "passport update successful",
-            uploadFunction: () => null,
-            dataTypes: [
-              "image/jpeg",
-              "image/jpg",
-              "image/png",
-              "application/pdf",
-            ],
-            acceptedTypes: "image/jpeg,image/jpg,image/png,application/pdf",
+            uploadFunction: updateVendorRoles,
           }),
       },
       {
         title: "Residents Permit",
-        value: "Add your permit",
+        value:
+          userProfile.value?.type?.residentPermit?.name ?? "Add your permit",
         type: "user",
         uploadFunction: () =>
           fileUploader({
-            fieldName: "Residence permit",
+            fieldName: "residentPermit",
+            data,
             message: "Residence permit update successful",
-            uploadFunction: (cb: any) => null,
-            dataTypes: [
-              // "image/jpeg",
-              // "image/jpg",
-              // "image/png",
-              "application/pdf",
-            ],
-            acceptedTypes: "image/jpeg,image/jpg,image/png,application/pdf",
+            uploadFunction: updateVendorRoles,
           }),
       },
       // {
@@ -509,13 +508,15 @@ const otherOptions = computed(() => {
   };
 });
 
-const closeDialog = (dialog: "vendor" | "user") => {
-  if (dialog === "vendor") {
-    isDialogOpen.value = false;
-  } else {
-    isProfileDialogOpen.value = false;
-  }
-  getUserProfile();
+const closeDialog = async (dialog: "vendor" | "user") => {
+  // if (dialog === "vendor") {
+  //   isDialogOpen.value = false;
+  // } else {
+  isDialogOpen.value = false;
+  isProfileDialogOpen.value = false;
+  // }
+
+  await getUserProfile();
 };
 
 onMounted(() => {

@@ -27,5 +27,18 @@ export default () => {
         method: "POST",
       });
     },
+
+    getSupportedTimezones() {
+      return useCustomFetch(`${resource}/vendors/timezones`, {
+        method: "GET",
+      });
+    },
+
+    setVendorSchedule(payload: any) {
+      return useCustomFetch(`${resource}/vendors/schedule`, {
+        method: "POST",
+        body: payload,
+      });
+    },
   };
 };
