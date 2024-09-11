@@ -138,3 +138,19 @@ export const paymentStatus = (status: any) => {
     };
   }
 };
+
+export const promotionStatus = (status: any) => {
+  if (status === true) {
+    return {
+      text: "Active",
+      color: "bg-[#009260]",
+      style: { backgroundColor: "#009260" },
+    };
+  } else {
+    return {
+      text: "Completed",
+      color: "bg-[#001726]",
+      style: { backgroundColor: "#001726" },
+    };
+  }
+};

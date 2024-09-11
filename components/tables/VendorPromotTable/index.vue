@@ -16,26 +16,39 @@
       <TableBody v-for="(promo, i) in promotions" :key="i">
         <TableRow>
           <TableCell class="text-[12px]">
-            #{{ promo?.order.slice(0, 9) }}
+            #{{ promo?.id.slice(0, 9) }}
           </TableCell>
           <TableCell class="text-[12px]"
-            >{{ $moment(promo.date).format("MMM DD, h:mm a") }}
+            >{{ $moment(promo?.createdAt).format("MMM DD, h:mm a") }}
           </TableCell>
-          <TableCell class="text-[12px]">{{ promo.promotType }} </TableCell>
-          <TableCell class="text-[12px]">{{ promo.duration }} </TableCell>
-          <TableCell class="text-[12px]">
-            {{ promo.description ?? "NIL" }}
+          <TableCell class="text-[12px] capitalize"
+            >{{ promo.data?.type.split(/(?=[A-Z])/).join(" ") }}
+          </TableCell>
+          <TableCell class="text-[12px]"
+            >{{ $moment(promo.validity?.to).format("MMM DD, h:mm a") }}
+          </TableCell>
+          <TableCell class="max-w-[400px] whitespace-normal text-[12px]">
+            {{
+              promo.description
+                ? gpHelpers.sliceWords(promo.description, 50)
+                : "NIL"
+            }}
           </TableCell>
           <TableCell>
             <Badge
               variant="outline"
               class="rounded-[8px] py-1 text-[12px] font-normal"
             >
-              <div class="mr-2 h-[9px] w-[9px] rounded-[3px]"></div>
-              {{ promo.status }}
+              <div
+                class="mr-2 h-[9px] w-[9px] rounded-[3px]"
+                :style="promotionStatus(promo.active).style"
+              ></div>
+              {{ promotionStatus(promo.active).text }}
             </Badge>
           </TableCell>
-          <TableCell class="text-[12px]"> {{ promo.setting }} </TableCell>
+          <TableCell class="text-[12px]">
+            {{ getPromoSettings(promo.data) }}
+          </TableCell>
           <TableCell class="flex gap-x-2">
             <CloseSquareIcon class="h-5 w-5" />
             <Setting2Icon class="h-5 w-5" />
@@ -47,49 +60,37 @@
 </template>
 
 <script setup lang="ts">
-import { MoreHorizontal } from "lucide-vue-next";
-import { orderStatus, paymentStatus } from "~/lib/utils";
+import { orderStatus, paymentStatus, promotionStatus } from "~/lib/utils";
 import { GP_ROUTES } from "~/constants/route-names";
 import { GP_CONSTANTS } from "~/constants";
 import { CloseSquareIcon, Setting2Icon } from "@placetopay/iconsax-vue/outline";
-import type { IOrders } from "~/types/modules/marketPlaceModel";
+
+defineProps({
+  promotions: {
+    type: Array as PropType<any[]>,
+    required: true,
+  },
+});
 
 const { $moment } = useNuxtApp();
+
 const userType = computed(() =>
   JSON.parse(localStorage.getItem(GP_CONSTANTS.USER_TYPE) as string),
 );
 
 const router = useRouter();
 
-const promotions = ref([
-  {
-    order: "84938zhdu8429h382h832b9",
-    date: new Date(),
-    promotType: "Free Delivery",
-    duration: "24 Hours",
-    description: "No Delivery fee",
-    status: "active",
-    setting: "20% Off",
-  },
-  {
-    order: "84938zhdu8429h382h832b9",
-    date: new Date(),
-    promotType: "Free Delivery",
-    duration: "24 Hours",
-    description: "No Delivery fee",
-    status: "active",
-    setting: "free",
-  },
-  {
-    order: "84938zhdu8429h382h832b9",
-    date: new Date(),
-    promotType: "Item Discount",
-    duration: "48 Hours",
-    description: null,
-    status: "completed",
-    setting: "20% off",
-  },
-]);
+const getPromoSettings = (data: any) => {
+  if (data.type === "freeDelivery") {
+    return "Free Delivery";
+  }
+  if (data.type === "fixedAmountDiscount") {
+    return gpNumbers.formatCurrency(data.amount, data.currency) + " OFF";
+  }
+  if (data.type === "percentageAmountDiscount") {
+    return data.percentage + "% OFF";
+  }
+};
 </script>
 
 <style></style>

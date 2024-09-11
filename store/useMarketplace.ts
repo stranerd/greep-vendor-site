@@ -16,6 +16,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
   const products = ref<Array<IProduct>>([]);
   const productsMeta = ref({});
   const singleProduct = ref<any>({});
+  const promotions = ref<any[]>([]);
   const productFoodsTags = ref<{ id: string; title: string }[]>([]);
   const productItemsTags = ref<{ id: string; title: string }[]>([]);
 
@@ -47,6 +48,8 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     getRecommendedProductsTags: API_STATES.IDLE,
     getRecommendedFoodsTags: API_STATES.IDLE,
     createProductCategory: API_STATES.IDLE,
+    createPromotion: API_STATES.IDLE,
+    getAllPromotions: API_STATES.IDLE,
   });
 
   const currentCart = ref({});
@@ -699,6 +702,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
         API_STATES.SUCCESS;
     }
   };
+
   const getProductItemsTags = async () => {
     const { $api } = useNuxtApp();
     const { toast } = useToast();
@@ -706,43 +710,116 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     console.log({ data });
   };
 
+  const getAllPromotions = async () => {
+    marketplaceLoadingStates.value.getAllPromotions = API_STATES.LOADING;
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+
+    const { data, error } = $api.marketplace.getAllPromotions();
+    if (data) {
+      marketplaceLoadingStates.value.getAllPromotions = API_STATES.SUCCESS;
+      promotions.value = data.value?.results;
+      // toast({
+      //   title: "success",
+      //   description: "Promotions retrieved successfully",
+      // });
+    }
+  };
+
+  const createPromotion = async (payload: any) => {
+    marketplaceLoadingStates.value.createPromotion = API_STATES.LOADING;
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+
+    const { data, error } = $api.marketplace.createPromotion(payload);
+    if (data) {
+      marketplaceLoadingStates.value.createPromotion = API_STATES.SUCCESS;
+      await getAllPromotions();
+      toast({
+        title: "success",
+        description: "Promotion created successfully",
+      });
+    }
+  };
+  const updatePromotion = async (payload: any, id: any) => {
+    marketplaceLoadingStates.value.createPromotion = API_STATES.LOADING;
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+
+    const { data, error } = $api.marketplace.updatePromotion(payload, id);
+    if (data) {
+      marketplaceLoadingStates.value.createPromotion = API_STATES.SUCCESS;
+      await getAllPromotions();
+      toast({
+        title: "success",
+        description: "Promotion created successfully",
+      });
+    }
+  };
+
+  const getSinglePromotion = async (id: any) => {
+    marketplaceLoadingStates.value.createPromotion = API_STATES.LOADING;
+    const { $api } = useNuxtApp();
+    const { toast } = useToast();
+
+    const { data, error } = $api.marketplace.getSinglePromotion(id);
+    if (data) {
+      marketplaceLoadingStates.value.createPromotion = API_STATES.SUCCESS;
+      toast({
+        title: "success",
+        description: "Promotion created successfully",
+      });
+    }
+  };
+
   return {
     marketplaceLoadingStates,
-    orders,
-    getVendorOrders,
+
+    dashBoardData,
+    getDashboardData,
+
+    products,
+    singleProduct,
+    productsMeta,
     createProduct,
     getAllProducts,
     getSingleProduct,
-    productsMeta,
-    singleProduct,
-    products,
     updateProduct,
-    getRecentOrders,
-    getDashboardData,
+    searchVendorProducts,
+
+    orders,
+    orderMeta,
+    singleOrder,
     recentOrders,
     recentOrderMeta,
-    dashBoardData,
-    searchVendorProducts,
-    addToCart,
-    currentCart,
-    clearCart,
-    orderMeta,
-    createOrder,
     getSingleOrder,
-    singleOrder,
-    productFoodsTags,
-    productFoodTagItems,
+    getRecentOrders,
+    getVendorOrders,
     cancelOrder,
     rejectOrAcceptOrder,
     dispatchOrder,
     markOrderAsShipped,
+
+    currentCart,
+    addToCart,
+    createOrder,
+    clearCart,
     createCartLink,
     getCartLinkDetails,
-    recommendedTags,
     checkoutCartLink,
+
+    productFoodsTags,
+    productFoodTagItems,
+    recommendedTags,
     getProductFoodsTags,
     getProductItemsTags,
     createProductCategoryTag,
     getRecommendedProductsTags,
+
+    promotions,
+    createPromotion,
+    getAllPromotions,
+    updatePromotion,
+    getSinglePromotion,
   };
 });

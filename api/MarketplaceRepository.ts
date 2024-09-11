@@ -126,5 +126,32 @@ export default () => {
         params,
       });
     },
+
+    createPromotion(payload: any) {
+      return useCustomFetch(`${resource}/promotions`, {
+        body: payload,
+        method: "POST",
+      });
+    },
+
+    getAllPromotions(params: any) {
+      return useCustomFetch(`${resource}/promotions`, {
+        method: "GET",
+        params,
+      });
+    },
+
+    updatePromotion(payload: any, id: string) {
+      return useCustomFetch(`${resource}/promotions/${id}`, {
+        body: payload,
+        method: "PUT",
+      });
+    },
+
+    getSinglePromotion(id: string) {
+      return useCustomFetch(`${resource}/promotions/${id}`, {
+        method: "GET",
+      });
+    },
   };
 };

@@ -153,7 +153,7 @@ const { getUserProfile, getSupportedTimezones } = authStore;
 
 const availability = ref(true);
 
-const timezone = ref(supportedTimezones.value[3].id);
+const timezone = ref(supportedTimezones.value[3]?.id);
 const activeBusinessHours = ref({
   monday: {
     active: true,

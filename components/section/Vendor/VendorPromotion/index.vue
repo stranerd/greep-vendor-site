@@ -31,13 +31,31 @@
       </Card>
     </div>
 
-    <VendorPromotTable />
+    <Skeleton
+      v-if="marketplaceLoadingStates.getAllPromotions === API_STATES.LOADING"
+      class="h-[300px] w-full"
+    />
+
+    <VendorPromotTable
+      v-else-if="
+        marketplaceLoadingStates.getAllPromotions === API_STATES.SUCCESS
+      "
+      :promotions="promotions"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { GP_ROUTES } from "~/constants/route-names";
 import { AddCircleIcon } from "@placetopay/iconsax-vue/outline";
+import { useMarketPlaceStore } from "@/store/useMarketplace";
+
+import { API_STATES } from "~/services/constants";
+
+const { promotions, marketplaceLoadingStates } = storeToRefs(
+  useMarketPlaceStore(),
+);
+const { getAllPromotions, updatePromotion } = useMarketPlaceStore();
 
 const router = useRouter();
 const overview = computed(() => [
@@ -57,6 +75,10 @@ const overview = computed(() => [
     titleColor: "text-[#249F5D]",
   },
 ]);
+
+onMounted(async () => {
+  await getAllPromotions();
+});
 </script>
 
 <style scoped></style>
