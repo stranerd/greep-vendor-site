@@ -1,11 +1,11 @@
 <template>
   <img
-    class="absolute hidden md:block top-0 left-0 w-full h-auto z-[-1]"
+    class="absolute left-0 top-0 z-[-1] hidden h-auto w-full md:block"
     src="/images/hero-illustration.svg"
     alt="Background"
   />
   <img
-    class="absolute md:hidden top-[0px] left-0 w-full h-auto z-[-1]"
+    class="absolute left-0 top-[0px] z-[-1] h-auto w-full md:hidden"
     src="/images/mobile-hero-bg.png"
     alt="Background"
   />
@@ -13,7 +13,7 @@
   <HomeCarousel />
   <HomePartners />
   <HomeFeatures />
-  <!-- <HomeCompany /> -->
+  <HomeCompany />
   <HomeReview />
   <Faq />
   <AppDownload />

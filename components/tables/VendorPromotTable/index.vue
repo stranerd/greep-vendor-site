@@ -49,9 +49,11 @@
           <TableCell class="text-[12px]">
             {{ getPromoSettings(promo.data) }}
           </TableCell>
-          <TableCell class="flex gap-x-2">
-            <CloseSquareIcon class="h-5 w-5" />
-            <Setting2Icon class="h-5 w-5" />
+          <TableCell class="">
+            <div class="flex h-full w-full items-center gap-x-2">
+              <CloseSquareIcon class="h-5 w-5" />
+              <Setting2Icon class="h-5 w-5" />
+            </div>
           </TableCell>
         </TableRow>
       </TableBody>

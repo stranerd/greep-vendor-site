@@ -15,8 +15,8 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
   const singleOrder = ref<IOrders>();
   const products = ref<Array<IProduct>>([]);
   const productsMeta = ref({});
-  const singleProduct = ref<any>({});
-  const promotions = ref<any[]>([]);
+  const singleProduct = ref({});
+  const promotions = ref([]);
   const productFoodsTags = ref<{ id: string; title: string }[]>([]);
   const productItemsTags = ref<{ id: string; title: string }[]>([]);
 
@@ -169,6 +169,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
       productsMeta.value = { ...data.value.pages, ...data.value.docs };
     }
   };
+
   const getRecommendedProductsTags = async () => {
     const { $api } = useNuxtApp();
     const { toast } = useToast();
@@ -714,9 +715,20 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
     marketplaceLoadingStates.value.getAllPromotions = API_STATES.LOADING;
     const { $api } = useNuxtApp();
     const { toast } = useToast();
+    const authStore = useAuthStore();
+    marketplaceLoadingStates.value.allOrders = API_STATES.LOADING;
 
-    const { data, error } = $api.marketplace.getAllPromotions();
-    if (data) {
+    // const { data, error } = await $api.marketplace.getOrders({
+
+    // });
+    const params = {
+      where: JSON.stringify([{ field: "createdBy", value: authStore.user.id }]),
+      sort: JSON.stringify([{ field: "createdAt", desc: true }]),
+      limit: 20,
+      lazy: false,
+    };
+    const { data, error } = $api.marketplace.getAllPromotions(params);
+    if (data && data.value.results) {
       marketplaceLoadingStates.value.getAllPromotions = API_STATES.SUCCESS;
       promotions.value = data.value?.results;
       // toast({
@@ -741,6 +753,7 @@ export const useMarketPlaceStore = defineStore("marketplace", () => {
       });
     }
   };
+
   const updatePromotion = async (payload: any, id: any) => {
     marketplaceLoadingStates.value.createPromotion = API_STATES.LOADING;
     const { $api } = useNuxtApp();

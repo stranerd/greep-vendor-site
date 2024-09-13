@@ -3,7 +3,7 @@
     style="
       background-image: url(&quot;/images/features-full-bg.png&quot;);
       background-size: contain;
-      background-position: center;
+      background-position: top;
       background-repeat: no-repeat;
       overflow: hidden;
     "
@@ -34,7 +34,7 @@
               <img
                 :src="feature.img"
                 :alt="feature.name"
-                class="h-[35px] w-[35px]"
+                class="w-[35px h-[35px]"
               />
               <h6 class="text-[22px] font-semibold">
                 {{ feature.name }}
@@ -50,7 +50,7 @@
             :src="activeFeature.featureImage"
             :key="activeFeature.featureImage"
             alt="App features"
-            class="w-full max-w-[298.21px] bg-black mix-blend-screen"
+            class="w-full max-w-[298.21px] bg-black"
         /></transition>
         <div class="flex flex-col gap-[86px]">
           <div
@@ -128,7 +128,9 @@
           </div>
         </div>
       </div>
-      <div class="mt-[70px] pt-[40px] text-[white] md:pt-[80px] lg:mt-[156px]">
+
+      <HomeServices />
+      <!-- <div class="mt-[70px] pt-[40px] text-[white] md:pt-[80px] lg:mt-[156px]">
         <div class="flex items-center justify-center md:justify-start">
           <CursiveTitle> Our Company </CursiveTitle>
         </div>
@@ -164,7 +166,7 @@
           />
           Your browser does not support the video tag.
         </video>
-      </div>
+      </div> -->
     </div>
   </section>
 </template>

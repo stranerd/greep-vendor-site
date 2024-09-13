@@ -47,8 +47,8 @@
             <Label
               for="availablity"
               class="text-[12px] font-normal leading-[20px]"
-              >Availability {{ localData.inStock }}</Label
-            >
+              >Availability
+            </Label>
             <Switch
               class="data-[state=checked]:bg-[#10BB76]"
               id="availablity"
@@ -111,9 +111,7 @@ onMounted(() => (localData.value = props.cardData));
 
 const updateCoverImage = async () => {
   try {
-    const result = await uploadStore.openModal({
-     
-    });
+    const result = await uploadStore.openModal({});
     if (result) {
       const { banner, ...data } = localData.value;
 
