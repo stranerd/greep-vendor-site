@@ -2,20 +2,20 @@
   <section class="">
     <div
       style="
-        background-image: url('/images/know-greep.svg');
+        background-image: url(&quot;/images/know-greep.svg&quot;);
         background-size: contain;
         background-position: top center;
         background-repeat: no-repeat;
       "
-      class="bg-[#000E18] text-[white] pt-[80px] pb-[238px]"
+      class="bg-[#000E18] pb-[238px] pt-[80px] text-[white]"
     >
-      <div class="container px-[20px] md:px-[2rem] bg-[#000E18]">
+      <div class="container bg-[#000E18] px-[20px] md:px-[2rem]">
         <CursiveTitle> Our Company </CursiveTitle>
-        <h2 class="text-[48px] mt-4 font-bold leading-[57.6px]">
+        <h2 class="mt-4 text-4xl font-bold leading-[57.6px] lg:text-[48px]">
           Greep Company
         </h2>
         <p
-          class="text-[18px] text-center mt-[10px] max-w-[1182px] mb-[83px] mx-auto"
+          class="mx-auto mt-[10px] max-w-[1182px] text-sm lg:mb-[83px] lg:text-center lg:text-[18px]"
         >
           This company is dedicated to celebrating and promoting the cultural
           heritage of the African diaspora while also economically empowering
@@ -25,11 +25,14 @@
         </p>
       </div>
     </div>
-    <div class="container px-[20px] md:px-[2rem] -mt-[180px]">
+    <div
+      class="container -mt-[180px] flex items-center justify-center px-[20px] lg:px-[2rem]"
+    >
       <video
         id="video1"
-        class="main-vid max-w-[1147px] mx-auto rounded-[20px] overflow-hidden w-auto h-[607px]"
+        class="main-vid mx-auto h-[307px] w-auto max-w-[95vw] overflow-hidden rounded-[20px] !bg-primary lg:h-[607px] lg:max-w-[1147px]"
         playsinline
+        controls
       >
         <source
           src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"

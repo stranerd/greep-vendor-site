@@ -3,7 +3,7 @@
     [
       {
         "type": "IMAGE",
-        "source": "/images/news/0.jpg",
+        "source": "/images/services/market.png",
         "style": {}
       },
       {
@@ -21,7 +21,8 @@
     [
       {
         "type": "IMAGE",
-        "source": "/images/news/0.jpg",
+        "source": "/images/services/food.png",
+        "class": "hidden lg:block",
         "style": {}
       },
       {
@@ -35,9 +36,21 @@
           "body": "Order, Deliver, and Discover with Our User-Friendly Food Marketplace. Where food meets passion, and every meal is a celebration of taste.",
           "actionText": "More Information"
         }
+      },
+      {
+        "type": "IMAGE",
+        "source": "/images/services/food.png",
+        "class": "block lg:hidden",
+        "style": {}
       }
     ],
     [
+      {
+        "type": "IMAGE",
+        "source": "/images/services/delivery.png",
+        "class": "block lg:hidden",
+        "style": {}
+      },
       {
         "type": "CARD",
         "style": {
@@ -52,7 +65,8 @@
       },
       {
         "type": "IMAGE",
-        "source": "/images/news/0.jpg",
+        "source": "/images/services/delivery.png",
+        "class": "hidden lg:block",
         "style": {}
       }
     ],
@@ -70,7 +84,7 @@
       },
       {
         "type": "IMAGE",
-        "source": "/images/news/0.jpg",
+        "source": "/images/services/car-rental.png",
         "style": {
           "background": "#FFFFFF"
         }
@@ -81,19 +95,24 @@
     [
       {
         "type": "IMAGE",
-        "source": "/images/news/0.jpg",
+        "source": "/images/services/partner.png",
+        "class": "h-20 lg:h-fit",
         "style": {
-          "gridColumn": "span 2 / span 2"
+          "gridColumn": "span 2 / span 2",
+          "max-height": "208px"
         }
       }
     ],
     [
       {
         "type": "CARD",
+        "class": "!h-[240px]",
         "style": {
           "background": "#FFFFFF",
-          "gridColumn": "span 2 / span 2"
+          "gridColumn": "span 2 / span 2",
+          "max-height": "208px"
         },
+
         "content": {
           "title": "Partner with us to sell",
           "body": "Explore, Purchase, and List with Our User-Friendly Marketplace. Where buyers find great deals and sellers thrive in a secure, hassle-free environment.",
@@ -102,6 +121,12 @@
       }
     ],
     [
+      {
+        "type": "IMAGE",
+        "source": "/images/services/greeppay.png",
+        "class": "block lg:hidden",
+        "style": {}
+      },
       {
         "type": "CARD",
         "style": {
@@ -116,7 +141,8 @@
       },
       {
         "type": "IMAGE",
-        "source": "/images/news/0.jpg",
+        "class": "hidden lg:block",
+        "source": "/images/services/greeppay.png",
         "style": {}
       }
     ],
@@ -135,7 +161,7 @@
       },
       {
         "type": "IMAGE",
-        "source": "/images/news/0.jpg",
+        "source": "/images/services/deliver.png",
         "style": {}
       }
     ]

@@ -14,9 +14,19 @@
       class="align-center element max-w-screen flexs mt-[60px] w-full justify-center overflow-hidden"
     >
       <Carousel
-        :items-to-show="6"
         :autoplay="1"
         :transition="1200"
+        :breakpoints="{
+          400: {
+            itemsToShow: 4,
+          },
+          700: {
+            itemsToShow: 5,
+          },
+          1024: {
+            itemsToShow: 6,
+          },
+        }"
         :wrap-around="true"
         :autoplay-hover-pause="false"
         :speed="10"

@@ -16,6 +16,7 @@
             v-for="(link, i) in navLinks"
             :key="i"
             :to="link.to"
+            :target="link?.target"
             :external="link?.external"
             class="rounded-[100px] px-6 py-[14px]"
             active-class="bg-[#F7F7F8]  font-medium border-[1px] border-[#F1F1F3]"
@@ -51,6 +52,7 @@
               <SheetClose asChild v-for="(link, i) in navLinks" :key="i">
                 <nuxt-link
                   :to="link.to"
+                  :target="link?.target"
                   :external="link?.external"
                   class="block w-full rounded-[100px] px-6 py-[14px]"
                   active-class="bg-[#F7F7F8] border-[1px] border-[#F1F1F3]"
@@ -110,22 +112,23 @@ const navLinks = [
     name: "Product",
     to: "/product",
   },
-  {
-    name: "News",
-    to: "/news",
-  },
-  {
-    name: "Contact",
-    to: "/contact",
-  },
+  // {
+  //   name: "News",
+  //   to: "/news",
+  // },
+  // {
+  //   name: "Contact",
+  //   to: "/contact",
+  // },
   {
     name: "Services",
     to: "/services",
   },
   {
-    name: "Greep Pay",
+    name: "GreepPay",
     to: "https://pay.greep.io",
     external: true,
+    target: "_blank",
   },
 ];
 </script>

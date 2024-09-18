@@ -1,6 +1,6 @@
 <template>
   <img
-    class="absolute left-0 top-0 z-[-1] hidden h-auto w-full md:block"
+    class="absolute left-0 top-20 z-[-1] hidden h-auto w-full md:block"
     src="/images/hero-illustration.svg"
     alt="Background"
   />

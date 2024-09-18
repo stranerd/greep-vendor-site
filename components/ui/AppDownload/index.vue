@@ -1,17 +1,17 @@
 <template>
   <section class="relative bg-[#000E18]">
     <div
-      class="container px-[20px] md:px-[2rem] flex items-center justify-center lg:gap-[50px]"
+      class="container flex items-center justify-center px-[20px] md:px-[2rem] lg:gap-[50px]"
     >
-      <div class="text-[#fff] w-full lg:max-w-[600px]">
+      <div class="w-full text-[#fff] lg:max-w-[600px]">
         <h2
-          class="text-[24px] md:text-[32px] lg:text-[48px] font-bold leading-[32px] md:leading-[48px] lg:leading-[60px]"
+          class="text-[24px] font-bold leading-[32px] md:text-[32px] md:leading-[48px] lg:text-[48px] lg:leading-[60px]"
         >
-          Unlock endless possibilities - Download our app today!
+          Connect with Home & Support African Businesses - Get Greep
         </h2>
 
         <p
-          class="text-[16px] md:text-[18px] mt-[30px] leading-[28px] mb-[30px] md:mb-[48px]"
+          class="mb-[30px] mt-[30px] text-[16px] leading-[28px] md:mb-[48px] md:text-[18px]"
         >
           Download the app to get the best deals of african food stuff and
           unlock a new door to your financial difficulties. Stay on track and
@@ -40,7 +40,7 @@
         <img
           src="/images/app-sample.png"
           alt="App Sample"
-          class="h-[585px] w-full object-cover min-w-[500px] hidden lg:block"
+          class="hidden h-[585px] w-full min-w-[500px] object-cover lg:block"
         />
       </div>
     </div>

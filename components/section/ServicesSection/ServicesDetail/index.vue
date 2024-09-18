@@ -1,11 +1,11 @@
 <template>
-  <div class="grid w-full gap-8 bg-black p-10">
-    <section class="w-2/3 text-white">
+  <div class="grid w-full gap-8 bg-black p-4 lg:p-10">
+    <section class="text-white lg:w-2/3">
       <CursiveTitle>Greep Services</CursiveTitle>
-      <h2 class="my-5 w-3/5 text-5xl font-semibold">
+      <h2 class="my-5 text-4xl font-semibold lg:w-3/5 lg:text-5xl">
         All Services Provided by Greep
       </h2>
-      <p class="text-lg">
+      <p class="lg:text-lg">
         Scan, Pay, and Go!. Make payments easily with GreepPay. Simply scan the
         QR code, enter the amount, and confirm to pay.
       </p>
@@ -13,19 +13,21 @@
 
     <section
       style="
-        background-image: url(&quot;/images/features-full-bg.png&quot;);
-        background-size: contain;
+        background-image: url(&quot;/images/services/greep-pay-fill.png&quot;);
+        /* background-size: contain; */
         background-position: top;
         background-repeat: no-repeat;
         overflow: hidden;
       "
-      class="h-[428px] bg-black pt-[114px]"
+      class="h-[240px] w-full bg-black bg-cover pt-[114px] lg:h-[428px] lg:bg-contain"
     >
-      <h2 class="ml-[74px] text-[90px] font-medium text-white">Greep Pay</h2>
+      <h2 class="ml-[74px] text-[45px] font-medium text-white lg:text-[90px]">
+        Greep Pay
+      </h2>
     </section>
 
-    <div class="grid grid-cols-2 gap-8">
-      <div class="grid grid-cols-2 gap-8" v-for="cards in services">
+    <div class="grid gap-4 lg:grid-cols-2 lg:gap-8">
+      <div class="grid grid-cols-2 gap-4 lg:gap-8" v-for="cards in services">
         <ServicesCard
           class="h-[428px] w-full overflow-hidden border-none"
           v-for="item in cards"

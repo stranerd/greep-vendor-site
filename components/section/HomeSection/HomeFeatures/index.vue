@@ -89,42 +89,30 @@
       <div
         class="relative flex flex-col justify-center gap-[58px] text-[white] md:flex-row lg:hidden"
       >
-        <div>
+        <div class="relative">
+          <transition mode="out-in" name="fade" :duration="400">
+            <div :key="activeFeature?.featureImage">
+              <img
+                :src="activeFeature?.featureImage"
+                alt="App features"
+                class="sticky top-[240px] mx-auto h-auto w-full max-w-[298.21px]"
+              />
+            </div>
+          </transition>
           <img
-            src="/images/features.png"
+            :src="activeFeature?.featureImage"
             alt="App features"
-            class="sticky top-[240px] mx-auto h-auto w-full max-w-[298.21px]"
+            class="invisible absolute mx-auto h-auto w-full max-w-[298.21px]"
           />
         </div>
 
         <div class="flex flex-col gap-[33px] md:gap-[86px]">
           <div
-            v-for="(feature, index) in features.filter(
-              (i) => i.type === 'FEATURE_ONE',
-            )"
+            v-for="(feature, index) in features"
             :key="index"
-            class="min-h-[194px] rounded-[12px] bg-[#001726] p-4"
-          >
-            <div class="mb-[36px] flex items-center gap-[10px]">
-              <img
-                :src="feature.img"
-                :alt="feature.name"
-                class="h-[35px] w-[35px]"
-              />
-              <h6 class="text-[22px] font-semibold">
-                {{ feature.name }}
-              </h6>
-            </div>
-            <p class="max-w-[431px] text-[16px] leading-[24px]">
-              {{ feature.description }}
-            </p>
-          </div>
-          <div
-            v-for="(feature, index) in features.filter(
-              (i) => i.type === 'FEATURE_TWO',
-            )"
-            :key="index"
-            class="min-h-[194px] rounded-[12px] bg-[#001726] p-4"
+            @click="activeIndex = feature.index"
+            :class="{ '!bg-white text-[#001726]': activeFeature === feature }"
+            class="min-h-[194px] cursor-pointer rounded-[12px] bg-[#001726] p-4 duration-1000"
           >
             <div class="mb-[36px] flex items-center gap-[10px]">
               <img
@@ -187,6 +175,8 @@
 
 <script setup lang="ts">
 interface FeatureCard {
+  index: number;
+  type: "FEATURE_ONE" | "FEATURE_TWO";
   name: string;
   img: string;
   description: string;
@@ -246,7 +236,7 @@ const changeActiveFeature = () => {
 onMounted(() => {
   setInterval(() => {
     changeActiveFeature();
-  }, 5000);
+  }, 2500);
 });
 </script>
 

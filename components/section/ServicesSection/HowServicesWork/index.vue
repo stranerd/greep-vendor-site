@@ -1,11 +1,11 @@
 <template>
   <div class="grid w-full gap-8 p-10">
-    <section class="w-3/5">
+    <section class="lg:w-3/5">
       <CursiveTitle>Greep Services</CursiveTitle>
-      <h2 class="my-5 w-3/5 text-5xl font-semibold">
+      <h2 class="my-5 text-4xl font-semibold lg:w-3/5 lg:text-5xl">
         How to Use Any of Our Services
       </h2>
-      <p class="text-lg">
+      <p class="lg:text-lg">
         Browse, customize, and order your favorite meals with ease on the Greep
         app. Track your delivery in real-time and enjoy delicious food delivered
         right to your doorstep.
@@ -15,11 +15,11 @@
     <section class="hide-scrollbar flex w-full gap-4 overflow-scroll">
       <Card
         v-for="item in steps"
-        class="flex h-[298px] w-[310px] flex-col justify-between bg-black p-6 text-white"
+        class="flex h-[168px] min-w-[200px] flex-col justify-between bg-black p-3 text-white lg:h-[298px] lg:min-w-[310px] lg:p-6"
       >
         <h2 class="">Step {{ item.step }}</h2>
-        <h2 class="text-3xl font-semibold">{{ item.title }}</h2>
-        <p class="">{{ item.description }}</p>
+        <h2 class="text-lg font-semibold lg:text-3xl">{{ item.title }}</h2>
+        <p class="text-xs lg:text-base">{{ item.description }}</p>
       </Card>
     </section>
   </div>
