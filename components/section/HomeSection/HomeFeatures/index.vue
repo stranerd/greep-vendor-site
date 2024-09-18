@@ -24,9 +24,11 @@
       >
         <div class="flex flex-col gap-[86px]">
           <div
-            v-for="(feature, i) in featuresOne"
-            :key="i"
-            @click="activeFeature = feature"
+            v-for="(feature, index) in features.filter(
+              (i) => i.type === 'FEATURE_ONE',
+            )"
+            :key="index"
+            @click="activeIndex = feature.index"
             :class="{ '!bg-white text-[#001726]': activeFeature === feature }"
             class="min-h-[194px] cursor-pointer rounded-[12px] bg-[#001726] p-4 duration-1000"
           >
@@ -45,18 +47,26 @@
             </p>
           </div>
         </div>
+
         <transition mode="out-in" name="fade" :duration="400">
-          <img
-            :src="activeFeature.featureImage"
-            :key="activeFeature.featureImage"
-            alt="App features"
-            class="w-full max-w-[298.21px] bg-black"
-        /></transition>
+          <div
+            class="h-[605px] min-w-[298.21px]"
+            :key="activeFeature?.featureImage"
+          >
+            <img
+              :src="activeFeature?.featureImage"
+              alt="App features"
+              class="w-full max-w-[298.21px] bg-black duration-500"
+            />
+          </div>
+        </transition>
         <div class="flex flex-col gap-[86px]">
           <div
-            v-for="(feature, i) in featuresTwo"
-            :key="i"
-            @click="activeFeature = feature"
+            v-for="(feature, index) in features.filter(
+              (i) => i.type === 'FEATURE_TWO',
+            )"
+            :key="index"
+            @click="activeIndex = feature.index"
             :class="{ '!bg-white text-[#001726]': activeFeature === feature }"
             class="min-h-[194px] cursor-pointer rounded-[12px] bg-[#001726] p-4 duration-1000"
           >
@@ -89,8 +99,10 @@
 
         <div class="flex flex-col gap-[33px] md:gap-[86px]">
           <div
-            v-for="(feature, i) in featuresOne"
-            :key="i"
+            v-for="(feature, index) in features.filter(
+              (i) => i.type === 'FEATURE_ONE',
+            )"
+            :key="index"
             class="min-h-[194px] rounded-[12px] bg-[#001726] p-4"
           >
             <div class="mb-[36px] flex items-center gap-[10px]">
@@ -108,8 +120,10 @@
             </p>
           </div>
           <div
-            v-for="(feature, i) in featuresTwo"
-            :key="i"
+            v-for="(feature, index) in features.filter(
+              (i) => i.type === 'FEATURE_TWO',
+            )"
+            :key="index"
             class="min-h-[194px] rounded-[12px] bg-[#001726] p-4"
           >
             <div class="mb-[36px] flex items-center gap-[10px]">
@@ -179,8 +193,10 @@ interface FeatureCard {
   featureImage: string;
 }
 
-const featuresOne = ref<FeatureCard[]>([
+const features = ref<FeatureCard[]>([
   {
+    index: 0,
+    type: "FEATURE_ONE",
     name: "Authenticity at Your Fingertips",
     img: "/images/llustrations/food-delivery.png",
     featureImage: "/images/products/2.jpg",
@@ -188,16 +204,18 @@ const featuresOne = ref<FeatureCard[]>([
       "Explore a rich catalog of African food items from local suppliers, ensuring the authenticity of every dish. From jollof rice to suya, Greep has it all!",
   },
   {
+    index: 1,
+    type: "FEATURE_ONE",
     name: "Reliable Delivery",
     img: "/images/llustrations/truck.png",
     featureImage: "/images/products/3.jpg",
     description:
       "Our efficient logistics system ensures your orders are handled with care and delivered to your doorstep promptly. Track your packages in real-time for added peace of mind.",
   },
-]);
 
-const featuresTwo = ref<FeatureCard[]>([
   {
+    index: 2,
+    type: "FEATURE_TWO",
     name: "Stellar-Powered Payments",
     img: "/images/llustrations/corruption.png",
     featureImage: "/images/products/4.jpg",
@@ -205,6 +223,8 @@ const featuresTwo = ref<FeatureCard[]>([
       "Say goodbye to currency conversion headaches! Greep integrates with Stellar blockchain for seamless transactions in your local African currency, reducing costs and simplifying payments.",
   },
   {
+    index: 3,
+    type: "FEATURE_TWO",
     name: "Global Marketplace",
     img: "/images/llustrations/globe.png",
     featureImage: "/images/products/1.jpg",
@@ -212,8 +232,22 @@ const featuresTwo = ref<FeatureCard[]>([
       "Discover a global marketplace connecting businesses and individuals. Greep opens the door to a world of possibilities for those wanting to share their love for African cuisine on a global scale.",
   },
 ]);
+const activeIndex = ref(0);
+const activeFeature = computed<FeatureCard>(
+  () => features.value[activeIndex.value],
+);
+const changeActiveFeature = () => {
+  activeIndex.value++;
+  if (activeIndex.value >= features.value.length) {
+    activeIndex.value = 0;
+  }
+};
 
-const activeFeature = ref<FeatureCard>(featuresOne.value[0]);
+onMounted(() => {
+  setInterval(() => {
+    changeActiveFeature();
+  }, 5000);
+});
 </script>
 
 <style></style>

@@ -1,7 +1,7 @@
 <template>
   <nav class="container sticky top-0 z-[40] px-[20px] pt-10 md:px-[2rem]">
     <div
-      class="bg-[#FCFCFD flex items-center justify-between rounded-[100px] border-[1px] border-[#F1F1F3] bg-[#fff] px-6 py-2"
+      class="bg-[#FCFCFD flex items-center justify-between rounded-[100px] border-[1px] border-[#F1F1F3] bg-[#fff] py-2 pl-6 pr-2"
     >
       <div class="flex items-center">
         <nuxt-link to="/" class="mr-0 flex items-center md:mr-[50px]">
@@ -16,10 +16,11 @@
             v-for="(link, i) in navLinks"
             :key="i"
             :to="link.to"
+            :external="link?.external"
             class="rounded-[100px] px-6 py-[14px]"
             active-class="bg-[#F7F7F8]  font-medium border-[1px] border-[#F1F1F3]"
-            >{{ link.name }}</nuxt-link
-          >
+            >{{ link.name }}
+          </nuxt-link>
         </div>
       </div>
       <Sheet>
@@ -50,6 +51,7 @@
               <SheetClose asChild v-for="(link, i) in navLinks" :key="i">
                 <nuxt-link
                   :to="link.to"
+                  :external="link?.external"
                   class="block w-full rounded-[100px] px-6 py-[14px]"
                   active-class="bg-[#F7F7F8] border-[1px] border-[#F1F1F3]"
                   >{{ link.name }}</nuxt-link
@@ -63,9 +65,7 @@
               class="w-full"
               @click="router.push('/login')"
               >Get Started
-              <div
-                class="ml-auto mr-[-20px] rounded-full bg-[#000E18] p-[14px]"
-              >
+              <div class="ml-auto rounded-full bg-[#000E18] p-[14px]">
                 <img
                   src="/images/icons/mail-white.svg"
                   alt="Mail Icon"
@@ -83,7 +83,7 @@
         rounded="lg"
         @click="router.push('/login')"
         >Get Started
-        <div class="ml-[10px] mr-[-20px] rounded-full bg-[#000E18] p-[14px]">
+        <div class="-mr-[20px] ml-[10px] rounded-full bg-[#000E18] p-[14px]">
           <img
             src="/images/icons/mail-white.svg"
             alt="Mail Icon"
@@ -117,6 +117,15 @@ const navLinks = [
   {
     name: "Contact",
     to: "/contact",
+  },
+  {
+    name: "Services",
+    to: "/services",
+  },
+  {
+    name: "Greep Pay",
+    to: "https://pay.greep.io",
+    external: true,
   },
 ];
 </script>

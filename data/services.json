@@ -1,0 +1,143 @@
+{
+  "customerServices": [
+    [
+      {
+        "type": "IMAGE",
+        "source": "/images/news/0.jpg",
+        "style": {}
+      },
+      {
+        "type": "CARD",
+        "style": {
+          "background": "#FFFFFF"
+        },
+        "content": {
+          "title": "Market",
+          "body": "Explore, Purchase, and List with Our User-Friendly Marketplace. Where buyers find great deals and sellers thrive in a secure, hassle-free environment.",
+          "actionText": "More Information"
+        }
+      }
+    ],
+    [
+      {
+        "type": "IMAGE",
+        "source": "/images/news/0.jpg",
+        "style": {}
+      },
+      {
+        "type": "CARD",
+        "style": {
+          "background": "#009260",
+          "color": "#FFFFFF"
+        },
+        "content": {
+          "title": "Food",
+          "body": "Order, Deliver, and Discover with Our User-Friendly Food Marketplace. Where food meets passion, and every meal is a celebration of taste.",
+          "actionText": "More Information"
+        }
+      }
+    ],
+    [
+      {
+        "type": "CARD",
+        "style": {
+          "background": "#009260",
+          "color": "#FFFFFF"
+        },
+        "content": {
+          "title": "Delivery",
+          "body": "Ship, Track, and Deliver with Our User-Friendly Logistics Platform. Experience the power of seamless logistics, where every shipment is a success story.",
+          "actionText": "More Information"
+        }
+      },
+      {
+        "type": "IMAGE",
+        "source": "/images/news/0.jpg",
+        "style": {}
+      }
+    ],
+    [
+      {
+        "type": "CARD",
+        "style": {
+          "background": "#FFFFFF"
+        },
+        "content": {
+          "title": "Car Rent",
+          "body": "Book, Ride, and Return with Our User-Friendly Car Rental Platform. Experience the freedom of hassle-free travel, where every journey is a smooth ride.",
+          "actionText": "More Information"
+        }
+      },
+      {
+        "type": "IMAGE",
+        "source": "/images/news/0.jpg",
+        "style": {
+          "background": "#FFFFFF"
+        }
+      }
+    ]
+  ],
+  "vendorServices": [
+    [
+      {
+        "type": "IMAGE",
+        "source": "/images/news/0.jpg",
+        "style": {
+          "gridColumn": "span 2 / span 2"
+        }
+      }
+    ],
+    [
+      {
+        "type": "CARD",
+        "style": {
+          "background": "#FFFFFF",
+          "gridColumn": "span 2 / span 2"
+        },
+        "content": {
+          "title": "Partner with us to sell",
+          "body": "Explore, Purchase, and List with Our User-Friendly Marketplace. Where buyers find great deals and sellers thrive in a secure, hassle-free environment.",
+          "actionText": "More Information"
+        }
+      }
+    ],
+    [
+      {
+        "type": "CARD",
+        "style": {
+          "background": "#009260",
+          "color": "#FFFFFF"
+        },
+        "content": {
+          "title": "Greep Pay",
+          "body": "Order, Deliver, and Discover with Our User-Friendly Food Marketplace. Where food meets passion, and every meal is a celebration of taste.",
+          "actionText": "More Information"
+        }
+      },
+      {
+        "type": "IMAGE",
+        "source": "/images/news/0.jpg",
+        "style": {}
+      }
+    ],
+    [
+      {
+        "type": "CARD",
+        "style": {
+          "background": "#009260",
+          "color": "#FFFFFF"
+        },
+        "content": {
+          "title": "Deliver With Us",
+          "body": "Ship, Track, and Deliver with Our User-Friendly Logistics Platform. Experience the power of seamless logistics, where every shipment is a success story.",
+          "actionText": "More Information"
+        }
+      },
+      {
+        "type": "IMAGE",
+        "source": "/images/news/0.jpg",
+        "style": {}
+      }
+    ]
+  ]
+}
