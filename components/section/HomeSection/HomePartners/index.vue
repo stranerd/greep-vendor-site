@@ -31,7 +31,7 @@
         <h5
           class="text-center text-[24px] font-semibold text-[#000E18] md:text-left md:text-[28px] lg:text-[35px]"
         >
-          Safe & Reliable Cargo Solutions
+          Why Choose Greep ?
         </h5>
       </div>
 

@@ -1,17 +1,16 @@
 <template>
   <header class="container px-[20px] md:px-[2rem]">
     <h1
-      class="mx-auto mb-[14px] mt-[100px] max-w-[80%] text-center text-[32px] font-semibold leading-[48px] md:text-[48px] md:leading-[60px] lg:text-[68px] lg:leading-[81.6px]"
+      class="mx-auto mb-[14px] mt-[100px] text-center text-[32px] font-semibold capitalize leading-[48px] md:text-[48px] md:leading-[60px] lg:max-w-[80%] lg:text-[68px] lg:leading-[81.6px]"
     >
-      Empowering the African diaspora
-      <span class="text-[#009260]">Economy</span>
+      Everything you need is now one
+      <span class="text-[#009260]">Place</span>
     </h1>
     <p
-      class="mx-auto mb-[50px] max-w-[80%] text-center text-[16px] font-medium text-[#4C4C4D] lg:text-[18px]"
+      class="mx-auto mb-[50px] text-center text-[16px] font-medium text-[#4C4C4D] lg:max-w-[80%] lg:text-[18px]"
     >
-      Greep bridges the gap by connecting Africans in the diaspora with African
-      products & businesses, empowering the diaspora economy one transaction at
-      a time.
+      Greep is your island companion. we bridge the gap by connecting students,
+      tourist and locals in TRNC to the services and products they need.
     </p>
     <div class="align-center flex justify-center">
       <Button variant="withIcon" size="lg" rounded="lg"

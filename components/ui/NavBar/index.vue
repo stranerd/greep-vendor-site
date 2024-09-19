@@ -64,10 +64,10 @@
               variant="withIcon"
               size="lg"
               rounded="lg"
-              class="w-full"
+              class="flexs w-full items-center justify-between pr-2.5"
               @click="router.push('/login')"
               >Get Started
-              <div class="ml-auto rounded-full bg-[#000E18] p-[14px]">
+              <div class="ml-0 rounded-full bg-[#000E18] p-[14px]">
                 <img
                   src="/images/icons/mail-white.svg"
                   alt="Mail Icon"

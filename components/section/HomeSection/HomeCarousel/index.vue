@@ -16,6 +16,7 @@
       <Carousel
         :autoplay="1"
         :transition="1200"
+        :itemsToShow="4"
         :breakpoints="{
           400: {
             itemsToShow: 4,

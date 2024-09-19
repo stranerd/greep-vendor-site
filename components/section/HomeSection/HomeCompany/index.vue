@@ -30,7 +30,7 @@
     >
       <video
         id="video1"
-        class="main-vid mx-auto h-[307px] w-auto max-w-[95vw] overflow-hidden rounded-[20px] !bg-primary lg:h-[607px] lg:max-w-[1147px]"
+        class="main-vid mx-auto h-[307px] w-auto max-w-[95vw] overflow-hidden rounded-[20px] lg:h-[607px] lg:max-w-[1147px]"
         playsinline
         controls
       >

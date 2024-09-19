@@ -4,14 +4,14 @@
       <CursiveTitle>Greep Services</CursiveTitle>
     </div>
     <h2
-      class="mx-auto my-5 mt-10 text-4xl font-semibold text-white lg:w-3/4 lg:text-center lg:text-6xl"
+      class="mx-auto my-5 mt-10 text-4xl font-semibold text-white lg:w-2/4 lg:text-center lg:text-5xl"
     >
       Explore the World of Our Amazing Services
     </h2>
     <p
-      class="mx-auto my-10 text-sm text-white lg:w-3/4 lg:text-center lg:text-2xl"
+      class="mx-auto my-10 text-sm text-white lg:w-3/4 lg:text-center lg:text-base"
     >
-      Scan, Pay, and Go!. Make payments easily with GreepPay. Simply scan the QR
+      Scan, Pay, and Go! Make payments easily with GreepPay. Simply scan the QR
       code, enter the amount, and confirm to pay.
     </p>
 
