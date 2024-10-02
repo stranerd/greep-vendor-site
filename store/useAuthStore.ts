@@ -481,12 +481,12 @@ export const useAuthStore = defineStore(
         return data.value;
       }
     };
-    const setVendorSchedule = async (payload: any) => {
+    const updateVendorSchedule = async (payload: any) => {
       const { $api } = useNuxtApp();
       const { toast } = useToast();
 
       // apiLoadingStates.value.sendContactMessage = API_STATES.LOADING;
-      const { data, error } = await $api.users.setVendorSchedule(payload);
+      const { data, error } = await $api.users.updateVendorSchedule(payload);
       if (error.value) {
         toast({
           variant: "destructive",
@@ -544,7 +544,7 @@ export const useAuthStore = defineStore(
       logoutUser,
       sendMessage,
       getSupportedTimezones,
-      setVendorSchedule,
+      updateVendorSchedule,
       vendorSchedule,
       supportedTimezones,
     };

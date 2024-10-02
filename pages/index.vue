@@ -12,10 +12,10 @@
   <Hero />
   <HomeCarousel />
   <HomePartners />
-  <HomeFeatures />
+  <HomeFeatures id="features" />
   <HomeCompany />
   <HomeReview />
-  <Faq />
+  <Faq id="faqs" />
   <AppDownload />
 </template>
 

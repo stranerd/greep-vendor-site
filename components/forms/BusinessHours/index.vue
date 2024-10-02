@@ -32,7 +32,10 @@
             class="flex h-10 items-center justify-between rounded-lg text-[#999999] lg:w-full"
           >
             <Select v-model="timezone" class="">
-              <SelectTrigger class="border border-[#999]">
+              <SelectTrigger
+                class="border border-[#999]"
+                :disabled="!editBusinessHours"
+              >
                 <SelectValue
                   placeholder="Select time range"
                   class="ml-auto mr-2 block text-black"
@@ -61,9 +64,10 @@
               <Switch
                 class="data-[state=checked]:bg-[#10BB76]"
                 id="availablity"
+                :disabled="!editBusinessHours"
                 v-model:checked="activity.active"
               />
-              <span class="capitalize">{{ days }}</span>
+              <span class="capitalize">{{ dayMap[days] }}</span>
             </div>
 
             <transition mode="out-in" name="fade" class="">
@@ -75,21 +79,25 @@
                   class="flex h-10 w-full items-center justify-between rounded-lg text-[#999999]"
                 >
                   <Select v-model="activity.from">
-                    <SelectTrigger class="border border-[#999]">
+                    <SelectTrigger
+                      class="border border-[#999]"
+                      :disabled="!editBusinessHours"
+                    >
                       <span class="">From</span>
-                      <SelectValue
-                        placeholder="Select time range"
-                        class="ml-auto mr-2 block text-black"
-                      />
+
+                      <span class="ml-auto block text-black">
+                        {{ convertTo12HourFormat(activity.from) }}</span
+                      >
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Available Hours</SelectLabel>
                         <SelectItem
                           :value="time"
+                          :key="index"
                           v-for="(time, index) in availableHours"
                         >
-                          {{ time }}
+                          {{ convertTo12HourFormat(time) }}
                         </SelectItem>
                       </SelectGroup>
                     </SelectContent>
@@ -99,22 +107,29 @@
                   class="flex h-10 w-full items-center justify-between rounded-lg text-[#999999]"
                 >
                   <Select v-model="activity.to">
-                    <SelectTrigger class="border border-[#999]">
-                      <span class="">To</span>
-
-                      <SelectValue
+                    <SelectTrigger
+                      class="border border-[#999]"
+                      :disabled="!editBusinessHours"
+                    >
+                      <span class="">From</span>
+                      <!-- <SelectValue
                         placeholder="Select time range"
                         class="ml-auto mr-2 block text-black"
-                      />
+                        >hello</SelectValue
+                      > -->
+                      <span class="ml-auto block text-black">
+                        {{ convertTo12HourFormat(activity.to) }}</span
+                      >
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Available Hours</SelectLabel>
                         <SelectItem
                           :value="time"
+                          :key="index"
                           v-for="(time, index) in filteredHours(activity.from)"
                         >
-                          {{ time }}
+                          {{ convertTo12HourFormat(time) }}
                         </SelectItem>
                       </SelectGroup>
                     </SelectContent>
@@ -132,8 +147,22 @@
             </transition>
           </div>
         </div>
-      </div></transition
-    >
+
+        <Button
+          v-if="editBusinessHours"
+          class="ml-auto mt-5 flex w-full !bg-primary duration-500"
+          @click="updateVendorSchedule"
+        >
+          Save</Button
+        >
+        <Button
+          v-else
+          class="ml-auto mt-5 flex w-full duration-500"
+          @click="editBusinessHours = true"
+          >{{ editBusinessHours ? "Save" : "Edit" }}</Button
+        >
+      </div>
+    </transition>
   </card>
 </template>
 
@@ -151,168 +180,183 @@ const { apiLoadingStates, userProfile, user, supportedTimezones } =
   storeToRefs(authStore);
 const { getUserProfile, getSupportedTimezones } = authStore;
 
+const editBusinessHours = ref(false);
 const availability = ref(true);
 
-const timezone = ref(supportedTimezones.value[3]?.id);
-const activeBusinessHours = ref({
-  monday: {
-    active: true,
-    from: "8:00AM",
-    to: "10:00PM",
+const timezone = ref(
+  userProfile.value?.vendor?.schedule?.timezone ??
+    supportedTimezones?.value[3].id,
+);
+
+interface ScheduleTime {
+  hr: number;
+  min: number;
+}
+
+interface ScheduleBlock {
+  active: boolean;
+  from: ScheduleTime;
+  to: ScheduleTime;
+}
+interface ISchedule {
+  mon: ScheduleBlock;
+  tue: ScheduleBlock;
+  wed: ScheduleBlock;
+  thu: ScheduleBlock;
+  fri: ScheduleBlock;
+  sat: ScheduleBlock;
+  sun: ScheduleBlock;
+}
+
+const dayMap = ref<any>({
+  mon: "monday",
+  tue: "tuesday",
+  wed: "wednesday",
+  thu: "thursday",
+  fri: "friday",
+  sat: "saturday",
+  sun: "sunday",
+});
+
+const vendorSchedule = computed(() => userProfile.value.vendor?.schedule);
+
+const convertTo12HourFormat = (time: ScheduleTime) => {
+  let { hr, min } = time;
+  const period = hr >= 12 ? "PM" : "AM";
+  let hour = hr % 12 || 12; // Converts hour to 12-hour format, if 0 make it 12
+  let minutes = min.toString().padStart(2, "0"); // Ensure minutes are always two digits
+
+  return `${hour}:${minutes} ${period}`;
+};
+
+const activeBusinessHours = ref<ISchedule>({
+  mon: {
+    active:
+      Boolean(vendorSchedule.value?.schedule) &&
+      vendorSchedule.value?.schedule?.mon !== null,
+    from: vendorSchedule.value?.schedule?.mon?.from || { hr: 6, min: 0 },
+    to: vendorSchedule.value?.schedule?.mon?.to || { hr: 22, min: 0 },
   },
-  tuesday: {
-    active: false,
-    from: "8:00AM",
-    to: "10:00PM",
+  tue: {
+    active:
+      Boolean(vendorSchedule.value?.schedule) &&
+      vendorSchedule.value?.schedule?.tue !== null,
+    from: vendorSchedule.value?.schedule?.tue?.from || { hr: 6, min: 0 },
+    to: vendorSchedule.value?.schedule?.tue?.to || { hr: 22, min: 0 },
   },
-  wednesday: {
-    active: true,
-    from: "8:00AM",
-    to: "10:00PM",
+  wed: {
+    active:
+      Boolean(vendorSchedule.value?.schedule) &&
+      vendorSchedule.value?.schedule?.wed !== null,
+    from: vendorSchedule.value?.schedule?.wed?.from || { hr: 6, min: 0 },
+    to: vendorSchedule.value?.schedule?.wed?.to || { hr: 22, min: 0 },
   },
-  thursday: {
-    active: true,
-    from: "8:00AM",
-    to: "10:00PM",
+  thu: {
+    active:
+      Boolean(vendorSchedule.value?.schedule) &&
+      vendorSchedule.value?.schedule?.thu !== null,
+    from: vendorSchedule.value?.schedule?.thu?.from || { hr: 6, min: 0 },
+    to: vendorSchedule.value?.schedule?.thu?.to || { hr: 22, min: 0 },
   },
-  friday: {
-    active: true,
-    from: "8:00AM",
-    to: "10:00PM",
+  fri: {
+    active:
+      Boolean(vendorSchedule.value?.schedule) &&
+      vendorSchedule.value?.schedule?.fri !== null,
+    from: vendorSchedule.value?.schedule?.fri?.from || { hr: 6, min: 0 },
+    to: vendorSchedule.value?.schedule?.fri?.to || { hr: 22, min: 0 },
   },
-  saturday: {
-    active: true,
-    from: "8:00AM",
-    to: "10:00PM",
+  sat: {
+    active:
+      Boolean(vendorSchedule.value?.schedule) &&
+      vendorSchedule.value?.schedule?.sat !== null,
+    from: vendorSchedule.value?.schedule?.sat?.from || { hr: 6, min: 0 },
+    to: vendorSchedule.value?.schedule?.sat?.to || { hr: 22, min: 0 },
   },
-  sunday: {
-    active: true,
-    from: "8:00AM",
-    to: "10:00PM",
+  sun: {
+    active:
+      Boolean(vendorSchedule.value?.schedule) &&
+      vendorSchedule.value?.schedule?.sun !== null,
+    from: vendorSchedule.value?.schedule?.sun?.from || { hr: 6, min: 0 },
+    to: vendorSchedule.value?.schedule?.sun?.to || { hr: 22, min: 0 },
   },
 });
 
-const availableHours = ref([
-  "12:00 AM",
-  "12:30 AM",
-  "01:00 AM",
-  "01:30 AM",
-  "02:00 AM",
-  "02:30 AM",
-  "03:00 AM",
-  "03:30 AM",
-  "04:00 AM",
-  "04:30 AM",
-  "05:00 AM",
-  "05:30 AM",
-  "06:00 AM",
-  "06:30 AM",
-  "07:00 AM",
-  "07:30 AM",
-  "08:00 AM",
-  "08:30 AM",
-  "09:00 AM",
-  "09:30 AM",
-  "10:00 AM",
-  "10:30 AM",
-  "11:00 AM",
-  "11:30 AM",
-  "12:00 PM",
-  "12:30 PM",
-  "01:00 PM",
-  "01:30 PM",
-  "02:00 PM",
-  "02:30 PM",
-  "03:00 PM",
-  "03:30 PM",
-  "04:00 PM",
-  "04:30 PM",
-  "05:00 PM",
-  "05:30 PM",
-  "06:00 PM",
-  "06:30 PM",
-  "07:00 PM",
-  "07:30 PM",
-  "08:00 PM",
-  "08:30 PM",
-  "09:00 PM",
-  "09:30 PM",
-  "10:00 PM",
-  "10:30 PM",
-  "11:00 PM",
-  "11:30 PM",
+const availableHours = ref(<ScheduleTime[]>[
+  { hr: 0, min: 0 },
+  { hr: 0, min: 30 },
+  { hr: 1, min: 0 },
+  { hr: 1, min: 30 },
+  { hr: 2, min: 0 },
+  { hr: 2, min: 30 },
+  { hr: 3, min: 0 },
+  { hr: 3, min: 30 },
+  { hr: 4, min: 0 },
+  { hr: 4, min: 30 },
+  { hr: 6, min: 0 },
+  { hr: 6, min: 30 },
+  { hr: 6, min: 0 },
+  { hr: 6, min: 30 },
+  { hr: 7, min: 0 },
+  { hr: 7, min: 30 },
+  { hr: 8, min: 0 },
+  { hr: 8, min: 30 },
+  { hr: 9, min: 0 },
+  { hr: 9, min: 30 },
+  { hr: 10, min: 0 },
+  { hr: 10, min: 30 },
+  { hr: 11, min: 0 },
+  { hr: 11, min: 30 },
+  { hr: 12, min: 0 },
+  { hr: 12, min: 30 },
+  { hr: 13, min: 0 },
+  { hr: 13, min: 30 },
+  { hr: 14, min: 0 },
+  { hr: 14, min: 30 },
+  { hr: 15, min: 0 },
+  { hr: 15, min: 30 },
+  { hr: 16, min: 0 },
+  { hr: 16, min: 30 },
+  { hr: 17, min: 0 },
+  { hr: 17, min: 30 },
+  { hr: 18, min: 0 },
+  { hr: 18, min: 30 },
+  { hr: 19, min: 0 },
+  { hr: 19, min: 30 },
+  { hr: 20, min: 0 },
+  { hr: 20, min: 30 },
+  { hr: 21, min: 0 },
+  { hr: 21, min: 30 },
+  { hr: 22, min: 0 },
+  { hr: 22, min: 30 },
+  { hr: 23, min: 0 },
+  { hr: 23, min: 30 },
 ]);
 
-const filteredHours = (selectedTime: string) => {
+const filteredHours = (selectedTime: ScheduleTime) => {
   const startIndex = availableHours.value.indexOf(selectedTime);
   return availableHours.value.slice(startIndex + 1);
 };
 
-function timeStringToObject(timeStr: string) {
-  const [hour, mins, period] = timeStr.match(/(\d+):(\d+)(AM|PM)/).slice(1);
-  let hr = parseInt(hour);
-  const min = parseInt(mins, 10);
-  if (period === "PM" && hr !== 12) hr += 12;
-  if (period === "AM" && hr === 12) hr = 0;
-  console.log(hr);
-  return { hr, min };
-}
-
-watch(activeBusinessHours, (schedule) => {
-  function convertTime({ hr, min }: { hr: number; min: number }) {
-    const period = hr >= 12 ? "PM" : "AM";
-    const hour = hr % 12 === 0 ? 12 : hr % 12; // Convert 0/24 to 12, and other values to 12-hour format
-    const minute = min.toString().padStart(2, "0");
-    return `${hour}:${minute}${period}`;
-  }
-
-  // Mapping from short day names to full day names
-  const dayMap = {
-    mon: "monday",
-    tue: "tuesday",
-    wed: "wednesday",
-    thu: "thursday",
-    fri: "friday",
-    sat: "saturday",
-    sun: "sunday",
-  };
-
-  const convertedDays = Object.keys(schedule).reduce((acc: any, day: any) => {
-    const shortDay = day.slice(0, 3); // Convert full day names to abbreviations
-    const { active, from, to } = schedule[day];
-
-    acc[shortDay] =
-      active === true
-        ? {
-            from: timeStringToObject(from),
-            to: timeStringToObject(to),
-          }
-        : null;
-
-    return acc;
-  }, {});
-
-  const activeBusinessPeriods = Object.keys(hours).reduce(
-    (acc: any, day: any) => {
-      const schedule = hours[day];
-      const fullDayName = dayMap[day];
-
-      acc[fullDayName] = {
-        active: schedule !== null,
-        from: schedule ? convertTime(schedule.from) : "8:00AM",
-        to: schedule ? convertTime(schedule.to) : "6:00PM",
-      };
-
-      return acc;
-    },
-    {},
-  );
-
-  console.log({ activeBusinessPeriods, convertedDays });
-});
 onBeforeMount(async () => {
   await getSupportedTimezones();
 });
+
+const updateVendorSchedule = async () => {
+  const data = {
+    schedule: {},
+    timezone: timezone.value,
+  };
+  Object.keys(activeBusinessHours.value).map((day: any) => {
+    const time = activeBusinessHours.value[day];
+    data.schedule[day] =
+      time.active === true ? { from: time.from, to: time.to } : null;
+  });
+  data.timezone = timezone.value;
+  await authStore.updateVendorSchedule({
+    schedule: data,
+  });
+  editBusinessHours.value = false;
+};
 </script>
 
 <style scoped></style>

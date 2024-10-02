@@ -65,8 +65,8 @@
               size="lg"
               rounded="lg"
               class="flexs w-full items-center justify-between pr-2.5"
-              @click="router.push('/login')"
-              >Get Started
+              @click="router.push(isLoggedIn ? '/vendor' : '/login')"
+              >{{ isLoggedIn ? "Dashboard" : "Get Started" }}
               <div class="ml-0 rounded-full bg-[#000E18] p-[14px]">
                 <img
                   src="/images/icons/mail-white.svg"
@@ -83,8 +83,8 @@
         variant="withIcon"
         size="lg"
         rounded="lg"
-        @click="router.push('/login')"
-        >Get Started
+        @click="router.push(isLoggedIn ? '/vendor' : '/login')"
+        >{{ isLoggedIn ? "Dashboard" : "Get Started" }}
         <div class="-mr-[20px] ml-[10px] rounded-full bg-[#000E18] p-[14px]">
           <img
             src="/images/icons/mail-white.svg"
@@ -98,16 +98,20 @@
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from "~/store/useAuthStore";
+
+const authToken = useCookie("authToken");
 const router = useRouter();
+const isLoggedIn = computed(() => Boolean(authToken.value));
 const navLinks = [
   {
     name: "Home",
     to: "/",
   },
-  {
-    name: "About",
-    to: "/about",
-  },
+  // {
+  //   name: "About",
+  //   to: "/about",
+  // },
   {
     name: "Product",
     to: "/product",

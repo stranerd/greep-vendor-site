@@ -5,11 +5,14 @@
 @import "./greep.css";
 @import "./animation.css";
 @import "./google-places.css";
-@import 'animate.css';
+@import "animate.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+html {
+  scroll-behavior: smooth !important;
+}
 
 body {
   font-family: "Poppins", sans-serif;

@@ -34,7 +34,7 @@ export default () => {
       });
     },
 
-    setVendorSchedule(payload: any) {
+    updateVendorSchedule(payload: any) {
       return useCustomFetch(`${resource}/vendors/schedule`, {
         method: "POST",
         body: payload,

@@ -103,8 +103,6 @@
       </Card>
     </div>
 
-    <!-- {{ userProfile.type?.location?.location }} -->
-    <!-- {{ userProfile.vendor }} -->
     <!-- Vendor image part -->
     <div class="">
       <div class="flexs my-4 justify-between lg:my-8 lg:block">

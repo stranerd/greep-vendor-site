@@ -1,7 +1,7 @@
 <template>
   <footer class="relative py-[40px] md:py-[80px]">
     <div
-      class="container px-[20px] md:px-[2rem] flex flex-col gap-[30px] lg:gap-[0px] lg:flex-row justify-between pt-[0px] md:pt-[48px] py-[48px]"
+      class="container flex flex-col justify-between gap-[30px] px-[20px] py-[48px] pt-[0px] md:px-[2rem] md:pt-[48px] lg:flex-row lg:gap-[0px]"
     >
       <div class="grow">
         <img src="/images/logos/greep-full.svg" alt="Greep" />
@@ -9,53 +9,53 @@
       <div
         v-for="(footerItem, i) in footerLinks"
         :key="i"
-        class="grow hidden lg:block"
+        class="hidden grow lg:block"
       >
-        <h6 class="text-[16px] font-semibold mb-[16px]">
+        <h6 class="mb-[16px] text-[16px] font-semibold">
           {{ footerItem.name }}
         </h6>
         <nuxt-link
           v-for="link in footerItem.sublinks"
           :key="link.name"
           :to="link.to"
-          class="py-2 text-[14px] text-[#001726] block"
+          class="block py-2 text-[14px] text-[#001726]"
         >
           {{ link.name }}
         </nuxt-link>
       </div>
-      <div class="lg:max-w-[500px] w-full">
-        <h6 class="text-[16px] font-semibold mb-[16px]">Subscribe</h6>
-        <p class="text-[#001726] text-[16px]">
+      <div class="w-full lg:max-w-[500px]">
+        <h6 class="mb-[16px] text-[16px] font-semibold">Subscribe</h6>
+        <p class="text-[16px] text-[#001726]">
           We'll send you an update notification for you to know we are now live
         </p>
-        <div class="flex flex-col md:flex-row mt-6 mb-4 gap-4 flex-grow">
+        <div class="mb-4 mt-6 flex flex-grow flex-col gap-4 md:flex-row">
           <input
             type="text"
             placeholder="Enter your email"
-            class="border-[1px] border-[#001726] p-3 rounded-[12px] grow text-[#505050] text-[16px]"
+            class="grow rounded-[12px] border-[1px] border-[#001726] p-3 text-[16px] text-[#505050]"
           />
           <button
-            class="border-[1px] max-w-[200px] md:max-w-[100%] rounded-[12px] border-[#001726] p-3"
+            class="max-w-[200px] rounded-[12px] border-[1px] border-[#001726] p-3 md:max-w-[100%]"
           >
             Subscribe
           </button>
         </div>
-        <small class="text-[12px] max-w-[500px]">
+        <small class="max-w-[500px] text-[12px]">
           By subscribing you agree to with our
           <nuxt-link to="/">Privacy Policy</nuxt-link> and provide consent to
           receive updates from our company.
         </small>
       </div>
-      <div class="grid lg:hidden grid-cols-2 gap-[30px] lg:gap-[0px] w-full">
+      <div class="grid w-full grid-cols-2 gap-[30px] lg:hidden lg:gap-[0px]">
         <div v-for="(footerItem, i) in footerLinks" :key="i" class="grow">
-          <h6 class="text-[16px] font-semibold mb-[16px]">
+          <h6 class="mb-[16px] text-[16px] font-semibold">
             {{ footerItem.name }}
           </h6>
           <nuxt-link
             v-for="link in footerItem.sublinks"
             :key="link.name"
             :to="link.to"
-            class="py-2 text-[14px] text-[#001726] block"
+            class="block py-2 text-[14px] text-[#001726]"
           >
             {{ link.name }}
           </nuxt-link>
@@ -63,9 +63,9 @@
       </div>
     </div>
     <div
-      class="container px-[20px] md:px-[2rem] flex flex-col lg:flex-row gap-[30px] justify-between items-center"
+      class="container flex flex-col items-center justify-between gap-[30px] px-[20px] md:px-[2rem] lg:flex-row"
     >
-      <div class="flex text-[14px] flex-wrap align-center gap-6">
+      <div class="align-center flex flex-wrap gap-6 text-[14px]">
         <p>© {{ new Date().getFullYear() }} Greep. All rights reserved.</p>
         <nuxt-link class="underline" to="/"> Privacy Policy </nuxt-link>
         <nuxt-link class="underline" to="/"> Terms of Service </nuxt-link>
@@ -75,7 +75,7 @@
         <div
           v-for="(link, i) in socialIcons"
           :key="i"
-          class="bg-[#009260] rounded-full h-[32px] w-[32px] md:h-[64px] md:w-[64px] flex items-center justify-center"
+          class="flex h-[32px] w-[32px] items-center justify-center rounded-full bg-[#009260] md:h-[64px] md:w-[64px]"
         >
           <img
             :src="link.icon"
@@ -95,11 +95,11 @@ const footerLinks = ref([
     sublinks: [
       {
         name: "Features",
-        to: "/",
+        to: "/#features",
       },
       {
         name: "About us",
-        to: "/",
+        to: "/about",
       },
       {
         name: "Terms of service",
@@ -116,7 +116,7 @@ const footerLinks = ref([
     sublinks: [
       {
         name: "Blog",
-        to: "/",
+        to: "/news",
       },
       {
         name: "Greep APP",
@@ -133,7 +133,7 @@ const footerLinks = ref([
     sublinks: [
       {
         name: "FAQs",
-        to: "/",
+        to: "/#faqs",
       },
       {
         name: "Support",
@@ -141,7 +141,7 @@ const footerLinks = ref([
       },
       {
         name: "Contact us",
-        to: "/",
+        to: "/contact",
       },
     ],
   },

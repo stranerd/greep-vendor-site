@@ -101,6 +101,7 @@ export interface IUserProfile {
     location: { coords: Array<number>; location: string; description: string };
     name: string;
     website: string;
+    schedule: { schedule: ISchedule | null; timezone: string };
   };
   __type: any;
   hash: string;
@@ -111,4 +112,24 @@ interface ITimezone {
   id: string;
   name: string;
   offset: string;
+}
+
+interface ScheduleTime {
+  hr: number;
+  min: number;
+}
+
+interface ScheduleBlock {
+  active: boolean;
+  from: ScheduleTime;
+  to: ScheduleTime;
+}
+interface ISchedule {
+  mon: ScheduleBlock | null;
+  tue: ScheduleBlock | null;
+  wed: ScheduleBlock | null;
+  thu: ScheduleBlock | null;
+  fri: ScheduleBlock | null;
+  sat: ScheduleBlock | null;
+  sun: ScheduleBlock | null;
 }
