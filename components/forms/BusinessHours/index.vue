@@ -111,12 +111,8 @@
                       class="border border-[#999]"
                       :disabled="!editBusinessHours"
                     >
-                      <span class="">From</span>
-                      <!-- <SelectValue
-                        placeholder="Select time range"
-                        class="ml-auto mr-2 block text-black"
-                        >hello</SelectValue
-                      > -->
+                      <span class="">To</span>
+
                       <span class="ml-auto block text-black">
                         {{ convertTo12HourFormat(activity.to) }}</span
                       >
