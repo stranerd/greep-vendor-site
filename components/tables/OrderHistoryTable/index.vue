@@ -6,7 +6,7 @@
         <TableRow>
           <TableHead>Order</TableHead>
           <TableHead>Date</TableHead>
-          <TableHead>Customer</TableHead>
+          <TableHead>Customers</TableHead>
           <TableHead>Customer Address</TableHead>
           <TableHead>Payment status</TableHead>
           <TableHead>Status</TableHead>

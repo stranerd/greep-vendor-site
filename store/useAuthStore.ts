@@ -64,7 +64,6 @@ export const useAuthStore = defineStore(
     const loginUser = async (payload: LoginPayload) => {
       const { $api } = useNuxtApp();
       const { toast } = useToast();
-
       apiLoadingStates.value.login = API_STATES.LOADING;
 
       const { data, error } = await $api.auth.signin(payload);
@@ -81,6 +80,8 @@ export const useAuthStore = defineStore(
         completeLogin(data);
         apiLoadingStates.value.login = API_STATES.SUCCESS;
       }
+
+      apiLoadingStates.value.login = API_STATES.IDLE;
     };
 
     const signUpUser = async (payload: SignUpPayload) => {

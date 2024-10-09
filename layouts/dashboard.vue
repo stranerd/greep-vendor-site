@@ -1,17 +1,30 @@
 <script setup lang="ts">
 import { useAuthStore } from "@/store/useAuthStore";
+import { useMarketPlaceStore } from "~/store/useMarketplace";
+import { usePaymentStore } from "~/store/usePayment";
 
 import { useUploadStore } from "~/store/useUploadStore";
 
 const uploadStore = useUploadStore();
 const authStore = useAuthStore();
+const marketplaceStore = useMarketPlaceStore();
+const paymentStore = usePaymentStore();
+
 const { hasCompletedVendorProfile, hasCompletedProfile, hasVerifiedEmail } =
   storeToRefs(authStore);
 
 const route = useRoute();
 
 onMounted(async () => {
-  await authStore.getUser();
+  authStore.getUser();
+  authStore.getUserProfile();
+  paymentStore.getUserWallet();
+  marketplaceStore.getAllProducts({});
+  marketplaceStore.getAllPromotions();
+  marketplaceStore.getVendorProductTags();
+  marketplaceStore.getRecentOrders();
+  marketplaceStore.getVendorOrders();
+  marketplaceStore.getProductFoodsTags();
 });
 </script>
 

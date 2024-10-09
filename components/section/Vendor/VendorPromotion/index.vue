@@ -86,10 +86,6 @@ const overview = computed(() => [
     titleColor: "text-[#249F5D]",
   },
 ]);
-
-onMounted(async () => {
-  await getAllPromotions();
-});
 </script>
 
 <style scoped></style>

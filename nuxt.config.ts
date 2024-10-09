@@ -1,6 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+  app: {
+    head: {
+      link: [{ rel: "icon", type: "image/svg", href: "/greep.svg" }],
+    },
+  },
+  ssr: false,
+  spaLoadingTemplate: true,
   modules: [
     "@nuxtjs/tailwindcss",
     "shadcn-nuxt",
@@ -22,7 +29,6 @@ export default defineNuxtConfig({
   //   },
   // },
 
-  ssr: false,
   shadcn: {
     /**
      * Prefix for all the imported component

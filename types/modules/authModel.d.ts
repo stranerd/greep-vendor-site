@@ -102,6 +102,7 @@ export interface IUserProfile {
     name: string;
     website: string;
     schedule: { schedule: ISchedule | null; timezone: string };
+    tags: { string: number };
   };
   __type: any;
   hash: string;

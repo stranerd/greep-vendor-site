@@ -335,7 +335,6 @@ const paymentStore = usePaymentStore();
 const { apiLoadingStates, userProfile, user } = storeToRefs(authStore);
 const { getUserProfile, updateUserProfile, updateVendorRoles } = authStore;
 
-const { getUserWallet } = paymentStore;
 const { wallet } = storeToRefs(paymentStore);
 const { toast } = useToast();
 const editDetails = ref<{
@@ -514,13 +513,8 @@ const closeDialog = async (dialog: "vendor" | "user") => {
   isProfileDialogOpen.value = false;
   // }
 
-  await getUserProfile();
-};
-
-onMounted(() => {
   getUserProfile();
-  getUserWallet();
-});
+};
 
 const fileUploader = async (data: {
   fieldName: string;

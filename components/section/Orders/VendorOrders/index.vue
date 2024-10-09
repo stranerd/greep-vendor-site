@@ -25,12 +25,35 @@
         /> -->
       </div>
     </form>
+
     <div class="flex">
       <p
         class="mr-[31px] flex items-center gap-[10px] text-[14px] leading-[21px]"
       >
-        <span class="h-[7px] w-[7px] rounded-full bg-[#000]"> </span>
-        Sort by: Latest Item
+        <client-only>
+          <DropdownMenu>
+            <DropdownMenuTrigger as-child>
+              <div class="">
+                <Button class="flex w-44 justify-start gap-x-2">
+                  <Arrow3Icon class="h-5 w-5 text-white" />
+                  <span class="flex-1 text-sm">{{
+                    selectedSortOption.label
+                  }}</span></Button
+                >
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <!-- <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator /> -->
+              <DropdownMenuItem
+                v-for="option in sortOptions"
+                @click="selectedSortOption = option"
+              >
+                {{ option.label }}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </client-only>
       </p>
       <Button
         variant="primary"
@@ -54,7 +77,7 @@
   <Skeleton
     v-if="
       marketplaceLoadingStates.allOrders === API_STATES.LOADING &&
-      orders.length === 0
+      ordersList.length === 0
     "
     class="h-[500px] w-full"
   />
@@ -67,7 +90,7 @@
     />
     <div v-else class="flex h-full flex-col justify-between">
       <div class="h-full max-h-[67vh] min-h-[66vh] overflow-y-scroll">
-        <VendorHistoryTable source="page" :items="orders" />
+        <VendorHistoryTable source="page" :items="ordersList" />
       </div>
       <Pagination
         :meta="orderMeta"
@@ -84,6 +107,7 @@ import { Search, CirclePlus, LoaderCircle } from "lucide-vue-next";
 import { API_STATES } from "~/services/constants";
 
 import { useMarketPlaceStore } from "~/store/useMarketplace";
+import { Arrow3Icon } from "@placetopay/iconsax-vue/outline";
 const marketPlaceStore = useMarketPlaceStore();
 
 const { orders, marketplaceLoadingStates, orderMeta } =
@@ -93,12 +117,75 @@ const { getVendorOrders } = useMarketPlaceStore();
 const isDialogOpen = ref(false);
 
 const searchTerm = ref("");
+const sortOptions = ref([
+  {
+    label: "Latest Item",
+    sortQuery: [{ field: "createdAt", desc: true }],
+  },
+  {
+    label: "Most Sold",
+    sortQuery: [{ field: "meta.orders", desc: true }],
+  },
+  {
+    label: "Highest In Price",
+    sortQuery: [{ field: "price.amount", desc: true }],
+  },
+  {
+    label: "Lowest In Price",
+    sortQuery: [{ field: "price.amount", desc: false }],
+  },
+]);
+
+const selectedSortOption = ref(sortOptions.value[0]);
 
 const searchOrders = debounce(async () => {
   await getVendorOrders({
     search: { value: searchTerm.value, fields: ["dropoffNote", "email"] },
   });
 }, 1500);
+
+const ordersList = computed(() => {
+  const regex = new RegExp(searchTerm.value, "i");
+  return orders.value.filter((item) => {
+    const products = Object.values(item.users).map((user) => ({
+      name: user.bio.name,
+      publicName: user.publicName,
+    }));
+
+    const productTitle = Object.values(item.products)
+      .map(({ title }) => title)
+      .join(" ");
+    const productUsers = Object.values(item.products).map(({ user }) => ({
+      name: user.bio.name,
+      publicName: user.publicName,
+    }));
+
+    const address = { from: item.from.location, to: item.to.location };
+    const Searchable = `${address.from} ${address.to}`;
+    const SearchableProduct = products
+      .map((i) => `${Object.values(i.name).join(" ")} ${i.publicName}`)
+      .join(" ");
+    const SearchableProductUsers = productUsers
+      .map((i) => `${Object.values(i.name).join(" ")} ${i.publicName}`)
+      .join(" ");
+
+    const st = [
+      Searchable,
+      SearchableProduct,
+      SearchableProductUsers,
+      productTitle,
+    ].join(" ");
+    const checkOrder = st
+      .toLowerCase()
+      .includes(searchTerm.value.toLowerCase());
+
+    if (checkOrder) return item;
+  });
+  // return orders.value.filter(
+  //   (item) => item,
+  //   // item.toLowerCase().includes(searchTerm.value.toLowerCase()),
+  // );
+});
 
 const paginateData = (params: { page: number }) => {
   let payload = { ...params } as Record<string, any>;

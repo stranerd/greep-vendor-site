@@ -131,5 +131,6 @@ export interface IOrders {
   __type: string;
   hash: string;
   users: Array<OrderUser>;
+  products: Array<IProduct>;
   activeStatus: "created" | "accepted" | "shipped";
 }

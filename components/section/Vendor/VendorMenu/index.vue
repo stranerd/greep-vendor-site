@@ -11,6 +11,7 @@
           <Separator orientation="vertical" />
           <Input
             type="search"
+            v-model="searchTerm"
             placeholder="Search "
             class="h-[48px] w-full appearance-none rounded-[99px] bg-background px-[48px] shadow-none lg:w-full"
           />
@@ -18,29 +19,41 @@
           <img
             class="absolute right-4 top-[50%] h-[24px] w-[24px] translate-y-[-50%] text-muted-foreground"
             src="/images/icons/arrangevertical.svg"
-            alt="Arrange"
+            alt="Arrange "
           />
         </div>
       </form>
       <div class="flex">
         <p
-          class="fit mr-[31px] flex w-[224px] items-center gap-[10px] text-[14px] leading-[21px]"
+          class="fit mr-[31px] flex items-center gap-[10px] text-[14px] leading-[21px]"
         >
-          Sort&nbsp;by:
-          <Select>
-            <SelectTrigger>
-              <SelectValue placeholder="Lastest Item" class="border-none" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem
-                  :value="value"
-                  v-for="{ label, value } in sortOptions"
-                  >{{ label }}
-                </SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <client-only>
+            <DropdownMenu>
+              <DropdownMenuTrigger as-child>
+                <div class="">
+                  <Button class="flex w-44 justify-start gap-x-2">
+                    <Arrow3Icon class="h-5 w-5 text-white" />
+                    <span class="flex-1 text-sm">{{
+                      selectedSortOption.label
+                    }}</span></Button
+                  >
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <!-- <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator /> -->
+                <DropdownMenuItem
+                  v-for="option in sortOptions"
+                  @click="
+                    getAllProducts(option.sortQuery);
+                    selectedSortOption = option;
+                  "
+                >
+                  {{ option.label }}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </client-only>
         </p>
 
         <Button
@@ -103,22 +116,55 @@
           @action="getAllProducts()"
         />
         <div v-else>
-          <div
-            v-if="products?.length > 0"
-            class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4"
-          >
-            <ItemCard
-              v-for="(item, i) in products"
-              :cardData="item"
-              @view="
-                getSingleProduct(item.id);
-                router.push({
-                  name: GP_ROUTES.VENDOR.FOOD.MENU_DETAILS,
-                  params: { id: item.id },
-                });
-              "
-              @trigger-edit="triggerEdit"
-            />
+          <div v-if="VendorProducts?.length > 0">
+            <div class="hide-scrollbar grid w-full gap-5">
+              <div
+                :value="tag.id"
+                v-for="tag in VendorProducts"
+                class="hide-scrollbar max-w-full gap-5 overflow-scroll"
+              >
+                <h2
+                  open
+                  class="mb-1 flex cursor-pointer items-end gap-2 text-lg font-medium capitalize"
+                  @click="tag.isOpen = !tag.isOpen"
+                >
+                  <ArrowUp2Icon
+                    class="h-6 w-6 stroke-1 duration-500"
+                    :class="{ 'rotate-180': tag.isOpen }"
+                  />
+                  <span class="text-base"> {{ tag.title }}</span>
+                  <span class="text-sm font-light lowercase text-gray-600"
+                    >{{ tag.products.length }} item<span
+                      v-if="tag.products.length > 1"
+                      >s</span
+                    ></span
+                  >
+                </h2>
+
+                <transition name="fade" mode="out-in">
+                  <div
+                    v-if="tag.isOpen"
+                    class="hide-scrollbar w-full overflow-scroll"
+                  >
+                    <div class="hide-scrollbar flex gap-4">
+                      <ItemCard
+                        v-for="(item, i) in tag.products"
+                        :cardData="item"
+                        class="min-w-60 max-w-60"
+                        @view="
+                          getSingleProduct(item.id);
+                          router.push({
+                            name: GP_ROUTES.VENDOR.FOOD.MENU_DETAILS,
+                            params: { id: item.id },
+                          });
+                        "
+                        @trigger-edit="triggerEdit"
+                      />
+                    </div>
+                  </div>
+                </transition>
+              </div>
+            </div>
           </div>
           <DisplayState
             v-else
@@ -159,10 +205,16 @@ import { Search, CirclePlus } from "lucide-vue-next";
 import { API_STATES } from "~/services/constants";
 import { useMarketPlaceStore } from "@/store/useMarketplace";
 import { GP_ROUTES } from "~/constants/route-names";
+import { ArrowUp2Icon, Arrow3Icon } from "@placetopay/iconsax-vue/outline";
+import type { IProduct } from "~/types/modules/marketPlaceModel";
 
 const marketplaceStore = useMarketPlaceStore();
-const { products, marketplaceLoadingStates } = storeToRefs(marketplaceStore);
-const { getAllProducts, getSingleProduct } = marketplaceStore;
+const { products, marketplaceLoadingStates, vendorProductTags } = storeToRefs(
+  useMarketPlaceStore(),
+);
+
+const { getAllProducts, getSingleProduct, getVendorProductTags } =
+  marketplaceStore;
 
 const router = useRouter();
 const isDialogOpen = ref(false);
@@ -171,12 +223,75 @@ const mode = ref<"create" | "edit">("create");
 const selectedProduct = ref({});
 const searchTerm = ref("");
 
-const sortOptions = [
-  { label: "Latest Item", value: "latest" },
-  { label: "Most Sold", value: "most sold" },
-  { label: "Highest In Price", value: "highest" },
-  { label: "Lowest In Price", value: "lowest" },
-];
+/* Latest item -> key=createdAt, desc = true
+Most sold -> key=meta.orders, desc = true
+Highest in price -> key=price.amount, desc = true
+Lowest in price -> key=price.amount, desc = false
+*/
+const sortOptions = ref([
+  {
+    label: "Latest Item",
+    sortQuery: [{ field: "createdAt", desc: true }],
+  },
+  {
+    label: "Most Sold",
+
+    sortQuery: [{ field: "meta.orders", desc: true }],
+  },
+  {
+    label: "Highest In Price",
+    sortQuery: [{ field: "price.amount", desc: true }],
+  },
+  {
+    label: "Lowest In Price",
+    sortQuery: [{ field: "price.amount", desc: false }],
+  },
+]);
+
+const selectedSortOption = ref(sortOptions.value[0]);
+
+interface VendorProduct {
+  id: string;
+  title: string;
+  keyWords: string[];
+  products: IProduct[];
+  isOpen?: boolean;
+}
+
+const VendorProductsList = ref<VendorProduct[]>([]);
+
+watch(
+  products,
+  () => {
+    VendorProductsList.value = marketplaceStore.vendorProductTags
+      .map(({ id, title }) => ({
+        id,
+        title,
+        isOpen: true,
+        keyWords: products.value
+          .filter((item) => item.tagIds.includes(id))
+          .map((i) => i.title),
+        products: products.value.filter((item) => item.tagIds.includes(id)),
+      }))
+      .filter((item: VendorProduct) => item.products.length > 0);
+  },
+  { deep: true, immediate: true },
+);
+
+const VendorProducts = ref<any[]>([]);
+
+watch(
+  searchTerm,
+  () => {
+    const regex = new RegExp(searchTerm.value, "i");
+    VendorProducts.value = VendorProductsList.value.filter(
+      (item) =>
+        item.title.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+        item.keyWords.some((key) => regex.test(key)),
+    );
+  },
+  { deep: true, immediate: true },
+);
 
 const closeModal = () => {
   isDialogOpen.value = false;
@@ -197,6 +312,7 @@ const triggerEdit = (product: any) => {
 
 onMounted(() => {
   getAllProducts({});
+  getVendorProductTags();
 });
 </script>
 

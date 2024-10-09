@@ -29,7 +29,7 @@
         />
         <div class="flex flex-1 flex-col gap-1 text-sm text-[#7C7C7C]">
           <h2 class="text-xl font-bold text-black">{{ product?.title }}</h2>
-          <h2 class="max-w-[60%] text-xs">
+          <h2 class="max-w-[60%] text-sm">
             {{ product?.description }}
           </h2>
 
@@ -60,10 +60,24 @@
           </div>
 
           <div class="mt-4 flex w-full items-center justify-between">
-            <div class="flex gap-1 text-primary">
+            <Button
+              variant="ghost"
+              class="flex gap-2 text-base text-primary"
+              @click="isDialogOpen = true"
+            >
               <span class="">Edit</span>
-              <EditIcon class="h5 mr-4 w-5" />
-            </div>
+              <EditIcon class="mr-4 h-5 w-5" />
+            </Button>
+
+            <client-only>
+              <CreateMenuModal
+                :isOpen="isDialogOpen"
+                mode="edit"
+                :selectedProduct="product"
+                @close="closeModal"
+                @completedCreation="completeProductCreation"
+              />
+            </client-only>
             <client-only>
               <div class="flex items-center space-x-2">
                 <Label
@@ -74,7 +88,12 @@
                 <Switch
                   class="data-[state=checked]:bg-[#10BB76]"
                   id="availablity"
-                  v-model:checked="availability"
+                  :checked="product?.inStock"
+                  :disabled="
+                    marketplaceLoadingStates.updateProduct ===
+                    API_STATES.LOADING
+                  "
+                  @update:checked="handleChange"
                 />
               </div>
             </client-only>
@@ -127,20 +146,20 @@
             <div class="flex items-center gap-10">
               <div class="">
                 <HeartIconFill
-                  class="h-8 w-8 text-red-500"
+                  class="h-6 w-6 text-red-500"
                   v-if="review.is_liked"
                   @click="review.is_liked = !review.is_liked"
                 />
                 <HeartIconLine
-                  class="h-8 w-8"
+                  class="h-6 w-6"
                   v-else
                   @click="review.is_liked = !review.is_liked"
                 />
               </div>
               <div
-                class="flex w-24 cursor-pointer items-center justify-center rounded bg-[#001726] p-1"
+                class="flex w-20 cursor-pointer items-center justify-center rounded bg-[#001726] p-1"
               >
-                <Send2Icon class="h-8 w-8 text-white" />
+                <Send2Icon class="h-6 w-6 text-white" />
               </div>
             </div>
           </div>
@@ -166,10 +185,34 @@ import { useMarketPlaceStore } from "@/store/useMarketplace";
 const marketplaceStore = useMarketPlaceStore();
 const { singleProduct: product, marketplaceLoadingStates } =
   storeToRefs(marketplaceStore);
-const { getSingleProduct } = marketplaceStore;
+const { getSingleProduct, updateProduct, getAllProducts } = marketplaceStore;
 const availability = ref(true);
+const isDialogOpen = ref(false);
+const handleChange = async (e: any) => {
+  product.value.inStock = e;
+  const { banner, ...payload } = product.value;
+  console.log(e);
+  const data = { ...payload, inStock: e };
+  const form = new FormData();
+
+  Object.keys(data).forEach((item, key) => {
+    form.append(item, JSON.stringify(data[item]));
+  });
+
+  await updateProduct(product.value.id, form);
+};
 
 const route = useRoute();
+
+const closeModal = () => {
+  isDialogOpen.value = false;
+};
+
+const completeProductCreation = () => {
+  closeModal();
+  getAllProducts({});
+};
+
 const reviews = ref([
   {
     name: "James Roland",

@@ -25,8 +25,33 @@
         <p
           class="mr-[31px] flex items-center gap-[10px] text-[14px] leading-[21px]"
         >
-          <span class="h-[7px] w-[7px] rounded-full bg-[#000]"> </span>
-          Sort by: Latest Item
+          <client-only>
+            <DropdownMenu>
+              <DropdownMenuTrigger as-child>
+                <div class="">
+                  <Button class="flex w-44 justify-start gap-x-2">
+                    <Arrow3Icon class="h-5 w-5 text-white" />
+                    <span class="flex-1 text-sm">{{
+                      selectedSortOption.label
+                    }}</span></Button
+                  >
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <!-- <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator /> -->
+                <DropdownMenuItem
+                  v-for="option in sortOptions"
+                  @click="
+                    getAllProducts(option.sortQuery);
+                    selectedSortOption = option;
+                  "
+                >
+                  {{ option.label }}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </client-only>
         </p>
 
         <Button
@@ -89,10 +114,10 @@
           @action="getAllProducts()"
         />
         <div v-else>
-          <div v-if="products?.length > 0">
+          <div v-if="productsList?.length > 0">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
               <ItemCard
-                v-for="(item, i) in products"
+                v-for="(item, i) in productsList"
                 :key="i"
                 :cardData="item"
                 @triggerEdit="triggerEdit"
@@ -137,6 +162,7 @@ import { debounce } from "~/lib/utils";
 import { Search, CirclePlus } from "lucide-vue-next";
 import { API_STATES } from "~/services/constants";
 import { useMarketPlaceStore } from "@/store/useMarketplace";
+import { SortIcon, Arrow3Icon } from "@placetopay/iconsax-vue/outline";
 
 const marketplaceStore = useMarketPlaceStore();
 const { products, marketplaceLoadingStates, productsMeta } =
@@ -149,11 +175,39 @@ const mode = ref("create");
 const selectedProduct = ref({});
 const searchTerm = ref("");
 
+const sortOptions = ref([
+  {
+    label: "Latest Item",
+    sortQuery: [{ field: "createdAt", desc: true }],
+  },
+  {
+    label: "Most Sold",
+    sortQuery: [{ field: "meta.orders", desc: true }],
+  },
+  {
+    label: "Highest In Price",
+    sortQuery: [{ field: "price.amount", desc: true }],
+  },
+  {
+    label: "Lowest In Price",
+    sortQuery: [{ field: "price.amount", desc: false }],
+  },
+]);
+
+const selectedSortOption = ref(sortOptions.value[0]);
+
 const searchProducts = debounce(async () => {
   await getAllProducts({
     search: { value: searchTerm.value, fields: ["dropoffNote", "email"] },
   });
 }, 1500);
+
+const productsList = computed(() => {
+  const regex = new RegExp(searchTerm.value, "i");
+  return products.value.filter((item) =>
+    item.title.toLowerCase().includes(searchTerm.value.toLowerCase()),
+  );
+});
 
 const paginateData = (params: { page: number }) => {
   let payload = { ...params } as Record<string, any>;
