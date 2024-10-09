@@ -12,7 +12,9 @@
       </div>
       <div class="flex-1">
         <div class="mb-2 flex h-[44px] items-center px-2 lg:px-3">
-          <h4 class="ml-4 text-[16px] font-bold leading-[28px]">Admin Board</h4>
+          <h4 class="ml-4 text-[16px] font-bold leading-[28px]">
+            {{ userProfile.vendor?.name }}
+          </h4>
         </div>
 
         <nav class="grid items-start px-2 text-sm font-medium lg:px-3">
@@ -76,6 +78,8 @@ import { useAuthStore } from "@/store/useAuthStore";
 
 const authStore = useAuthStore();
 const showLogoutModal = ref(false);
+
+const { userProfile } = storeToRefs(useAuthStore());
 const { getUserProfile, updateUserProfile, logoutUser } = authStore;
 
 const userType = computed(() =>
