@@ -107,16 +107,22 @@ import type { IOrders } from "~/types/modules/marketPlaceModel";
 import { API_STATES } from "~/services/constants";
 
 const marketplaceStore = useMarketPlaceStore();
-const { orders, marketplaceLoadingStates } = storeToRefs(marketplaceStore);
+const { marketplaceLoadingStates } = storeToRefs(marketplaceStore);
 type OrderTypes = "created" | "accepted" | "shipped";
 
+const props = defineProps({
+  orders: {
+    type: Array as PropType<IOrders[]>,
+    required: true,
+  },
+});
 const marketOrders = computed(() => {
   return [
     {
       label: "New",
       buttonClass: "w-full bg-[#7C13FF] hover:bg-[#7C13FF]",
       message: "No new orders, kindly check back!",
-      orders: orders.value.filter(
+      orders: props.orders.filter(
         ({ activeStatus }) => activeStatus === "created",
       ),
     },
@@ -124,7 +130,7 @@ const marketOrders = computed(() => {
       label: "Kitchen",
       buttonClass: "w-full bg-[#0250C6] hover:bg-[#0250C6]",
       message: "No current orders, accept orders or check back for new order!",
-      orders: orders.value.filter(
+      orders: props.orders.filter(
         ({ activeStatus }) => activeStatus === "accepted",
       ),
     },
@@ -132,14 +138,11 @@ const marketOrders = computed(() => {
       label: "Delivery",
       buttonClass: "w-full bg-[#006D48] hover:bg-[#006D48]",
       message: "No shipped orders, ship orders or check back for new order!",
-      orders: orders.value.filter(
+      orders: props.orders.filter(
         ({ activeStatus }) => activeStatus === "shipped",
       ),
     },
   ];
-});
-onMounted(() => {
-  marketplaceStore.getVendorOrders();
 });
 </script>
 

@@ -60,10 +60,6 @@ const selectChat = (chat: IChatMetaEntity) => {
   selectedChatId.value = chat.id;
 };
 
-onMounted(() => {
-  getChatList();
-});
-
 watch(selectedChatId, () => {
   getSupportChats(selectedChatId.value);
 });

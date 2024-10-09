@@ -8,7 +8,8 @@ export const useCustomFetch = (request: any, opts?: any) => {
     onRequestError({ request, options, error }) {
       console.log({ error });
     },
-
+    // immediate: true,
+    // watch: true,
     ...opts,
     headers: {
       "Access-Token": authToken.value ? `${authToken.value}` : "",

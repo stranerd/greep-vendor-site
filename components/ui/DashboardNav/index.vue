@@ -29,7 +29,7 @@
             <div
               v-else
               class="!hover:text-[#ffffff] flex cursor-pointer items-center gap-4 rounded-[4px] px-2 py-2 text-[16px] leading-[28px] !text-[#FF5656] text-muted-foreground transition-all"
-              @click="router.push('/login')"
+              @click="logoutUser"
             >
               <component :is="navItem.icon" class="h-6 w-6" />
 
@@ -81,7 +81,7 @@
               <div class="flex">
                 <Button variant="secondary" size="icon" class="rounded-full">
                   <Avatar>
-                    <!-- <AvatarImage src="https://github.com/radix-vue.png" alt="@radix-vue" /> -->
+                    <AvatarImage :src="user?.photo?.link" alt="user" />
                     <AvatarFallback>{{ displayName[0] }}</AvatarFallback>
                   </Avatar>
                   <span class="sr-only">Toggle user menu</span>

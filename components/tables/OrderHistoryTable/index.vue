@@ -77,25 +77,21 @@ import { orderStatus, paymentStatus } from "~/lib/utils";
 
 import { useMarketPlaceStore } from "@/store/useMarketplace";
 import { GP_ROUTES } from "~/constants/route-names";
+import type { IOrders } from "~/types/modules/marketPlaceModel";
 
 const marketPlaceStore = useMarketPlaceStore();
-const { marketplaceLoadingStates, orders } = storeToRefs(marketPlaceStore);
+const { marketplaceLoadingStates } = storeToRefs(marketPlaceStore);
+
+const props = defineProps({
+  orders: { type: Array as PropType<IOrders[]>, required: true },
+  source: { type: String, default: "recent" },
+  items: { type: Array, default: () => [] },
+});
 
 const { $moment } = useNuxtApp();
 
 const orderHistory = computed(() => {
-  return orders.value.filter((order) => order.activeStatus === null);
-});
-
-const props = defineProps({
-  source: {
-    type: String,
-    default: "recent",
-  },
-  items: {
-    type: Array,
-    default: () => [],
-  },
+  return props.orders.filter((order) => order.activeStatus === null);
 });
 
 const router = useRouter();

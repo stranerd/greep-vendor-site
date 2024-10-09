@@ -12,7 +12,7 @@
           <Input
             type="search"
             v-model="searchTerm"
-            placeholder="Search "
+            placeholder="Search by category, menu title, etc. "
             class="h-[48px] w-full appearance-none rounded-[99px] bg-background px-[48px] shadow-none lg:w-full"
           />
           <Separator orientation="vertical" />
@@ -45,7 +45,7 @@
                 <DropdownMenuItem
                   v-for="option in sortOptions"
                   @click="
-                    getAllProducts(option.sortQuery);
+                    getAllProducts(JSON.stringify({ sort: option.sortQuery }));
                     selectedSortOption = option;
                   "
                 >
@@ -63,30 +63,13 @@
           @click="isDialogOpen = true"
           ><CirclePlus class="mr-[10px] h-5 w-5" /> Create Menu</Button
         >
-
-        <client-only>
-          <CreateMenuModal
-            :isOpen="isDialogOpen"
-            :mode="mode"
-            :selectedProduct="selectedProduct"
-            @close="closeModal"
-            @completedCreation="completeProductCreation"
-          />
-        </client-only>
       </div>
     </div>
     <div class="mt-6">
-      <!-- <div class="p-[10px] flex items-center gap-[10px] mb-1 cursor-pointer">
-      <img src="/images/icons/arrow-down.svg" alt="Arrow" />
-      <p class="text-[14px] text-[#999999]">
-        <strong class="mr-[10px] text-[#000]"> Grains </strong>
-        4 items
-      </p>
-    </div> -->
       <div
         v-if="
-          marketplaceLoadingStates.getProducts === API_STATES.LOADING &&
-          products?.length === 0
+          marketplaceLoadingStates.getProducts === API_STATES.LOADING ||
+          marketplaceLoadingStates.getVendorProductTags === API_STATES.LOADING
         "
         class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4"
       >
@@ -124,7 +107,6 @@
                 class="hide-scrollbar max-w-full gap-5 overflow-scroll"
               >
                 <h2
-                  open
                   class="mb-1 flex cursor-pointer items-end gap-2 text-lg font-medium capitalize"
                   @click="tag.isOpen = !tag.isOpen"
                 >
@@ -132,8 +114,8 @@
                     class="h-6 w-6 stroke-1 duration-500"
                     :class="{ 'rotate-180': tag.isOpen }"
                   />
-                  <span class="text-base"> {{ tag.title }}</span>
-                  <span class="text-sm font-light lowercase text-gray-600"
+                  <span class="text-sm font-bold"> {{ tag.title }}</span>
+                  <span class="text-sm lowercase text-[#999999]"
                     >{{ tag.products.length }} item<span
                       v-if="tag.products.length > 1"
                       >s</span
@@ -174,29 +156,16 @@
           />
         </div>
       </div>
-      <!-- <client-only>
-        <CreateMenuModal
-          :isOpen="isEditDialogOpen"
-          @close="isEditDialogOpen = false"
-          mode="edit"
-          :selectedProduct="selectedProduct"
-          @completedCreation="completeProductCreation"
-        />
-      </client-only> -->
     </div>
-
-    <!-- <div>
-    <div class="p-[10px] flex items-center gap-[10px] mb-1 cursor-pointer">
-      <img src="/images/icons/arrow-down.svg" alt="Arrow" />
-      <p class="text-[14px] text-[#999999]">
-        <strong class="mr-[10px] text-[#000]"> Seasonings </strong>
-        5 items
-      </p>
-    </div>
-    <div class="grid grid-cols-4 gap-4">
-      <ItemCard v-for="(item, i) in seasonings" :key="i" :cardData="item" />
-    </div>
-  </div> -->
+    <client-only>
+      <CreateMenuModal
+        :isOpen="isDialogOpen"
+        :mode="mode"
+        :selectedProduct="selectedProduct"
+        @close="closeModal"
+        @completedCreation="completeProductCreation"
+      />
+    </client-only>
   </div>
 </template>
 
@@ -208,13 +177,12 @@ import { GP_ROUTES } from "~/constants/route-names";
 import { ArrowUp2Icon, Arrow3Icon } from "@placetopay/iconsax-vue/outline";
 import type { IProduct } from "~/types/modules/marketPlaceModel";
 
-const marketplaceStore = useMarketPlaceStore();
 const { products, marketplaceLoadingStates, vendorProductTags } = storeToRefs(
   useMarketPlaceStore(),
 );
 
 const { getAllProducts, getSingleProduct, getVendorProductTags } =
-  marketplaceStore;
+  useMarketPlaceStore();
 
 const router = useRouter();
 const isDialogOpen = ref(false);
@@ -258,37 +226,33 @@ interface VendorProduct {
   isOpen?: boolean;
 }
 
-const VendorProductsList = ref<VendorProduct[]>([]);
+const VendorProductsInit = computed(() => {
+  const VendorProductsList = vendorProductTags.value
+    .map(({ id, title }) => ({
+      id,
+      title,
+      isOpen: true,
+      keyWords: products?.value
+        .filter((item) => item.tagIds.includes(id))
+        .map((i) => i.title),
+      products: products.value?.filter((item) => item.tagIds.includes(id)),
+    }))
+    .filter((item: VendorProduct) => item.products.length > 0);
+
+  const regex = new RegExp(searchTerm.value, "i");
+
+  return VendorProductsList.filter(
+    (item) =>
+      item.title.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+      item.keyWords.some((key) => regex.test(key)),
+  );
+});
+const VendorProducts = ref(VendorProductsInit.value);
 
 watch(
-  products,
-  () => {
-    VendorProductsList.value = marketplaceStore.vendorProductTags
-      .map(({ id, title }) => ({
-        id,
-        title,
-        isOpen: true,
-        keyWords: products.value
-          .filter((item) => item.tagIds.includes(id))
-          .map((i) => i.title),
-        products: products.value.filter((item) => item.tagIds.includes(id)),
-      }))
-      .filter((item: VendorProduct) => item.products.length > 0);
-  },
-  { deep: true, immediate: true },
-);
-
-const VendorProducts = ref<any[]>([]);
-
-watch(
-  searchTerm,
-  () => {
-    const regex = new RegExp(searchTerm.value, "i");
-    VendorProducts.value = VendorProductsList.value.filter(
-      (item) =>
-        item.title.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-        item.keyWords.some((key) => regex.test(key)),
-    );
+  VendorProductsInit,
+  (newItems) => {
+    VendorProducts.value = newItems;
   },
   { deep: true, immediate: true },
 );
@@ -309,11 +273,6 @@ const triggerEdit = (product: any) => {
   selectedProduct.value = product;
   isDialogOpen.value = true;
 };
-
-onMounted(() => {
-  getAllProducts({});
-  getVendorProductTags();
-});
 </script>
 
 <style></style>

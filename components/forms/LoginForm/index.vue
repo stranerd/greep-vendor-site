@@ -158,6 +158,10 @@ const accountFormSchema = toTypedSchema(
     language: z.string().min(1, "Please select a language."),
   }),
 );
+
+onMounted(() => {
+  apiLoadingStates.value.login = API_STATES.IDLE;
+});
 </script>
 
 <style></style>

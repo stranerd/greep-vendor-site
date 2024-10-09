@@ -1,6 +1,6 @@
 <template>
   <div>
-    <OrderHistoryTable />
+    <OrderHistoryTable v-bind="$attrs" />
   </div>
 </template>
 

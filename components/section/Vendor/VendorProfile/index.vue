@@ -192,9 +192,26 @@
                 {{ item.title }}
               </p>
               <p
-                class="flex cursor-pointer gap-2 whitespace-nowrap text-[14px] font-light leading-[20px]"
+                class="flex cursor-pointer items-center gap-2 whitespace-nowrap text-[14px] font-light leading-[20px]"
               >
-                {{ item.value || "--" }}
+                <Button
+                  class="flex h-8 justify-end text-primary"
+                  variant="secondary"
+                  v-if="item.value"
+                >
+                  Added
+                  <TickCircleIcon class="ml-2 mr-auto h-5 w-5 text-primary" />
+                </Button>
+
+                <Button
+                  class="flex h-8 justify-end text-destructive"
+                  variant="secondary"
+                  v-else
+                >
+                  Not Added
+                  <InfoCircleIcon class="ml-2 mr-auto h-5 w-5" />
+                </Button>
+
                 <EditIcon class="h-5 w-5" @click="item.uploadFunction" />
               </p>
             </div>
@@ -322,7 +339,11 @@ import {
   CallIcon,
   DocumentText1Icon,
 } from "@placetopay/iconsax-vue/outline";
-
+import {
+  InfoCircleIcon,
+  TickCircleIcon,
+  VerifyIcon,
+} from "@placetopay/iconsax-vue/bold";
 import { useUploadStore } from "~/store/useUploadStore";
 import { API_STATES } from "~/services/constants";
 import { useAuthStore } from "@/store/useAuthStore";

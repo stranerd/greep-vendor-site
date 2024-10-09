@@ -1,6 +1,6 @@
 <template>
   <PageHeader :isInnerPage="true">
-    Orders > Order #{{ route?.params?.id?.slice(0, 9) || "" }}
+    <BreadCrumb :routes="routes" small />
   </PageHeader>
   <div class="mx-auto w-full max-w-[848px]">
     <OrderDetails />
@@ -24,6 +24,17 @@ import { GP_ROUTES } from "~/constants/route-names";
 
 const marketPlaceStore = useMarketPlaceStore();
 const { getSingleOrder } = marketPlaceStore;
+
+const routes = computed(() => [
+  { route: { name: GP_ROUTES.VENDOR.ITEMS.ORDERS }, title: "Orders" },
+  {
+    route: {
+      name: GP_ROUTES.VENDOR.ITEMS.ORDER_DETAILS,
+      params: { id: route?.params?.id ?? "" },
+    },
+    title: `#${route?.params?.id?.slice(0, 9)}` || "",
+  },
+]);
 
 onMounted(() => {
   const id = (route?.params?.id || "") as string;

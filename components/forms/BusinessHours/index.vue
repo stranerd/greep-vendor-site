@@ -60,14 +60,16 @@
             class="flex lg:items-center"
             v-for="(activity, days) in activeBusinessHours"
           >
-            <div class="flex w-48 gap-x-3">
+            <div class="flex w-40 gap-x-3 lg:w-48">
               <Switch
                 class="data-[state=checked]:bg-[#10BB76]"
                 id="availablity"
                 :disabled="!editBusinessHours"
                 v-model:checked="activity.active"
               />
-              <span class="capitalize">{{ dayMap[days] }}</span>
+              <span class="text-sm capitalize lg:text-base">{{
+                dayMap[days]
+              }}</span>
             </div>
 
             <transition mode="out-in" name="fade" class="">

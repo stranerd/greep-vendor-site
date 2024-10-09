@@ -1,7 +1,9 @@
 <template>
-  <div class="min-h-[80vh]">
-    <div class="mt-[25px] flex items-center justify-between">
-      <form class="w-full max-w-[576px]">
+  <div class="min-h-[80vh] w-full">
+    <div
+      class="mt-[25px] flex w-full flex-col items-center justify-between gap-4 lg:flex-row"
+    >
+      <form class="w-full max-w-full lg:max-w-[576px]">
         <div class="relative flex w-full">
           <Search
             class="absolute left-4 top-[50%] h-[24px] w-[24px] translate-y-[-50%] text-muted-foreground"
@@ -9,7 +11,7 @@
           <Separator orientation="vertical" />
           <Input
             type="search"
-            placeholder="Search "
+            placeholder="Search by item title "
             v-model="searchTerm"
             class="h-[48px] w-full appearance-none rounded-[99px] bg-background px-[48px] shadow-none lg:w-full"
             @input="searchProducts"
@@ -21,21 +23,19 @@
           />
         </div>
       </form>
-      <div class="flex">
+      <div class="grid w-full grid-cols-2 justify-between gap-3 lg:w-fit">
         <p
-          class="mr-[31px] flex items-center gap-[10px] text-[14px] leading-[21px]"
+          class="flex items-center gap-[10px] text-[14px] leading-[21px] lg:mr-[31px]"
         >
           <client-only>
             <DropdownMenu>
               <DropdownMenuTrigger as-child>
-                <div class="">
-                  <Button class="flex w-44 justify-start gap-x-2">
-                    <Arrow3Icon class="h-5 w-5 text-white" />
-                    <span class="flex-1 text-sm">{{
-                      selectedSortOption.label
-                    }}</span></Button
-                  >
-                </div>
+                <Button class="flex w-full justify-start gap-x-2 lg:w-44">
+                  <Arrow3Icon class="h-5 w-5 text-white" />
+                  <span class="flex-1 text-sm">{{
+                    selectedSortOption.label
+                  }}</span></Button
+                >
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <!-- <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -43,7 +43,7 @@
                 <DropdownMenuItem
                   v-for="option in sortOptions"
                   @click="
-                    getAllProducts(option.sortQuery);
+                    getAllProducts(JSON.stringify({ sort: option.sortQuery }));
                     selectedSortOption = option;
                   "
                 >
@@ -56,21 +56,11 @@
 
         <Button
           variant="primary"
-          size="lg"
+          class="lg:w-44"
           rounded="md"
           @click="isDialogOpen = true"
           ><CirclePlus class="mr-[10px] h-5 w-5" /> Create Item</Button
         >
-
-        <client-only>
-          <CreateProductModal
-            :isOpen="isDialogOpen"
-            :mode="mode"
-            :selectedProduct="selectedProduct"
-            @close="isDialogOpen = false"
-            @completedCreation="completeProductCreation"
-          />
-        </client-only>
       </div>
     </div>
     <div class="mt-6">
@@ -82,10 +72,7 @@
       </p>
     </div> -->
       <div
-        v-if="
-          marketplaceLoadingStates.getProducts === API_STATES.LOADING &&
-          products?.length === 0
-        "
+        v-if="marketplaceLoadingStates.getProducts === API_STATES.LOADING"
         class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4"
       >
         <div
@@ -141,6 +128,15 @@
         </div>
       </div>
     </div>
+    <client-only>
+      <CreateProductModal
+        :isOpen="isDialogOpen"
+        :mode="mode"
+        :selectedProduct="selectedProduct"
+        @close="isDialogOpen = false"
+        @completedCreation="completeProductCreation"
+      />
+    </client-only>
 
     <!-- <div>
     <div class="p-[10px] flex items-center gap-[10px] mb-1 cursor-pointer">

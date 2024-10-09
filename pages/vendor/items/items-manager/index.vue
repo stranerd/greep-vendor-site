@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center">
-    <h1 class="text-lg font-semibold md:text-2xl">Food Manager > Menu</h1>
+    <BreadCrumb :routes="routes"/>
   </div>
   <VendorItem />
 </template>
@@ -15,6 +15,13 @@ definePageMeta({
 useHead({
   title: "Vendors Items",
 });
+const routes = ref([
+  {
+    route: { name: GP_ROUTES.VENDOR.ITEMS.ITEMS_MANAGER },
+    title: "Item Manager",
+  },
+  { route: { name: GP_ROUTES.VENDOR.ITEMS.ITEMS_MANAGER }, title: "Items" },
+]);
 </script>
 
 <style></style>

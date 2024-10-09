@@ -191,13 +191,7 @@ const updateRange = () => {
   }
 };
 
-onMounted(() => {
-  getDashboardData({
-    start: new Date($moment().startOf("M")),
-    end: new Date($moment().endOf("M")),
-  });
-  getRecentOrders();
-});
+onMounted(() => {});
 </script>
 
 <style></style>

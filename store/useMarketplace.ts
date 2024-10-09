@@ -18,7 +18,7 @@ export const useMarketPlaceStore = defineStore(
     const products = ref<Array<IProduct>>([]);
     const productsMeta = ref({});
     const vendorProductTags = ref<any[]>([]);
-    const singleProduct = ref({});
+    const singleProduct = ref<IProduct>();
     const promotions = ref([]);
     const productFoodsTags = ref<{ id: string; title: string }[]>([]);
     const productItemsTags = ref<{ id: string; title: string }[]>([]);
@@ -72,8 +72,8 @@ export const useMarketPlaceStore = defineStore(
           { field: "data.vendorId", value: authStore.user.id },
         ]),
         sort: JSON.stringify([{ field: "createdAt", desc: true }]),
-        // ...params,
-        limit: 15,
+        ...payload,
+        limit: 20,
         lazy: false,
       });
 
@@ -168,6 +168,7 @@ export const useMarketPlaceStore = defineStore(
         return { error: error.value };
       }
       if (data.value) {
+        await getVendorProductTags();
         marketplaceLoadingStates.value.getProducts = API_STATES.SUCCESS;
         products.value = data.value.results;
         productsMeta.value = { ...data.value.pages, ...data.value.docs };
@@ -386,6 +387,7 @@ export const useMarketPlaceStore = defineStore(
         ]),
         sort: JSON.stringify([{ field: "createdAt", desc: true }]),
         lazy: false,
+        ...payload,
       });
 
       if (error.value) {
@@ -710,9 +712,9 @@ export const useMarketPlaceStore = defineStore(
       marketplaceLoadingStates.value.getRecommendedFoodsTags =
         API_STATES.LOADING;
       if (data.value) {
-        productFoodsTags.value = data.value?.results;
         marketplaceLoadingStates.value.getRecommendedFoodsTags =
           API_STATES.SUCCESS;
+        productFoodsTags.value = data.value?.results;
       }
     };
 
@@ -727,12 +729,13 @@ export const useMarketPlaceStore = defineStore(
     const getVendorProductTags = async () => {
       const { $api } = useNuxtApp();
       const { toast } = useToast();
-      const authStore = useAuthStore();
+
+      const { userProfile } = storeToRefs(useAuthStore());
 
       marketplaceLoadingStates.value.getVendorProductTags = API_STATES.LOADING;
 
       const { data, error } = await $api.interactions.getVendorProductTags(
-        Object.keys(Object(authStore.userProfile.vendor?.tags)),
+        Object.keys(Object(userProfile.value.vendor?.tags)),
       );
 
       if (error.value) {
@@ -741,10 +744,13 @@ export const useMarketPlaceStore = defineStore(
           title: "Error",
           description: error.value?.data?.[0]?.message || "",
         });
+        marketplaceLoadingStates.value.getVendorProductTags = API_STATES.ERROR;
         return { error: error.value };
       }
-      if (data.value) {
-        vendorProductTags.value = data.value.results;
+      if (data?.value?.results) {
+        marketplaceLoadingStates.value.getVendorProductTags =
+          API_STATES.SUCCESS;
+        vendorProductTags.value = data.value?.results;
       }
     };
 

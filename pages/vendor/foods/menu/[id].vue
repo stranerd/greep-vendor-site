@@ -1,12 +1,27 @@
 <template>
   <div class="flex items-center">
-    <h1 class="text-lg font-semibold md:text-2xl">Food > Menu> Jollof Rice</h1>
+    <BreadCrumb
+      :routes="
+        marketplaceLoadingStates.getSingleProduct !== API_STATES.LOADING
+          ? routes
+          : []
+      "
+      :loading="
+        marketplaceLoadingStates.getSingleProduct === API_STATES.LOADING
+      "
+    />
   </div>
   <VendorMenuDetails />
 </template>
 
 <script setup lang="ts">
 import { GP_ROUTES } from "~/constants/route-names";
+import { useMarketPlaceStore } from "@/store/useMarketplace";
+import { API_STATES } from "~/services/constants";
+
+const marketplaceStore = useMarketPlaceStore();
+const { singleProduct: product, marketplaceLoadingStates } =
+  storeToRefs(marketplaceStore);
 definePageMeta({
   layout: "dashboard",
   middleware: ["authenticated", "vendor-foods"],
@@ -16,6 +31,20 @@ definePageMeta({
 useHead({
   title: "Vendor Menu",
 });
+
+const route = useRoute();
+
+const routes = computed(() => [
+  { route: { name: GP_ROUTES.VENDOR.FOOD.MENU }, title: "Food Manager" },
+  { route: { name: GP_ROUTES.VENDOR.FOOD.MENU }, title: "Menu" },
+  {
+    route: {
+      name: GP_ROUTES.VENDOR.FOOD.MENU_DETAILS,
+      params: { id: route.params.id },
+    },
+    title: product.value?.title ?? "",
+  },
+]);
 </script>
 
 <style scoped></style>

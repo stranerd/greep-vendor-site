@@ -10,6 +10,7 @@ export default () => {
         method: "POST",
       });
     },
+
     signup(payload: SignUpPayload) {
       return useCustomFetch(`${resource}/emails/signup`, {
         method: "POST",

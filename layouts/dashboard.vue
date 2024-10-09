@@ -2,20 +2,22 @@
 import { useAuthStore } from "@/store/useAuthStore";
 import { useMarketPlaceStore } from "~/store/useMarketplace";
 import { usePaymentStore } from "~/store/usePayment";
-
+import { useSupportStore } from "~/store/useSupport";
 import { useUploadStore } from "~/store/useUploadStore";
 
+const { $moment } = useNuxtApp();
 const uploadStore = useUploadStore();
 const authStore = useAuthStore();
 const marketplaceStore = useMarketPlaceStore();
 const paymentStore = usePaymentStore();
+const supportStore = useSupportStore();
 
 const { hasCompletedVendorProfile, hasCompletedProfile, hasVerifiedEmail } =
   storeToRefs(authStore);
 
 const route = useRoute();
 
-onMounted(async () => {
+onBeforeMount(async () => {
   authStore.getUser();
   authStore.getUserProfile();
   paymentStore.getUserWallet();
@@ -25,6 +27,12 @@ onMounted(async () => {
   marketplaceStore.getRecentOrders();
   marketplaceStore.getVendorOrders();
   marketplaceStore.getProductFoodsTags();
+  supportStore.getChatList();
+
+  marketplaceStore.getDashboardData({
+    start: new Date($moment().startOf("M")),
+    end: new Date($moment().endOf("M")),
+  });
 });
 </script>
 
