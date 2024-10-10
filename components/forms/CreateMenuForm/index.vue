@@ -1,6 +1,10 @@
 <template>
-  <div class="mt-4 max-h-[80vh] w-full overflow-auto">
-    <form class="space-y-8 p-2" @submit="createNewFoodProduct">
+  <div>
+    <form
+      class="space-y-8 p-2"
+      @submit="createNewFoodProduct"
+      v-if="openMainModal"
+    >
       <div class="grid gap-4">
         <div class="grid gap-2">
           <FormField v-slot="{ componentField }" name="title">
@@ -107,13 +111,13 @@
                 <CommandInput
                   placeholder="Search category..."
                   v-if="
-                    marketplaceLoadingStates.getRecommendedFoodsTags !==
+                    marketplaceLoadingStates.getVendorFoodsTags !==
                     API_STATES.LOADING
                   "
                 />
                 <template
                   v-if="
-                    marketplaceLoadingStates.getRecommendedFoodsTags ===
+                    marketplaceLoadingStates.getVendorFoodsTags ===
                     API_STATES.LOADING
                   "
                 >
@@ -128,7 +132,7 @@
                 <CommandList v-else>
                   <CommandGroup class="max-h-[145px] overflow-auto">
                     <CommandItem
-                      v-for="tag in productFoodTagItems"
+                      v-for="tag in productFoodsTags"
                       :key="tag.id"
                       :value="tag.id"
                       @select="toggleCategory(tag)"
@@ -157,7 +161,7 @@
                 </CommandList>
                 <CommandEmpty
                   v-if="
-                    marketplaceLoadingStates.getRecommendedFoodsTags !==
+                    marketplaceLoadingStates.getVendorFoodsTags !==
                     API_STATES.LOADING
                   "
                 >
@@ -166,7 +170,7 @@
                     <button
                       variant="outline"
                       class="mx-auto flex w-[98%] justify-center rounded-sm bg-[#F1F5F9] p-2 text-center text-xs text-muted-foreground"
-                      @click="openCreateCategoryModal = true"
+                      @click="openCategoryModal"
                     >
                       <div class="mr-2 h-4 w-4"></div>
                       <CirclePlus class="mr-2 h-4 w-4" />
@@ -179,7 +183,7 @@
                   <CommandItem
                     value="createCategory"
                     class="text-xs text-muted-foreground"
-                    @select="openCreateCategoryModal = true"
+                    @select="openCategoryModal"
                   >
                     <div class="mr-2 h-4 w-4"></div>
                     <CirclePlus class="mr-2 h-4 w-4" />
@@ -344,70 +348,13 @@
       </div>
     </form>
 
-    <Dialog class="max-h-[78vh] !max-w-[200px]" :open="openCreateCategoryModal">
-      <DialogContent :hideClose="true">
-        <DialogHeader>
-          <DialogTitle>Create New Category </DialogTitle>
-          <X
-            @click="openCreateCategoryModal = false"
-            class="2-4 absolute right-4 top-4 h-4 cursor-pointer rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
-          />
-        </DialogHeader>
-        <DialogDescription class="z-10">
-          <div class="grid gap-2">
-            <FormField v-slot="{ componentField }" name="description">
-              <FormItem>
-                <FormLabel>
-                  Title
-                  <span class="font-normal text-red-400">required</span>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter Text Here..."
-                    v-bind="componentField"
-                    v-model="newCategoryTitle"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            </FormField>
-          </div>
-        </DialogDescription>
-        <div class="mt-4 flex items-center justify-end">
-          <Button
-            type="submit"
-            class="rounded-[12px]"
-            :disabled="!newCategoryTitle"
-            @click="openConfirmCreateCategoryModal"
-          >
-            Create Category
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
-
-    <AlertDialog v-model:open="confirmCreateCategoryTag">
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Create New Item</AlertDialogTitle>
-          <AlertDialogDescription>
-            You want to create a new item
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction @click="createFoodCategoryTag"
-            ><Button
-              :loading="
-                marketplaceLoadingStates.createProductCategory ===
-                API_STATES.LOADING
-              "
-              >Continue</Button
-            ></AlertDialogAction
-          >
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <client-only>
+      <CreateProductTags
+        type="productsFoods"
+        @close="closeCategoryModal"
+        v-if="openCreateCategoryModal"
+      />
+    </client-only>
   </div>
 </template>
 
@@ -436,23 +383,18 @@ const props = defineProps({
 
 const { toast } = useToast();
 const marketPlaceStore = useMarketPlaceStore();
-const { marketplaceLoadingStates, productFoodsTags, productFoodTagItems } =
-  storeToRefs(useMarketPlaceStore());
-const {
-  createProduct,
-  updateProduct,
-  getProductFoodsTags,
-  getAllProducts,
-  createProductCategoryTag,
-} = marketPlaceStore;
+const { marketplaceLoadingStates, productFoodsTags } = storeToRefs(
+  useMarketPlaceStore(),
+);
+const { createProduct, updateProduct, getProductFoodsTags, getAllProducts } =
+  marketPlaceStore;
 const file = ref<File | null>(null);
 const initialAddOnList = ref<any>({});
 
 const emits = defineEmits(["completed"]);
 const openCombobox = ref<boolean>(false);
+const openMainModal = ref<boolean>(true);
 const openCreateCategoryModal = ref<boolean>(false);
-const confirmCreateCategoryTag = ref<boolean>(false);
-const newCategoryTitle = ref<string>("");
 const selectedValues = ref<any[]>([]);
 const openConfirmDialog = ref(false);
 const addOns = ref<any[]>([]);
@@ -467,11 +409,14 @@ const toggleCategory = (tag: any) => {
   }
 };
 
-const openConfirmCreateCategoryModal = () => {
-  if (newCategoryTitle.value) {
-    openCreateCategoryModal.value = false;
-    confirmCreateCategoryTag.value = true;
-  }
+const closeCategoryModal = () => {
+  openCreateCategoryModal.value = false;
+  openMainModal.value = true;
+};
+
+const openCategoryModal = () => {
+  openCreateCategoryModal.value = true;
+  openMainModal.value = false;
 };
 
 const schemaShape = ref({
@@ -525,10 +470,6 @@ const { handleSubmit, resetForm, setFieldValue, errors } = useForm({
   },
 });
 
-const openCreateProductModal = () => {
-  openConfirmDialog.value = true;
-};
-
 const createNewFoodProduct = handleSubmit(async (values: any) => {
   const form = new FormData();
   const prepTimeInMins = {
@@ -572,31 +513,12 @@ const createNewFoodProduct = handleSubmit(async (values: any) => {
   emits("completed");
 });
 
-const categorySchema = toTypedSchema(
-  z.object({
-    title: z.string({ message: "Title is required" }).min(3, {
-      message: "Title cannot be less than 3 characters",
-    }),
-  }),
-);
-
 // const { handleSubmit: handleCreateCategory, resetForm: resetCreateCategory } =
 //   useForm({
 //     validationSchema: categorySchema,
 //   });
 
 // const createCategory = handleCreateCategory(async (values) => {});
-
-const createFoodCategoryTag = async () => {
-  await createProductCategoryTag({
-    title: newCategoryTitle.value,
-    type: "productsFoods",
-    photo: null,
-  });
-
-  newCategoryTitle.value = "";
-  await getProductFoodsTags();
-};
 
 onMounted(async () => {
   await getProductFoodsTags();
@@ -606,7 +528,7 @@ onMounted(async () => {
   if (props.mode === "edit" && props.selectedProduct) {
     const { inStock, title, description, price, banner, data, tagIds, addOns } =
       props.selectedProduct;
-    selectedValues.value = productFoodTagItems.value.filter((tag) =>
+    selectedValues.value = productFoodsTags.value.filter((tag) =>
       tagIds.includes(tag.id),
     );
 

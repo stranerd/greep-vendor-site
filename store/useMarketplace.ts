@@ -3,6 +3,7 @@ import { API_STATES } from "~/services/constants";
 import { useToast } from "@/components/library/toast/use-toast";
 import { useAuthStore } from "@/store/useAuthStore";
 import type { IOrders, IProduct } from "~/types/modules/marketPlaceModel";
+import { useClipboard } from "@vueuse/core";
 
 export const useMarketPlaceStore = defineStore(
   "marketplace",
@@ -49,7 +50,8 @@ export const useMarketPlaceStore = defineStore(
       getCartLinkDetails: API_STATES.IDLE,
       checkoutCartLink: API_STATES.IDLE,
       getRecommendedProductsTags: API_STATES.IDLE,
-      getRecommendedFoodsTags: API_STATES.IDLE,
+      getVendorFoodsTags: API_STATES.IDLE,
+      getVendorItemsTags: API_STATES.IDLE,
       getVendorProductTags: API_STATES.IDLE,
       createProductCategory: API_STATES.IDLE,
       createPromotion: API_STATES.IDLE,
@@ -57,8 +59,6 @@ export const useMarketPlaceStore = defineStore(
     });
 
     const currentCart = ref({});
-
-    const productFoodTagItems = computed(() => productFoodsTags.value);
 
     const getVendorOrders = async (payload?: any) => {
       const { $api } = useNuxtApp();
@@ -181,25 +181,22 @@ export const useMarketPlaceStore = defineStore(
 
       marketplaceLoadingStates.value.getRecommendedProductsTags =
         API_STATES.LOADING;
-      const { data, error } = await $api.marketplace.getRecommendedTags({
-        limit: 100,
-      });
 
-      if (error.value) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: error.value?.data?.[0]?.message || "",
-        });
-        marketplaceLoadingStates.value.getRecommendedProductsTags =
-          API_STATES.ERROR;
-        return { error: error.value };
-      }
-      if (data.value) {
-        marketplaceLoadingStates.value.getRecommendedProductsTags =
-          API_STATES.SUCCESS;
-        recommendedTags.value = data.value.results;
-      }
+      // if (error.value) {
+      //   toast({
+      //     variant: "destructive",
+      //     title: "Error",
+      //     description: error.value?.data?.[0]?.message || "",
+      //   });
+      //   marketplaceLoadingStates.value.getRecommendedProductsTags =
+      //     API_STATES.ERROR;
+      //   return { error: error.value };
+      // }
+      // if (data.value) {
+      //   marketplaceLoadingStates.value.getRecommendedProductsTags =
+      //     API_STATES.SUCCESS;
+      //   recommendedTags.value = data.value.results;
+      // }
     };
 
     const searchVendorProducts = async (payload: any = {}) => {
@@ -595,12 +592,27 @@ export const useMarketPlaceStore = defineStore(
       }
       if (data.value) {
         console.log(data.value);
-        toast({
-          title: "Success",
-          description: "Public cart created successfully",
+        const cartLink = `${window.location.origin}/payment?id=${data.value.id}`;
+        const { text, copy, copied, isSupported } = useClipboard({
+          source: cartLink,
         });
+
+        if (isSupported) {
+          copy(cartLink);
+          toast({
+            title: "Order created successfully",
+            description:
+              "Order created successfully with link copied to clipboard!",
+          });
+        } else {
+          toast({
+            title: "Success",
+            description: "Order created successfully",
+          });
+        }
         marketplaceLoadingStates.value.createCartLink = API_STATES.SUCCESS;
-        router.push(`/payment?id=${data.value.id}`);
+
+        // router.push(`/payment?id=${data.value.id}`);
         // return data.value;
       }
     };
@@ -709,11 +721,9 @@ export const useMarketPlaceStore = defineStore(
 
       const { data } =
         await $api.interactions.getProductCategoryTag("productsFoods");
-      marketplaceLoadingStates.value.getRecommendedFoodsTags =
-        API_STATES.LOADING;
+      marketplaceLoadingStates.value.getVendorFoodsTags = API_STATES.LOADING;
       if (data.value) {
-        marketplaceLoadingStates.value.getRecommendedFoodsTags =
-          API_STATES.SUCCESS;
+        marketplaceLoadingStates.value.getVendorFoodsTags = API_STATES.SUCCESS;
         productFoodsTags.value = data.value?.results;
       }
     };
@@ -721,9 +731,13 @@ export const useMarketPlaceStore = defineStore(
     const getProductItemsTags = async () => {
       const { $api } = useNuxtApp();
       const { toast } = useToast();
-      const { data, error } =
-        $api.interactions.getProductCategoryTag("productsItems");
-      console.log({ data });
+      const { data } =
+        await $api.interactions.getProductCategoryTag("productsItems");
+      marketplaceLoadingStates.value.getVendorItemsTags = API_STATES.LOADING;
+      if (data.value) {
+        marketplaceLoadingStates.value.getVendorItemsTags = API_STATES.SUCCESS;
+        productItemsTags.value = data.value?.results;
+      }
     };
 
     const getVendorProductTags = async () => {
@@ -747,10 +761,10 @@ export const useMarketPlaceStore = defineStore(
         marketplaceLoadingStates.value.getVendorProductTags = API_STATES.ERROR;
         return { error: error.value };
       }
-      if (data?.value?.results) {
+      if (data.value && data.value.results) {
         marketplaceLoadingStates.value.getVendorProductTags =
           API_STATES.SUCCESS;
-        vendorProductTags.value = data.value?.results;
+        vendorProductTags.value = data.value.results;
       }
     };
 
@@ -870,8 +884,7 @@ export const useMarketPlaceStore = defineStore(
       checkoutCartLink,
 
       productFoodsTags,
-      productFoodTagItems,
-      recommendedTags,
+      productItemsTags,
       vendorProductTags,
       getVendorProductTags,
       getProductFoodsTags,

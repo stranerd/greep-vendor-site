@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-4 grid gap-4">
-    <form class="space-y-8" @submit="onSubmit">
+  <div>
+    <form class="space-y-8" @submit="onSubmit" v-if="openMainModal">
       <div class="grid gap-4">
         <div class="grid gap-2">
           <FormField v-slot="{ componentField }" name="title">
@@ -48,7 +48,7 @@
               variant="outline"
               class="mb-2 mr-2 px-3 py-2"
             >
-              {{ framework.label }}
+              {{ framework.title }}
               <X class="ml-3 h-[16px] w-[16px]" />
             </Badge>
           </div>
@@ -60,15 +60,15 @@
                 :aria-expanded="openCombobox"
                 class="w-full justify-between text-foreground"
               >
-                <span class="truncate text-[#64748B]">
+                <span class="truncate capitalize text-[#64748B]">
                   {{
                     selectedValues.length === 0
-                      ? "Select labels"
+                      ? "Select categories"
                       : selectedValues.length === 1
-                        ? selectedValues[0].label
+                        ? selectedValues[0].title
                         : selectedValues.length === 2
-                          ? selectedValues.map(({ label }) => label).join(", ")
-                          : `${selectedValues.length} labels selected`
+                          ? selectedValues.map(({ title }) => title).join(", ")
+                          : `${selectedValues.length} tags selected`
                   }}
                 </span>
                 <ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -82,30 +82,40 @@
                 />
                 <CommandGroup class="max-h-[145px] overflow-auto">
                   <CommandItem
-                    v-for="tag in recommendedTags"
+                    v-for="tag in productItemsTags"
                     :key="tag.id"
                     :value="tag.id"
                     @select="toggleTags(tag)"
                   >
-                    <Check
+                    <TicketDiscountIcon
                       class="mr-2 h-4 w-4"
                       :class="{
-                        'opacity-100': selectedValues.includes(tag),
-                        'opacity-0': !selectedValues.includes(tag),
+                        'text-primary opacity-100':
+                          selectedValues.includes(tag),
+                        'opacity-20': !selectedValues.includes(tag),
                       }"
                     />
-                    <div class="flex-1">{{ tag.title }}</div>
+                    <div
+                      class="flex-1 capitalize"
+                      :class="{
+                        'font-semibold text-primary opacity-100':
+                          selectedValues.includes(tag),
+                        'opacity-20': !selectedValues.includes(tag),
+                      }"
+                    >
+                      {{ tag.title }}
+                    </div>
                   </CommandItem>
                 </CommandGroup>
                 <CommandSeparator alwaysRender />
                 <CommandGroup>
                   <CommandItem
-                    :value="`:${inputValue}:`"
+                    value="createCategory"
                     class="text-xs text-muted-foreground"
-                    @select="openDialog = true"
+                    @select="openCategoryModal"
                   >
                     <div class="mr-2 h-4 w-4"></div>
-                    <CirclePlus class="mr-2 h-2.5 w-2.5" />
+                    <CirclePlus class="mr-2 h-4 w-4" />
                     Create a new category
                   </CommandItem>
                 </CommandGroup>
@@ -254,6 +264,14 @@
         </div>
       </div>
     </form>
+
+    <client-only>
+      <CreateProductTags
+        type="productsItems"
+        @close="closeCategoryModal"
+        v-if="openCreateCategoryModal"
+      />
+    </client-only>
   </div>
 </template>
 
@@ -264,13 +282,31 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import { API_STATES } from "~/services/constants";
 import { useMarketPlaceStore } from "@/store/useMarketplace";
+import { TicketIcon, TicketDiscountIcon } from "@placetopay/iconsax-vue/bold";
 import { cn } from "@/lib/utils";
 
 const marketPlaceStore = useMarketPlaceStore();
-const { marketplaceLoadingStates, recommendedTags } =
+const { marketplaceLoadingStates, productItemsTags } =
   storeToRefs(marketPlaceStore);
 
-const { createProduct, getRecommendedProductsTags } = marketPlaceStore;
+const { createProduct, getProductItemsTags } = marketPlaceStore;
+
+const openCombobox = ref<boolean>(false);
+const openDialog = ref<boolean>(false);
+const openMainModal = ref<boolean>(true);
+const openCreateCategoryModal = ref<boolean>(false);
+const inputValue = ref<string>("");
+const selectedValues = ref<any[]>([]);
+
+const closeCategoryModal = () => {
+  openCreateCategoryModal.value = false;
+  openMainModal.value = true;
+};
+
+const openCategoryModal = () => {
+  openCreateCategoryModal.value = true;
+  openMainModal.value = false;
+};
 
 const formSchema = toTypedSchema(
   z.object({
@@ -325,17 +361,12 @@ const categories = ref([
   },
 ]);
 
-const openCombobox = ref<boolean>(false);
-const openDialog = ref<boolean>(false);
-const inputValue = ref<string>("");
-const selectedValues = ref<any[]>([]);
-
 const toggleTags = (tag: any) => {
-  if (!selectedValues.value.includes(tag)) {
+  if (!selectedValues.value.some((i) => i.id === tag.id)) {
     selectedValues.value = [...selectedValues.value, tag];
   } else {
     selectedValues.value = selectedValues.value.filter(
-      (l: any) => l.id !== tag.id,
+      (item: any) => item.id !== tag.id,
     );
   }
 };
@@ -363,20 +394,23 @@ const onSubmit = handleSubmit(async (values: any) => {
 
 onMounted(async () => {
   if (props.mode === "edit") {
-    const { inStock, title, description, price, banner } =
+    const { inStock, title, description, tagIds, price, banner } =
       props.selectedProduct;
-    resetForm({
-      values: {
-        inStock,
-        title,
-        description,
-        price: price.amount,
-        currency: price.currency,
-        banner,
-      },
-    });
+    (selectedValues.value = productItemsTags.value.filter((tag) =>
+      tagIds.includes(tag.id),
+    )),
+      resetForm({
+        values: {
+          inStock,
+          title,
+          description,
+          price: price.amount,
+          currency: price.currency,
+          banner,
+        },
+      });
   }
-  getRecommendedProductsTags();
+  getProductItemsTags();
 });
 </script>
 

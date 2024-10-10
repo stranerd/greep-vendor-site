@@ -1,7 +1,7 @@
 <template>
   <section class="relative bg-[#000E18]">
     <div
-      class="container flex items-center justify-center px-[20px] md:px-[2rem] lg:gap-[50px]"
+      class="container flex items-center justify-center px-[20px] py-6 md:px-[2rem] lg:gap-[50px] lg:py-0"
     >
       <div class="w-full text-[#fff] lg:max-w-[600px]">
         <h2

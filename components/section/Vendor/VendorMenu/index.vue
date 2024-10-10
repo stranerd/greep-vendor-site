@@ -23,21 +23,17 @@
           />
         </div>
       </form>
-      <div class="flex">
-        <p
-          class="fit mr-[31px] flex items-center gap-[10px] text-[14px] leading-[21px]"
-        >
+      <div class="grid w-full grid-cols-2 justify-between gap-3 lg:w-fit">
+        <div class="flex items-center gap-[10px] text-[14px] leading-[21px]">
           <client-only>
             <DropdownMenu>
               <DropdownMenuTrigger as-child>
-                <div class="">
-                  <Button class="flex w-44 justify-start gap-x-2">
-                    <Arrow3Icon class="h-5 w-5 text-white" />
-                    <span class="flex-1 text-sm">{{
-                      selectedSortOption.label
-                    }}</span></Button
-                  >
-                </div>
+                <Button class="flex w-full justify-start gap-x-2 lg:w-44">
+                  <Arrow3Icon class="h-5 w-5 text-white" />
+                  <span class="flex-1 text-sm">{{
+                    selectedSortOption.label
+                  }}</span></Button
+                >
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <!-- <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -45,7 +41,7 @@
                 <DropdownMenuItem
                   v-for="option in sortOptions"
                   @click="
-                    getAllProducts(JSON.stringify({ sort: option.sortQuery }));
+                    getAllProducts({ sort: JSON.stringify(option.sortQuery) });
                     selectedSortOption = option;
                   "
                 >
@@ -54,11 +50,11 @@
               </DropdownMenuContent>
             </DropdownMenu>
           </client-only>
-        </p>
+        </div>
 
         <Button
           variant="primary"
-          size="lg"
+          class="lg:w-44"
           rounded="md"
           @click="isDialogOpen = true"
           ><CirclePlus class="mr-[10px] h-5 w-5" /> Create Menu</Button
@@ -227,6 +223,7 @@ interface VendorProduct {
 }
 
 const VendorProductsInit = computed(() => {
+  const regex = new RegExp(searchTerm.value, "i");
   const VendorProductsList = vendorProductTags.value
     .map(({ id, title }) => ({
       id,
@@ -239,20 +236,23 @@ const VendorProductsInit = computed(() => {
     }))
     .filter((item: VendorProduct) => item.products.length > 0);
 
-  const regex = new RegExp(searchTerm.value, "i");
-
   return VendorProductsList.filter(
     (item) =>
       item.title.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-      item.keyWords.some((key) => regex.test(key)),
+      item.keyWords.some((key) =>
+        key.toLowerCase().includes(searchTerm.value.toLowerCase()),
+      ),
   );
 });
+
 const VendorProducts = ref(VendorProductsInit.value);
 
 watch(
   VendorProductsInit,
-  (newItems) => {
-    VendorProducts.value = newItems;
+  (newItems, oldItems) => {
+    if (newItems !== oldItems) {
+      VendorProducts.value = newItems;
+    } else VendorProducts.value = oldItems;
   },
   { deep: true, immediate: true },
 );

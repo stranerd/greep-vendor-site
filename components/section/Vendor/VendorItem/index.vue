@@ -24,9 +24,7 @@
         </div>
       </form>
       <div class="grid w-full grid-cols-2 justify-between gap-3 lg:w-fit">
-        <p
-          class="flex items-center gap-[10px] text-[14px] leading-[21px] lg:mr-[31px]"
-        >
+        <p class="flex items-center gap-[10px] text-[14px] leading-[21px]">
           <client-only>
             <DropdownMenu>
               <DropdownMenuTrigger as-child>
@@ -43,7 +41,7 @@
                 <DropdownMenuItem
                   v-for="option in sortOptions"
                   @click="
-                    getAllProducts(JSON.stringify({ sort: option.sortQuery }));
+                    getAllProducts({ sort: JSON.stringify(option.sortQuery) });
                     selectedSortOption = option;
                   "
                 >
@@ -231,12 +229,6 @@ const triggerEdit = (product: any) => {
   selectedProduct.value = product;
   isDialogOpen.value = true;
 };
-
-onMounted(() => {
-  getAllProducts({
-    page: 1,
-  });
-});
 </script>
 
 <style></style>

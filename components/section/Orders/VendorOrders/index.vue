@@ -30,9 +30,7 @@
       </form>
 
       <div class="grid w-full grid-cols-2 justify-between gap-3 lg:w-fit">
-        <p
-          class="flex items-center gap-[10px] text-[14px] leading-[21px] lg:mr-[31px]"
-        >
+        <p class="flex items-center gap-[10px] text-[14px] leading-[21px]">
           <client-only>
             <DropdownMenu>
               <DropdownMenuTrigger as-child>
@@ -49,7 +47,7 @@
                 <DropdownMenuItem
                   v-for="option in sortOptions"
                   @click="
-                    getRecentOrders({ sort: JSON.stringify(option.sortQuery) });
+                    getVendorOrders({ sort: JSON.stringify(option.sortQuery) });
                     selectedSortOption = option;
                   "
                 >

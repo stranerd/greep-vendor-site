@@ -1,6 +1,8 @@
 <template>
   <div>
-    <FileUploader />
+    <ClientOnly>
+      <CreateProductTags type="productsFoods" />
+    </ClientOnly>
   </div>
 </template>
 

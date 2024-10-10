@@ -1,5 +1,5 @@
 <template>
-  <Dialog :open="isOpenLocal" class="max-h-[78vh] overflow-y-auto">
+  <Dialog :open="isOpenLocal" class="">
     <DialogContent :hideClose="true">
       <DialogHeader>
         <DialogTitle>New Item </DialogTitle>
@@ -8,7 +8,7 @@
           @click="$emit('close')"
         />
       </DialogHeader>
-      <DialogDescription class="z-10">
+      <DialogDescription class="mt-4 max-h-[80vh] w-full overflow-auto p-1">
         <CreateMenuForm
           :mode="mode"
           :selectedProduct="selectedProduct"

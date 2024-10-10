@@ -114,19 +114,6 @@ export default () => {
       });
     },
 
-    getRecommendedProductTags(tag: "foods" | "items") {
-      return useCustomFetch(`${resource}/products/recommendation/tags/${tag}`, {
-        method: "GET",
-      });
-    },
-
-    getRecommendedTags(params?: any) {
-      return useCustomFetch(`${resource}/products/recommendation/tags/items`, {
-        method: "GET",
-        params,
-      });
-    },
-
     createPromotion(payload: any) {
       return useCustomFetch(`${resource}/promotions`, {
         body: payload,
