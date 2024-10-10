@@ -1,9 +1,11 @@
 <template>
   <section class="relative bg-[#000E18]">
     <div
-      class="container flex items-center justify-center px-[20px] py-6 md:px-[2rem] lg:gap-[50px] lg:py-0"
+      class="container flex flex-col items-center justify-center px-[20px] py-6 md:px-[2rem] lg:flex-row lg:gap-[50px] lg:py-0"
     >
-      <div class="w-full text-[#fff] lg:max-w-[600px]">
+      <div
+        class="flex w-full flex-col items-center justify-center text-center text-[#fff] lg:block lg:max-w-[600px] lg:text-start"
+      >
         <h2
           class="text-[24px] font-bold leading-[32px] md:text-[32px] md:leading-[48px] lg:text-[48px] lg:leading-[60px]"
         >
@@ -43,6 +45,13 @@
           class="hidden h-[585px] w-full min-w-[500px] object-cover lg:block"
         />
       </div>
+    </div>
+    <div class="relative h-[253.35px] overflow-hidden lg:hidden">
+      <img
+        src="/images/features.png"
+        alt="App Sample"
+        class="absolute mx-auto block h-[406.35px] w-[200px] translate-x-1/2 object-cover lg:hidden"
+      />
     </div>
   </section>
 </template>
