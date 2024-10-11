@@ -48,14 +48,17 @@
             Let’s get you to where you need to be.
           </p>
         </template>
-        <Button
-          class="flex h-14 justify-between gap-x-4 bg-primary pb-3 pr-2 pt-3 hover:bg-primary"
-          rounded="lg"
-          ><span class="font-normal">Go back to home</span>
-          <div class="rounded-full bg-[#000E18] p-[14px]">
-            <MoveUpRight :size="20" />
-          </div>
-        </Button>
+        <nuxt-link to="/">
+          <Button
+            class="flex h-14 justify-between gap-x-4 bg-primary pb-3 pr-2 pt-3 hover:bg-primary"
+            rounded="lg"
+          >
+            <span class="font-normal">Go back to home</span>
+            <div class="rounded-full bg-[#000E18] p-[14px]">
+              <MoveUpRight :size="20" />
+            </div>
+          </Button>
+        </nuxt-link>
       </div>
     </div>
     <Faq />
@@ -65,6 +68,7 @@
 
 <script setup lang="ts">
 import { MoveUpRight } from "lucide-vue-next";
+
 const error = useError();
 const NotFoundError = computed(() => error.value?.statusCode === 404);
 
