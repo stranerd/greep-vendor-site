@@ -70,7 +70,10 @@ import {
   LogOut,
 } from "lucide-vue-next";
 
-import { TicketDiscountIcon } from "@placetopay/iconsax-vue/outline";
+import {
+  TicketDiscountIcon,
+  Wallet1Icon,
+} from "@placetopay/iconsax-vue/outline";
 
 import { GP_CONSTANTS } from "~/constants";
 import { GP_ROUTES } from "~/constants/route-names";
@@ -110,6 +113,11 @@ const navLinks = ref([
         : GP_ROUTES.VENDOR.ITEMS.ITEMS_MANAGER,
     name: userType.value?.vendorType === "foods" ? "Menu" : "Items Manager",
     icon: BookmarkMinus,
+  },
+  {
+    to: GP_ROUTES.VENDOR.WALLETS.OVERVIEW,
+    name: "Wallet",
+    icon: Wallet1Icon,
   },
   {
     to: GP_ROUTES.VENDOR.PROMOTIONS,

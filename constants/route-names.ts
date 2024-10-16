@@ -21,6 +21,13 @@ export class GP_ROUTES {
     PROMOTIONS: "vendor-promotions",
     PROMOTIONS_CREATE: "vendor-promotions create",
 
+    WALLETS: {
+      OVERVIEW: "vendor-wallet",
+      WITHDRAW: "vendor-wallet withdraw",
+      TRANSFER: "vendor-wallet transfer",
+      DEPOSIT: "vendor-wallet deposit",
+    },
+
     FOOD: {
       ORDERS: "food-orders",
       ORDER_DETAILS: "food-orders details",

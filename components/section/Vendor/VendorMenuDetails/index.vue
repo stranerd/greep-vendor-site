@@ -4,7 +4,7 @@
       class="flex h-72 items-center gap-4 py-2"
       v-if="marketplaceLoadingStates.getSingleProduct === API_STATES.LOADING"
     >
-      <Skeleton class="block h-full w-72 rounded object-cover" />
+      <Skeleton class="block h-full w-full rounded object-cover lg:w-72" />
       <div class="flex flex-1 flex-col gap-1 text-sm text-[#7C7C7C]">
         <Skeleton class="block h-10 w-4/12 rounded object-cover" />
         <Skeleton class="block h-16 w-10/12 rounded object-cover" />
@@ -29,7 +29,7 @@
         />
         <div class="flex flex-1 flex-col gap-1 text-sm text-[#7C7C7C]">
           <h2 class="text-xl font-bold text-black">{{ product?.title }}</h2>
-          <h2 class="max-w-[60%] text-sm">
+          <h2 class="text-sm lg:max-w-[60%]">
             {{ product?.description }}
           </h2>
 

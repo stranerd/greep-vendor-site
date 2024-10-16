@@ -157,6 +157,7 @@ import { Search, CirclePlus } from "lucide-vue-next";
 import { API_STATES } from "~/services/constants";
 import { useMarketPlaceStore } from "@/store/useMarketplace";
 import { SortIcon, Arrow3Icon } from "@placetopay/iconsax-vue/outline";
+import { LoaderCircle } from "lucide-vue-next";
 
 const marketplaceStore = useMarketPlaceStore();
 const { products, marketplaceLoadingStates, productsMeta } =

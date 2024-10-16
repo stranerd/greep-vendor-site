@@ -1,7 +1,9 @@
 <template>
   <BreadCrumb :routes="routes" />
-  <div class="mt-[25px] flex items-center justify-between">
-    <form class="w-full max-w-[570px]">
+  <div
+    class="mb-6 mt-[25px] flex w-full flex-col items-center justify-between gap-4 lg:flex-row"
+  >
+    <form class="w-full max-w-full lg:max-w-[576px]">
       <div class="relative flex w-full">
         <Search
           class="absolute left-4 top-[50%] h-[24px] w-[24px] translate-y-[-50%] text-muted-foreground"
@@ -21,6 +23,44 @@
         />
       </div>
     </form>
+
+    <div class="grid w-full grid-cols-2 justify-between gap-3 lg:w-fit">
+      <div class="flex items-center gap-[10px] text-[14px] leading-[21px]">
+        <client-only>
+          <DropdownMenu>
+            <DropdownMenuTrigger as-child>
+              <Button class="flex w-full justify-start gap-x-2 lg:w-44">
+                <Arrow3Icon class="h-5 w-5 text-white" />
+                <span class="flex-1 text-sm">{{
+                  selectedSortOption.label
+                }}</span></Button
+              >
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <!-- <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator /> -->
+              <DropdownMenuItem
+                v-for="option in sortOptions"
+                @click="
+                  getVendorOrders({ sort: JSON.stringify(option.sortQuery) });
+                  selectedSortOption = option;
+                "
+              >
+                {{ option.label }}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </client-only>
+      </div>
+
+      <Button
+        variant="primary"
+        class="lg:w-44"
+        rounded="md"
+        @click="isDialogOpen = true"
+        ><CirclePlus class="mr-[10px] h-5 w-5" /> Create Order</Button
+      >
+    </div>
   </div>
   <div class="my-5 flex w-full items-center justify-center gap-4">
     <button
@@ -43,14 +83,22 @@
 </template>
 
 <script setup lang="ts">
+import { debounce } from "~/lib/utils";
+import { Search, CirclePlus, LoaderCircle } from "lucide-vue-next";
 import ActiveOrders from "~/components/section/Orders/ActiveOrders/index.vue";
 import OrderHistory from "~/components/section/Orders/OrderHistory/index.vue";
 
-import { Search } from "lucide-vue-next";
 import { GP_ROUTES } from "~/constants/route-names";
 import { useMarketPlaceStore } from "~/store/useMarketplace";
 
-const { orders } = storeToRefs(useMarketPlaceStore());
+import { Arrow3Icon } from "@placetopay/iconsax-vue/outline";
+const marketPlaceStore = useMarketPlaceStore();
+
+const { orders, marketplaceLoadingStates, orderMeta } =
+  storeToRefs(marketPlaceStore);
+const { getVendorOrders, getRecentOrders } = useMarketPlaceStore();
+
+const isDialogOpen = ref(false);
 definePageMeta({
   layout: "dashboard",
   middleware: ["authenticated", "vendor-foods"],
@@ -61,6 +109,33 @@ useHead({
 });
 
 const searchTerm = ref("");
+
+const sortOptions = ref([
+  {
+    label: "Latest Item",
+    sortQuery: [{ field: "createdAt", desc: true }],
+  },
+  {
+    label: "Most Sold",
+    sortQuery: [{ field: "meta.orders", desc: true }],
+  },
+  {
+    label: "Highest In Price",
+    sortQuery: [{ field: "price.amount", desc: true }],
+  },
+  {
+    label: "Lowest In Price",
+    sortQuery: [{ field: "price.amount", desc: false }],
+  },
+]);
+
+const selectedSortOption = ref(sortOptions.value[0]);
+
+const searchOrders = debounce(async () => {
+  await getVendorOrders({
+    search: { value: searchTerm.value, fields: ["dropoffNote", "email"] },
+  });
+}, 1500);
 
 const orderTabs = shallowRef([
   { name: "Active", component: ActiveOrders },
