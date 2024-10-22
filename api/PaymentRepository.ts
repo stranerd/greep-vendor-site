@@ -18,7 +18,7 @@ export default () => {
       });
     },
 
-    getTransactionRate() {
+    getExchangeRates() {
       return useCustomFetch(`${resource}/transactions/rates`, {
         method: "GET",
       });

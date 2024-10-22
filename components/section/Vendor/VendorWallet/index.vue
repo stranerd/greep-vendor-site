@@ -6,26 +6,40 @@
           <CardDescription class="flex justify-between">
             <h2 class="flex">Total Balance</h2>
 
-            <Select v-model="selectedCurrency">
-              <SelectTrigger class="w-[120px]">
-                <SelectValue placeholder="Select currency" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectLabel>Currencies</SelectLabel>
-                <SelectItem :value="currency" v-for="currency in currencies">{{
-                  currency.currency
-                }}</SelectItem>
-              </SelectContent>
-            </Select>
+            <client-only>
+              <DropdownMenu>
+                <DropdownMenuTrigger as-child>
+                  <Button
+                    variant="outline"
+                    class="flex w-32 justify-start gap-x-2"
+                  >
+                    <ArrowDown1Icon class="h-5 w-5 text-[#999]" />
+                    <span class="flex-1 text-sm">{{
+                      selectedCurrency?.currency ?? "TRY"
+                    }}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>Currencies</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    :value="currency"
+                    v-for="currency in currencies"
+                    @click="selectedCurrency = currency"
+                  >
+                    {{ currency?.currency }}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </client-only>
           </CardDescription>
         </CardHeader>
-
         <CardContent>
           <h2 class="text-5xl font-semibold">
             {{
               gpNumbers.formatCurrency(
-                3862.83 * selectedCurrency.value,
-                selectedCurrency.currency,
+                38562.83 / (selectedCurrency?.rate ?? 1),
+                selectedCurrency?.currency ?? "TRY",
               )
             }}
           </h2></CardContent
@@ -55,18 +69,21 @@ import {
   ArrowRight1Icon,
   AddIcon,
   MinusIcon,
+  ArrowDown1Icon,
 } from "@placetopay/iconsax-vue/outline";
 
 import { GP_ROUTES } from "~/constants/route-names";
 import { usePaymentStore } from "~/store/usePayment";
 
-const { wallet, transactionHistory } = storeToRefs(usePaymentStore());
+const { wallet, exchangeRates } = storeToRefs(usePaymentStore());
 const router = useRouter();
 
-const currencies = ref([
-  { currency: "TRY", value: 1 },
-  { currency: "NGN", value: 0.03636363636363636 },
-]);
+const currencies = computed(() =>
+  Object.entries(exchangeRates.value).map(([currency, rate]) => ({
+    currency,
+    rate,
+  })),
+);
 
 const selectedCurrency = ref(currencies.value[0]);
 

@@ -89,6 +89,7 @@ onBeforeMount(async () => {
 
   paymentStore.getUserWallet();
   paymentStore.getUserTransactionHistory();
+  paymentStore.getExchangeRates();
 
   marketplaceStore.getAllProducts({});
   marketplaceStore.getAllPromotions();
