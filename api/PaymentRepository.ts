@@ -7,5 +7,21 @@ export default () => {
         method: "GET",
       });
     },
+
+    getUserTransactions() {
+      return useCustomFetch(`${resource}/transactions/`, {
+        method: "GET",
+        // query: {
+        //   where: JSON.stringify([{ field: "type", value: type }]),
+        //   sort: JSON.stringify([{ field: `meta.${type}`, desc: true }]),
+        // },
+      });
+    },
+
+    getTransactionRate() {
+      return useCustomFetch(`${resource}/transactions/rates`, {
+        method: "GET",
+      });
+    },
   };
 };

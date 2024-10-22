@@ -1,41 +1,3 @@
-<script setup lang="ts">
-import { useAuthStore } from "@/store/useAuthStore";
-import { useMarketPlaceStore } from "~/store/useMarketplace";
-import { usePaymentStore } from "~/store/usePayment";
-import { useSupportStore } from "~/store/useSupport";
-import { useUploadStore } from "~/store/useUploadStore";
-
-const { $moment } = useNuxtApp();
-const uploadStore = useUploadStore();
-const authStore = useAuthStore();
-const marketplaceStore = useMarketPlaceStore();
-const paymentStore = usePaymentStore();
-const supportStore = useSupportStore();
-
-const { hasCompletedVendorProfile, hasCompletedProfile, hasVerifiedEmail } =
-  storeToRefs(authStore);
-
-const route = useRoute();
-
-onBeforeMount(async () => {
-  authStore.getUser();
-  authStore.getUserProfile();
-  paymentStore.getUserWallet();
-  marketplaceStore.getAllProducts({});
-  marketplaceStore.getAllPromotions();
-  marketplaceStore.getVendorProductTags();
-  marketplaceStore.getRecentOrders();
-  marketplaceStore.getVendorOrders();
-  marketplaceStore.getProductFoodsTags();
-  supportStore.getChatList();
-
-  marketplaceStore.getDashboardData({
-    start: new Date($moment().startOf("M")),
-    end: new Date($moment().endOf("M")),
-  });
-});
-</script>
-
 <template>
   <div
     class="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]"
@@ -101,3 +63,45 @@ onBeforeMount(async () => {
     />
   </div>
 </template>
+
+<script setup lang="ts">
+import { useAuthStore } from "@/store/useAuthStore";
+import { useMarketPlaceStore } from "~/store/useMarketplace";
+import { usePaymentStore } from "~/store/usePayment";
+import { useSupportStore } from "~/store/useSupport";
+import { useUploadStore } from "~/store/useUploadStore";
+
+const { $moment } = useNuxtApp();
+const uploadStore = useUploadStore();
+const authStore = useAuthStore();
+const marketplaceStore = useMarketPlaceStore();
+const paymentStore = usePaymentStore();
+const supportStore = useSupportStore();
+
+const { hasCompletedVendorProfile, hasCompletedProfile, hasVerifiedEmail } =
+  storeToRefs(authStore);
+
+const route = useRoute();
+
+onBeforeMount(async () => {
+  authStore.getUser();
+  authStore.getUserProfile();
+
+  paymentStore.getUserWallet();
+  paymentStore.getUserTransactionHistory();
+
+  marketplaceStore.getAllProducts({});
+  marketplaceStore.getAllPromotions();
+  marketplaceStore.getVendorProductTags();
+  marketplaceStore.getRecentOrders();
+  marketplaceStore.getVendorOrders();
+  marketplaceStore.getProductFoodsTags();
+
+  supportStore.getChatList();
+
+  marketplaceStore.getDashboardData({
+    start: new Date($moment().startOf("M")),
+    end: new Date($moment().endOf("M")),
+  });
+});
+</script>

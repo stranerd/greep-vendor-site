@@ -2,7 +2,9 @@
   <card class="my-8 grid gap-2 duration-500">
     <div class="flex items-center justify-between gap-x-4 bg-[#F1F3F76B] p-4">
       <div class="flex gap-x-4">
-        <ClockIcon class="block h-6 w-6 text-primary" />
+        <div class="min-w-[10%] lg:min-w-[5%]">
+          <ClockIcon class="block h-6 w-6 text-primary" />
+        </div>
         <div class="">
           <h2 class="font-medium">Business Hours</h2>
           <p class="text-sm text-[#999999]">

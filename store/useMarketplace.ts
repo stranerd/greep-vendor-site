@@ -588,10 +588,8 @@ export const useMarketPlaceStore = defineStore(
           description: error.value?.data?.[0]?.message || "",
         });
         marketplaceLoadingStates.value.createCartLink = API_STATES.ERROR;
-        return { error: error.value };
       }
       if (data.value) {
-        console.log(data.value);
         const cartLink = `${window.location.origin}/payment?id=${data.value.id}`;
         const { text, copy, copied, isSupported } = useClipboard({
           source: cartLink,
@@ -612,8 +610,7 @@ export const useMarketPlaceStore = defineStore(
         }
         marketplaceLoadingStates.value.createCartLink = API_STATES.SUCCESS;
 
-        // router.push(`/payment?id=${data.value.id}`);
-        // return data.value;
+        return cartLink;
       }
     };
 

@@ -13,7 +13,7 @@
               <SelectContent>
                 <SelectLabel>Currencies</SelectLabel>
                 <SelectItem :value="currency" v-for="currency in currencies">{{
-                  currency
+                  currency.currency
                 }}</SelectItem>
               </SelectContent>
             </Select>
@@ -22,7 +22,12 @@
 
         <CardContent>
           <h2 class="text-5xl font-semibold">
-            {{ gpNumbers.formatCurrency(3862.83, selectedCurrency) }}
+            {{
+              gpNumbers.formatCurrency(
+                3862.83 * selectedCurrency.value,
+                selectedCurrency.currency,
+              )
+            }}
           </h2></CardContent
         >
       </Card>
@@ -53,10 +58,15 @@ import {
 } from "@placetopay/iconsax-vue/outline";
 
 import { GP_ROUTES } from "~/constants/route-names";
+import { usePaymentStore } from "~/store/usePayment";
 
+const { wallet, transactionHistory } = storeToRefs(usePaymentStore());
 const router = useRouter();
 
-const currencies = ref(["TRY", "NGN", "USD", "GBP", "CNY"]);
+const currencies = ref([
+  { currency: "TRY", value: 1 },
+  { currency: "NGN", value: 0.03636363636363636 },
+]);
 
 const selectedCurrency = ref(currencies.value[0]);
 

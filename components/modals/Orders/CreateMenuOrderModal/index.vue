@@ -1,17 +1,12 @@
 <template>
   <CustomModal title="Create Order" @close="emit('completed')">
-    <CreateOrderForm :vendorType @completed="$emit('completed')" />
+    <CreateMenuOrderForm @completed="$emit('completed')" />
   </CustomModal>
 </template>
 
 <script setup lang="ts">
 import { Search, CirclePlus, X as CancelIcon } from "lucide-vue-next";
-defineProps({
-  vendorType: {
-    type: String as PropType<"vendorFoods" | "vendorItems">,
-    required: true,
-  },
-});
+
 const isOpen = ref(false);
 
 const emit = defineEmits(["close", "completed"]);

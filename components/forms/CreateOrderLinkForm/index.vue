@@ -1,5 +1,6 @@
 <template>
-  <div class="grid gap-4 mt-4">
+  <div class="mt-4 grid gap-4">
+    {{ dateValue }}
     <form class="space-y-8" @submit="onSubmit">
       <div class="grid gap-4">
         <div class="grid gap-2">
@@ -9,15 +10,12 @@
                 >Address <span class="text-[#FF5656]">Required</span></FormLabel
               >
               <FormControl>
-                <Input
-                  type="text"
+                <LocationPicker
                   placeholder="Lagos"
                   v-bind="componentField"
+                  v-model="location"
                 />
               </FormControl>
-              <!-- <FormDescription>
-                        This is your public display name.
-                      </FormDescription> -->
               <FormMessage />
             </FormItem>
           </FormField>
@@ -25,7 +23,7 @@
 
         <div class="flex gap-[20px]">
           <FormField v-slot="{ field, value }" name="time">
-            <FormItem class="flex flex-col grow">
+            <FormItem class="flex grow flex-col">
               <FormLabel class="mb-[10px]">Delivery date</FormLabel>
               <Popover>
                 <PopoverTrigger as-child>
@@ -35,15 +33,13 @@
                       :class="
                         cn(
                           'w-full grow justify-start text-left font-normal',
-                          !value && 'text-muted-foreground'
+                          !value && 'text-muted-foreground',
                         )
                       "
                     >
                       <CalendarIcon class="mr-2 h-4 w-4 opacity-50" />
                       <span>{{
-                        value
-                          ? $moment(dateValue).format("MMMM Do, YYYY")
-                          : "Pick a date"
+                        value ? gpDates.formatDate(dateValue) : "Pick a date"
                       }}</span>
                     </Button>
                   </FormControl>
@@ -77,7 +73,7 @@
             <FormItem class="grow">
               <FormLabel>Time </FormLabel>
               <FormControl>
-                <Input
+                <TimePicker
                   type="text"
                   placeholder="12:00"
                   class="w-full"
@@ -96,6 +92,7 @@
                 type="number"
                 placeholder="10"
                 class="w-full"
+                disabled
                 v-bind="componentField"
               />
             </FormControl>
@@ -114,8 +111,8 @@
             <FormMessage />
           </FormItem>
         </FormField>
-        <div class="flex items-center justify-end mt-4">
-          <Button variant="ghost" class="rounded-[12px] mr-3"> Cancel </Button>
+        <div class="mt-4 flex items-center justify-end">
+          <Button variant="ghost" class="mr-3 rounded-[12px]"> Cancel </Button>
 
           <Button
             type="submit"
@@ -167,6 +164,7 @@ const marketPlaceStore = useMarketPlaceStore();
 const { marketplaceLoadingStates } = storeToRefs(marketPlaceStore);
 import { cn, debounce } from "~/lib/utils";
 import type { IProduct } from "~/types/modules/marketPlaceModel";
+import { getMilliseconds, milliseconds, parse } from "date-fns";
 const { $moment } = useNuxtApp();
 
 const { checkoutCartLink } = marketPlaceStore;
@@ -174,20 +172,30 @@ const { checkoutCartLink } = marketPlaceStore;
 const df = new DateFormatter("en-US", {
   dateStyle: "long",
 });
+interface Location {
+  name: string;
+  city: string;
+  state: string;
+  country: string;
+  latitude: number;
+  longitude: number;
+}
+
+const location = ref<Location>();
 
 const placeholder = ref();
 const dateValue = ref();
 
 const formSchema = toTypedSchema(
   z.object({
-    to: z.string({
+    to: z.any({
       required_error: "Address cannot be empty",
     }),
     discount: z.number({
       required_error: "Discount cannot be empty",
     }),
     dropoffNote: z.string().optional(),
-    deliveryTime: z.string({
+    deliveryTime: z.number({
       required_error: "Delivey time is required",
     }),
     time: z
@@ -195,36 +203,34 @@ const formSchema = toTypedSchema(
       .datetime()
       .optional()
       .refine((date: any) => date !== undefined, "Please select a valid date."),
-  })
+  }),
 );
 
 const { handleSubmit, setFieldValue, resetForm } = useForm({
   validationSchema: formSchema,
-  initialValues: {
-    to: "",
-  },
+  initialValues: { discount: 1, dropoffNote: "Drop in front of my house" },
 });
 
 const emits = defineEmits(["completed"]);
 
 const onSubmit = handleSubmit(async (values: any) => {
   console.log("Form submitted!", values);
+  if (!location.value?.name) return;
 
   const payload = {
     ...values,
+
     to: {
-      coords: [2, 4],
-      location: values.to,
-      description: "Location",
+      coords: [location.value?.latitude, location.value?.longitude],
+      location: location.value?.name,
+      description: location.value?.city,
     },
+    discount: 1,
     cartLinkId: props.cartLinkId,
     payment: "cash",
-    time: {
-      date: new Date(values.time).getTime(),
-      time: values.deliveryTime,
-    },
+    time: new Date(values.time).getTime() + values.deliveryTime,
   };
-  delete payload.deliveryTime;
+  // delete payload.deliveryTime;
   await checkoutCartLink(payload);
   emits("completed");
 });

@@ -7,8 +7,11 @@ import type { Wallet } from "~/types/modules/walletModel";
 export const usePaymentStore = defineStore("payment", () => {
   // state variables
   const wallet = ref<Wallet>();
+  const transactionHistory = ref([]);
+  const exchangeRates = ref({});
   const paymentLoadingStates = ref({
     userWallet: API_STATES.IDLE,
+    userTransactionsHistory: API_STATES.IDLE,
   });
 
   const getUserWallet = async () => {
@@ -33,9 +36,30 @@ export const usePaymentStore = defineStore("payment", () => {
     }
   };
 
+  const getUserTransactionHistory = async () => {
+    const { user } = storeToRefs(useAuthStore());
+    const { $api } = useNuxtApp();
+
+    const { data, error } = await $api.payment.getUserTransactions();
+    if (error.value) {
+      console.log(error.value?.data);
+
+      paymentLoadingStates.value.userTransactionsHistory = API_STATES.ERROR;
+      return { error: error.value };
+    }
+    if (data.value) {
+      transactionHistory.value = data.value.results;
+      paymentLoadingStates.value.userTransactionsHistory = API_STATES.SUCCESS;
+    }
+  };
+
   return {
     paymentLoadingStates,
+
     wallet,
     getUserWallet,
+
+    transactionHistory,
+    getUserTransactionHistory,
   };
 });

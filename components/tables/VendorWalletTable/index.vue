@@ -16,51 +16,46 @@
           <TableHead class="font-normal text-black"> Actions </TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody v-for="(wallet, i) in walletHistory" :key="i">
+      <TableBody v-for="(wallet, i) in transactionHistory" :key="i">
         <TableRow>
           <TableCell class="text-[12px]">
             #{{ wallet?.id.slice(0, 9) }}
           </TableCell>
           <TableCell class="text-[12px]"
-            >{{ $moment(wallet?.date).format("MMM DD, h:mm a") }}
+            >{{ gpDates.formatDate(wallet?.createdAt) }}
           </TableCell>
           <TableCell class="flex items-center justify-start gap-2 text-[12px]">
             <ArrowUp3Icon
               class="h-8 w-8 rounded-full bg-green-300 p-1 text-primary"
-              v-if="wallet.type === 'deposit'"
+              v-if="wallet?.data.type === 'FundWallet'"
             />
             <ArrowDownIcon
               class="h-8 w-8 rounded-full bg-red-300 p-1 text-destructive"
-              v-if="wallet.type === 'withdraw'"
+              v-else-if="wallet?.data.type === 'Sent'"
             />
             <ArrowRight1Icon
               class="h-8 w-8 rounded-full bg-violet-300 p-1 text-violet-600"
-              v-if="wallet.type === 'transfer'"
+              v-else
             />
-            <span class=""> {{ wallet?.customer }}</span>
+            <span class=""> {{ wallet?.email }}</span>
           </TableCell>
           <TableCell class="text-[12px] capitalize">
-            {{ wallet?.paymentType }}
+            {{ wallet?.title }}
           </TableCell>
           <TableCell>
             <Badge
               variant="outline"
-              class="rounded-[8px] py-1 text-[12px] font-normal"
+              class="rounded-[8px] py-1 text-[12px] font-normal capitalize"
             >
               <div
-                class="mr-2 h-[9px] w-[9px] rounded-[3px] bg-primary"
-                :style="{}"
+                class="mr-2 h-[9px] w-[9px] rounded-[3px] capitalize"
+                :style="transactionStatus(wallet?.status)?.style"
               ></div>
-              {{ wallet.status }}
+              {{ transactionStatus(wallet?.status)?.text }}
             </Badge>
           </TableCell>
           <TableCell class="text-[12px] capitalize">
-            {{
-              gpNumbers.formatCurrency(
-                wallet.amount.price,
-                wallet.amount.currency,
-              )
-            }}
+            {{ gpNumbers.formatCurrency(wallet?.amount, wallet?.currency) }}
           </TableCell>
 
           <TableCell>
@@ -96,6 +91,11 @@ import {
   ArrowSwapHorizontalIcon,
   ArrowUp3Icon,
 } from "@placetopay/iconsax-vue/outline";
+
+import { usePaymentStore } from "~/store/usePayment";
+import { transactionStatus } from "~/lib/utils";
+
+const { wallet, transactionHistory } = storeToRefs(usePaymentStore());
 
 // defineProps({
 //   promotions: {

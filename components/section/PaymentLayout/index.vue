@@ -13,6 +13,7 @@
     <p class="mb-[10px] text-center text-[14px] text-[#999999]">
       Make payment for your purchase
     </p>
+
     <div
       class="rounded-[16px] p-5"
       style="box-shadow: 0px 0px 4px 0px #00000040"
@@ -63,7 +64,11 @@
             <td class="py-[19px] pr-[8px]">
               <p class="text-[12px] leading-[18px]">
                 {{ pack.title }}
-                <span class="block text-[#999999]">{{ pack.description }}</span>
+                <span class="block text-[#999999]">{{
+                  Object.values(pack.addOnsMap)
+                    .map((i) => i.itemName)
+                    .join(", ")
+                }}</span>
               </p>
             </td>
             <td class="py-[19px] pr-[8px]">
@@ -98,20 +103,6 @@
           <p class="text-[12px] leading-[18px] text-[#616161]">Subtotal</p>
           <p class="text-[12px] leading-[18px]">{{ productTotal }}</p>
         </div>
-        <!-- <div class="flex items-center justify-between gap-[8px] mb-[10px]">
-          <p class="text-[12px] leading-[18px] text-[#616161]">Delivery fee</p>
-          <p class="text-[12px] leading-[18px]">₺431.56</p>
-        </div>
-        <div class="flex items-center justify-between gap-[8px] mb-[10px]">
-          <p class="text-[12px] leading-[18px] text-[#616161]">VAT</p>
-          <p class="text-[12px] leading-[18px]">₺431.56</p>
-        </div>
-        <div class="flex items-center justify-between gap-[8px]">
-          <p class="text-[12px] leading-[18px] text-[#616161] font-semibold">
-            Total
-          </p>
-          <p class="text-[12px] leading-[18px]">₺431.56</p>
-        </div> -->
       </div>
       <Button class="mt-[26px] w-full" @click="isDialogOpen = true">
         Make Payment
@@ -119,7 +110,7 @@
       <client-only>
         <CheckoutCartlinkModal
           :cartLinkId="cartLinkDetails.id"
-          :isOpen="isDialogOpen"
+          v-if="isDialogOpen"
           @close="isDialogOpen = false"
           @completed="isDialogOpen = false"
         />

@@ -93,7 +93,8 @@
     </div>
     <client-only>
       <CreateOrderModal
-        :isOpen="isDialogOpen"
+        vendorType="vendorItems"
+        v-if="isDialogOpen"
         @close="isDialogOpen = false"
         @completed="
           isDialogOpen = false;

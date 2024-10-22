@@ -1,3 +1,31 @@
+type AddOnItem = {
+  price: {
+    amount: number;
+    currency: string;
+  };
+  inStock: boolean;
+};
+
+type AddOnCategory = {
+  minSelection: number;
+  maxSelection: number;
+  items: Record<string, AddOnItem>;
+};
+
+type AddOns = Record<string, AddOnCategory>;
+type AddOnMapItem = {
+  minSelection: number;
+  maxSelection: number;
+  price: {
+    amount: number;
+    currency: string;
+  };
+  inStock: boolean;
+  groupName: string;
+  itemName: string;
+};
+
+type AddOnsMap = Record<string, AddOnMapItem>;
 export interface IProduct {
   id: string;
   title: string;
@@ -29,6 +57,9 @@ export interface IProduct {
     };
     publicName: string;
   };
+
+  addOns: AddOns;
+  addOnsMap: AddOnsMap;
   meta: {
     orders: number;
     total: number;

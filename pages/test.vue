@@ -1,7 +1,7 @@
 <template>
   <div>
     <ClientOnly>
-      <CreateProductTags type="productsFoods" />
+      <TimePicker />
     </ClientOnly>
   </div>
 </template>

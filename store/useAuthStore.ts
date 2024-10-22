@@ -186,13 +186,17 @@ export const useAuthStore = defineStore(
       }
 
       const router = useRouter();
+      const route = useRoute();
 
       user.value = data?.value?.user;
       authToken.value = data?.value?.accessToken;
       localStorage.setItem("authToken", data?.value?.accessToken);
       await getUserProfile();
       isLoggedIn.value = true;
-      options.route && router.push(options.route);
+      if (route.redirectedFrom) {
+        console.log({ redirectedFrom: route.redirectedFrom });
+        router.replace(route.redirectedFrom.fullPath);
+      } else options.route && router.push(options.route);
     };
 
     const getUser = async () => {

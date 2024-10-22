@@ -3,6 +3,9 @@ import { format, isToday, isYesterday } from "date-fns";
 const specificTime = new Date("2024-10-13T10:54:00");
 
 export const gpDates = {
+  formatDate(date: string | Date) {
+    return format(date, "MMM dd yyyy");
+  },
   getTimeAgo(date: string | Date) {
     if (isToday(date)) {
       return "Today";

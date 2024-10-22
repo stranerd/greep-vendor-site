@@ -42,7 +42,7 @@
               <DropdownMenuItem
                 v-for="option in sortOptions"
                 @click="
-                  getVendorOrders({ sort: JSON.stringify(option.sortQuery) });
+                  getRecentOrders({ sort: JSON.stringify(option.sortQuery) });
                   selectedSortOption = option;
                 "
               >
@@ -80,6 +80,17 @@
       :orders="ordersList"
     />
   </div>
+  <client-only>
+    <CreateOrderModal
+      v-if="isDialogOpen"
+      vendorType="vendorFoods"
+      @close="isDialogOpen = false"
+      @completed="
+        isDialogOpen = false;
+        getVendorOrders({});
+      "
+    />
+  </client-only>
 </template>
 
 <script setup lang="ts">

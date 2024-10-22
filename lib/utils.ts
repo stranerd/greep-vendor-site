@@ -154,3 +154,32 @@ export const promotionStatus = (status: any) => {
     };
   }
 };
+enum TransactionStatus {
+  FAILED = "failed",
+  FULFILLED = "fulfilled",
+  INITIALIZED = "initialized",
+  SETTLED = "settled",
+}
+export const transactionStatus = (status: TransactionStatus) => {
+  if (status === TransactionStatus.INITIALIZED) {
+    return {
+      text: TransactionStatus.INITIALIZED,
+      style: { backgroundColor: "#708090" },
+    };
+  } else if (status === TransactionStatus.FAILED) {
+    return {
+      text: TransactionStatus.FAILED,
+      style: { backgroundColor: "#B91010" },
+    };
+  } else if (status === TransactionStatus.SETTLED) {
+    return {
+      text: TransactionStatus.SETTLED,
+      style: { backgroundColor: "#001726" },
+    };
+  } else if (status === TransactionStatus.FULFILLED) {
+    return {
+      text: TransactionStatus.FULFILLED,
+      style: { backgroundColor: "#009260" },
+    };
+  }
+};

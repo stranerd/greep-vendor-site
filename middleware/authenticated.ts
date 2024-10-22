@@ -18,6 +18,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     await getUser();
   } else if (!authToken.value && refreshToken.value) {
     await exchangeToken();
+  } else if (to.name === GP_ROUTES.PAYMENT) {
+    return true;
   } else if (userType === null && to.name !== GP_ROUTES.VENDOR.USER_TYPE) {
     return navigateTo({ name: GP_ROUTES.VENDOR.USER_TYPE });
   }

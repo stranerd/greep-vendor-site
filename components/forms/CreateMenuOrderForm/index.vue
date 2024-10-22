@@ -141,7 +141,7 @@
 
             <!-- AddOns List -->
 
-            <div class="ml-10" v-if="vendorType === 'vendorFoods'">
+            <div class="ml-10">
               <div
                 class="mb-3 flex items-center gap-[20px]"
                 v-for="(addOnItem, index) in cartItem.addOns"
@@ -331,12 +331,6 @@ import {
 } from "@internationalized/date";
 import { toDate } from "radix-vue/date";
 
-const props = defineProps({
-  vendorType: {
-    type: String as PropType<"vendorFoods" | "vendorItems">,
-    required: true,
-  },
-});
 const marketPlaceStore = useMarketPlaceStore();
 const { marketplaceLoadingStates, products, currentCart } =
   storeToRefs(marketPlaceStore);
@@ -388,18 +382,15 @@ const formattedProducts = computed(() => {
       value: product.id,
       label: product.title,
       price: product.price,
-      addOns:
-        props.vendorType === "vendorItems"
-          ? []
-          : Object.values(product.addOnsMap).map(
-              ({ groupName, itemName, price }) => ({
-                groupName,
-                itemName,
-                price,
-                quantity: 1,
-                openAddOns: false,
-              }),
-            ),
+      addOns: Object.values(product.addOnsMap).map(
+        ({ groupName, itemName, price }) => ({
+          groupName,
+          itemName,
+          price,
+          quantity: 1,
+          openAddOns: false,
+        }),
+      ),
     };
   });
 });
