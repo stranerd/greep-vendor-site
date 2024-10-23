@@ -1,7 +1,7 @@
 <template>
   <div class="grid gap-10">
     <div>
-      <Card class="w-3/5">
+      <Card class="lg:w-3/5">
         <CardHeader>
           <CardDescription class="flex justify-between">
             <h2 class="flex">Total Balance</h2>
@@ -38,7 +38,7 @@
           <h2 class="text-5xl font-semibold">
             {{
               gpNumbers.formatCurrency(
-                38562.83 / (selectedCurrency?.rate ?? 1),
+                (wallet?.balance.amount ?? 1) / (selectedCurrency?.rate ?? 1),
                 selectedCurrency?.currency ?? "TRY",
               )
             }}
@@ -85,7 +85,9 @@ const currencies = computed(() =>
   })),
 );
 
-const selectedCurrency = ref(currencies.value[0]);
+const selectedCurrency = ref(
+  wallet.value?.balance.currency ?? currencies.value[0],
+);
 
 const walletActionButtons = ref([
   { title: "Deposit", icon: AddIcon, route: GP_ROUTES.VENDOR.WALLETS.DEPOSIT },

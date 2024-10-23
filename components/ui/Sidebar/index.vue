@@ -114,15 +114,16 @@ const navLinks = ref([
     name: userType.value?.vendorType === "foods" ? "Menu" : "Items Manager",
     icon: BookmarkMinus,
   },
-  {
-    to: GP_ROUTES.VENDOR.WALLETS.OVERVIEW,
-    name: "Wallet",
-    icon: Wallet1Icon,
-  },
+
   {
     to: GP_ROUTES.VENDOR.PROMOTIONS,
     name: "Promo Manager",
     icon: TicketDiscountIcon,
+  },
+  {
+    to: GP_ROUTES.VENDOR.WALLETS.OVERVIEW,
+    name: "Wallet",
+    icon: Wallet1Icon,
   },
   {
     to: GP_ROUTES.VENDOR.SETTINGS,

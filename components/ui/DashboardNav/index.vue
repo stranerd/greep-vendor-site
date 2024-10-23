@@ -128,7 +128,7 @@ import {
   LogOut,
 } from "lucide-vue-next";
 
-import { TicketDiscountIcon } from "@placetopay/iconsax-vue/outline";
+import { TicketDiscountIcon , Wallet1Icon} from "@placetopay/iconsax-vue/outline";
 import { GP_CONSTANTS } from "~/constants";
 import { GP_ROUTES } from "~/constants/route-names";
 import { useAuthStore } from "@/store/useAuthStore";
@@ -174,6 +174,11 @@ const navLinks = ref([
     to: GP_ROUTES.VENDOR.PROMOTIONS,
     name: "Promo Manager",
     icon: TicketDiscountIcon,
+  },
+  {
+    to: GP_ROUTES.VENDOR.WALLETS.OVERVIEW,
+    name: "Wallet",
+    icon: Wallet1Icon,
   },
   {
     to: GP_ROUTES.VENDOR.SETTINGS,
