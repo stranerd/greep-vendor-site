@@ -39,7 +39,9 @@
         </nav>
       </SheetContent>
     </Sheet>
-    <div class="container flex items-center px-[10px] pl-0 md:px-[2rem]">
+    <div
+      class="container -ml-5 flex items-center px-[10px] pl-0 md:px-[2rem] lg:ml-0"
+    >
       <div class="hidden w-full flex-1">
         <!-- <form>
           <div class="relative">
