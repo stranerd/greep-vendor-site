@@ -47,17 +47,17 @@
       </Card>
     </div>
 
-    <div class="flex gap-4">
+    <div class="flex gap-2 lg:gap-4">
       <Button
         v-for="btnAction in walletActionButtons"
         variant="outline"
         rounded="lg"
-        class="flex gap-4"
+        class="flex gap-2 text-xs lg:gap-4 lg:text-base"
         @click="router.push({ name: btnAction.route })"
       >
         <span class="blcok"> {{ btnAction.title }}</span>
 
-        <component :is="btnAction.icon" class="h-6 w-6" />
+        <component :is="btnAction.icon" class="h-4 w-4 lg:h-6 lg:w-6" />
       </Button>
     </div>
     <VendorWalletTable />

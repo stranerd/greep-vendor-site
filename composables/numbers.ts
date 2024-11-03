@@ -31,34 +31,10 @@ export const gpNumbers = {
       return formatter.format(formattedNumber / 1e9) + "B";
     } else if (formattedNumber >= 1e6) {
       return formatter.format(formattedNumber / 1e6) + "M";
-    } else if (formattedNumber >= 1e3) {
-      return formatter.format(formattedNumber / 1e3) + "k";
     } else {
       return formatter.format(formattedNumber);
     }
   },
-
-  formatNumberToCurrency(value: number, currency = "USD") {
-    // Define a formatter for the currency style
-    const formatter = new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: currency,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    });
-
-    if (value >= 1e9) {
-      return formatter.format(value / 1e6) + "B";
-    } else if (value >= 1e6) {
-      return formatter.format(value / 1e6) + "M";
-    } else if (value >= 1e3) {
-      return formatter.format(value / 1e3) + "k";
-    } else {
-      return formatter.format(value);
-    }
-  },
-
-  // Example usage:    // "$500.00"
 
   convertCurrencyToNumber(value: string | number) {
     if (typeof value === "number") return value;

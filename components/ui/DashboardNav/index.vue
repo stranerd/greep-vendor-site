@@ -39,8 +39,8 @@
         </nav>
       </SheetContent>
     </Sheet>
-    <div class="container flex items-center px-[20px] md:px-[2rem]">
-      <div class="w-full flex-1">
+    <div class="container flex items-center px-[10px] pl-0 md:px-[2rem]">
+      <div class="hidden w-full flex-1">
         <!-- <form>
           <div class="relative">
             <Search
@@ -54,7 +54,8 @@
           </div>
         </form> -->
       </div>
-      <div class="flex items-center">
+      <div class="ml-auto flex items-center gap-2">
+        <GoogleTranslator />
         <div>
           <Button variant="outline" size="icon" class="ml-auto h-8 w-8">
             <img
@@ -128,7 +129,10 @@ import {
   LogOut,
 } from "lucide-vue-next";
 
-import { TicketDiscountIcon , Wallet1Icon} from "@placetopay/iconsax-vue/outline";
+import {
+  TicketDiscountIcon,
+  Wallet1Icon,
+} from "@placetopay/iconsax-vue/outline";
 import { GP_CONSTANTS } from "~/constants";
 import { GP_ROUTES } from "~/constants/route-names";
 import { useAuthStore } from "@/store/useAuthStore";
