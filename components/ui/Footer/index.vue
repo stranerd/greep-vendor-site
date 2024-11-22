@@ -18,7 +18,8 @@
           v-for="link in footerItem.sublinks"
           :key="link.name"
           :to="link.to"
-          class="block py-2 text-[14px] text-[#001726]"
+          translate="no"
+          class="notranslate block py-2 text-[14px] text-[#001726]"
         >
           {{ link.name }}
         </nuxt-link>
