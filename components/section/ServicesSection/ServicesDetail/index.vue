@@ -1,9 +1,13 @@
 <template>
   <div class="grid w-full gap-8 bg-black p-4 lg:p-10">
     <section class="text-white lg:w-2/3">
-      <CursiveTitle>Greep Services</CursiveTitle>
+      <CursiveTitle>
+        <span class="notranslate" translate="no">Greep</span>
+        Services</CursiveTitle
+      >
       <h2 class="my-5 text-4xl font-semibold lg:w-3/5 lg:text-5xl">
-        All Services Provided by Greep
+        All Services Provided by
+        <span class="notranslate" translate="no">Greep</span>
       </h2>
       <p class="lg:text-lg">
         Scan, Pay, and Go!. Make payments easily with GreepPay. Simply scan the
@@ -22,7 +26,7 @@
       class="h-[240px] w-full bg-black bg-cover pt-[114px] lg:h-[428px] lg:bg-contain"
     >
       <h2 class="ml-[74px] text-[45px] font-medium text-white lg:text-[90px]">
-        Greep Pay
+        <span class="notranslate" translate="no">Greep</span> Pay
       </h2>
     </section>
 

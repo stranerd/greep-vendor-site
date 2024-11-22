@@ -31,7 +31,7 @@
         :style="{
           backgroundImage:
             userProfile.type.banner !== null
-              ? `url(${userProfile.type.banner.link})`
+              ? `url(${userProfile.type?.banner?.link})`
               : `url('/images/vendor-profile.png')`,
         }"
         class="align-center relative mb-20 flex h-28 w-full justify-start rounded-lg bg-cover object-cover pt-10 lg:h-auto"
@@ -106,12 +106,15 @@
     <!-- Vendor image part -->
     <div class="">
       <div class="flexs my-4 justify-between lg:my-8 lg:block">
-        <h1 class="mb-2 text-lg font-medium md:text-2xl lg:flex">
+        <h1
+          class="notranslate mb-2 text-lg font-medium md:text-2xl lg:flex"
+          translate="no"
+        >
           {{ userProfile.type?.name || "----" }}
         </h1>
         <div class="flex gap-[13px] lg:mb-[20px]">
           <MapPin class="text-primary" />
-          <p class="text-[14px] leading-[21px]">
+          <p class="notranslate text-[14px] leading-[21px]" translate="no">
             {{ userProfile.type?.location?.location || "Location not set" }}
           </p>
         </div>
@@ -148,7 +151,8 @@
               </p>
               <p
                 @click.prevent="openDialog(profileItem)"
-                class="flex cursor-pointer gap-2 text-[14px] font-light leading-[20px]"
+                translate="no"
+                class="notranslate flex cursor-pointer gap-2 text-[14px] font-light leading-[20px]"
               >
                 {{ item.value || "--" }}
 

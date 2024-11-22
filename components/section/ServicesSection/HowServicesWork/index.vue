@@ -1,7 +1,10 @@
 <template>
   <div class="grid w-full gap-8 p-10">
     <section class="lg:w-3/5">
-      <CursiveTitle>Greep Services</CursiveTitle>
+      <CursiveTitle>
+        <span class="notranslate" translate="no">Greep</span>
+        Services</CursiveTitle
+      >
       <h2 class="my-5 text-4xl font-semibold lg:w-3/5 lg:text-5xl">
         How to Use Any of Our Services
       </h2>

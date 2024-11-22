@@ -1,7 +1,10 @@
 <template>
   <div class="mt-20">
     <div class="w-full items-center justify-center lg:flex lg:text-center">
-      <CursiveTitle>Greep Services</CursiveTitle>
+      <CursiveTitle>
+        <span class="notranslate" translate="no">Greep</span>
+        Services</CursiveTitle
+      >
     </div>
     <h2
       class="mx-auto my-5 mt-10 text-4xl font-semibold text-white lg:w-2/4 lg:text-center lg:text-5xl"

@@ -70,7 +70,8 @@
         </div>
         <div class="ml-3 mr-[36px] grow">
           <h6
-            class="text-right text-[14px] font-medium leading-[20px] text-[#212B36]"
+            translate="no"
+            class="notranslate text-right text-[14px] font-medium leading-[20px] text-[#212B36]"
           >
             {{ displayName }}
           </h6>

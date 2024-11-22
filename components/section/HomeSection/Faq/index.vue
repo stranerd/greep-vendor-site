@@ -1,12 +1,12 @@
 <template>
   <section class="bg-[#F4F4F4] py-[40px] md:py-[83px]">
     <div
-      class="container px-[20px] md:px-[2rem] flex flex-col w-full lg:flex-row gap-[50px] justify-between"
+      class="container flex w-full flex-col justify-between gap-[50px] px-[20px] md:px-[2rem] lg:flex-row"
     >
       <div class="w-full max-w-[100%] lg:max-w-[681px]">
         <CursiveTitle> FAQs </CursiveTitle>
         <h2
-          class="mb-[50px] font-semibold text-[24px] md:text-[32px] lg:text-[48px] max-w-[423px]"
+          class="mb-[50px] max-w-[423px] text-[24px] font-semibold md:text-[32px] lg:text-[48px]"
         >
           Frequently Asked Questions
         </h2>
@@ -27,20 +27,20 @@
           </Accordion>
         </client-only>
       </div>
-      <div class="relative md:min-w-[550px] w-full lg:pl-[100px]">
+      <div class="relative w-full md:min-w-[550px] lg:pl-[100px]">
         <div
-          class="absolute py-[37px] md:py-[52px] left-0 px-[20px] md:px-[45px] bg-[#000E18] text-[#fff] w-full lg:max-w-[448px] rounded-[6px] bottom-0 lg:bottom-auto lg:top-[150px]"
+          class="absolute bottom-0 left-0 w-full rounded-[6px] bg-[#000E18] px-[20px] py-[37px] text-[#fff] md:px-[45px] md:py-[52px] lg:bottom-auto lg:top-[150px] lg:max-w-[448px]"
         >
           <p
-            class="text-[14px] md:text-[18px] lg:text-[20px] font-medium mb-[21px]"
+            class="mb-[21px] text-[14px] font-medium md:text-[18px] lg:text-[20px]"
           >
             You need any help? get free consultation
           </p>
-          <div class="flex items-center mb-[21px]">
+          <div class="mb-[21px] flex items-center">
             <img
               src="/images/icons/call-icon.svg"
               alt="call"
-              class="h-[40px] w-[40px] md:h-[63px] md:w-[63px] mr-[14px]"
+              class="mr-[14px] h-[40px] w-[40px] md:h-[63px] md:w-[63px]"
             />
             <div>
               <p class="max-w-[166px] text-[14px] md:text-[16px]">
@@ -51,7 +51,7 @@
           <Button variant="withIcon" size="lg" rounded="lg"
             >Contact Us
             <div
-              class="bg-[#000E18] rounded-full p-[14px] ml-[10px] mr-[-20px]"
+              class="ml-[10px] mr-[-20px] rounded-full bg-[#000E18] p-[14px]"
             >
               <MoveUpRight :size="20" />
             </div>
@@ -60,7 +60,7 @@
         <img
           src="/images/faq-image.jpg"
           alt="Frequently asked questions"
-          class="h-[539px] w-full rounded-[6px] block object-cover"
+          class="block h-[539px] w-full rounded-[6px] object-cover"
         />
       </div>
     </div>
@@ -72,24 +72,30 @@ import { MoveUpRight } from "lucide-vue-next";
 
 const faqItems = [
   {
-    question: "How can I pay for your logistics services?",
+    question: "What is Greep?",
     answer:
-      "Leverage agile frameworks to provide a robust synopsis for strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive.",
+      "Greep is an innovative online and onsite marketplace designed to connect businesses and customers. Our platform off ers a wide range of products and services, including African food items, hair products, logistics solutions, and more. Greep also empowers businesses with delivery and subscription-based solutions to help them grow.",
   },
   {
-    question: "What payment methods are supported?",
+    question: "What does Greep Market offer?",
     answer:
-      "Leverage agile frameworks to provide a robust synopsis for strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive.",
+      "Greep Market specializes in African food items, hair products, and various consumer goods. We continuously expand our catalog to include more products based on customer feedback and market demand.",
   },
   {
-    question: "What options for logistics plans are available?",
+    question: "Does Greep offer delivery services?",
     answer:
-      "Leverage agile frameworks to provide a robust synopsis for strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive.",
+      "Yes, Greep off ers fast, reliable, and aff ordable delivery services to customers and vendors. Our services are operational across all cities in TRNC, and we use dedicated delivery bikes to ensure your items reach you promptly",
   },
   {
-    question: "Can i specify a delivery date when ordering?",
+    question: "What payment methods does Greep accept?",
     answer:
-      "Leverage agile frameworks to provide a robust synopsis for strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive.",
+      "Greep supports a variety of payment methods, including cash on delivery, bank transfers, and digital payments through Greep Pay, our secure and user-friendly payment platform.",
+  },
+  {
+    question:
+      "How can I stay updated about Greep’s latest products and services?",
+    answer:
+      "Stay connected by following us on our social media platforms, joining our WhatsApp group, and subscribing to our newsletter for updates on new products, services, and promotions.",
   },
 ];
 </script>

@@ -9,7 +9,8 @@
         <h2
           class="text-[24px] font-bold leading-[32px] md:text-[32px] md:leading-[48px] lg:text-[48px] lg:leading-[60px]"
         >
-          Connect with Home & Support African Businesses - Get Greep
+          Connect with Home & Support African Businesses - Get
+          <span class="notranslate" translate="no">Greep</span>
         </h2>
 
         <p

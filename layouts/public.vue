@@ -15,7 +15,7 @@
         <h1
           class="text-center text-[30px] font-bold leading-[48px] text-[#FFFFFF]"
         >
-          Download Greep Today!
+          Download <span class="notranslate" translate="no">Greep</span> Today!
         </h1>
         <p
           class="mb-2 text-center text-[18px] font-medium leading-[48px] text-[#fff]"

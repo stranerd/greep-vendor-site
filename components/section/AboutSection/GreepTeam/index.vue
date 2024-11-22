@@ -5,11 +5,11 @@
         <CursiveTitle> Meet our team </CursiveTitle>
       </div>
       <h2
-        class="text-[32px] md:text-[48px] lg:text-[64px] font-semibold leading-[48px] md:leading-[60px] lg:leading-[75px] mt-[16px] mb-6"
+        class="mb-6 mt-[16px] text-[32px] font-semibold leading-[48px] md:text-[48px] md:leading-[60px] lg:text-[64px] lg:leading-[75px]"
       >
         Our team
       </h2>
-      <p class="text-[16px] md:text-[18px] leading-[27px] mb-[80px]">
+      <p class="mb-[80px] text-[16px] leading-[27px] md:text-[18px]">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       </p>
       <client-only>
@@ -26,23 +26,23 @@
           <swiper-slide
             v-for="(member, index) in team"
             :key="index"
-            class="w-full md:w-[404px] max-w-[404px]"
+            class="w-full max-w-[404px] md:w-[404px]"
           >
             <div>
               <img :src="member.img" :alt="member.name" />
               <div class="bg-[#FCFCFD] p-[32px]">
                 <h4
-                  class="text-[18px] md:text-[20px] lg:text-[24px] leading-[32px] font-semibold mb-2 text-[#23262F] min-h-[32px] md:min-h-[64px]"
+                  class="mb-2 min-h-[32px] text-[18px] font-semibold leading-[32px] text-[#23262F] md:min-h-[64px] md:text-[20px] lg:text-[24px]"
                 >
                   {{ member.name }}
                 </h4>
                 <p
-                  class="text-[#777E90] text-[14px] md:text-[16px] leading-[24px]"
+                  class="text-[14px] leading-[24px] text-[#777E90] md:text-[16px]"
                 >
                   {{ member.position }}
                 </p>
                 <div
-                  class="flex items-center mt-[24px] md:mt-[32px] gap-4 md:gap-6"
+                  class="mt-[24px] flex items-center gap-4 md:mt-[32px] md:gap-6"
                 >
                   <a href="#">
                     <img src="/images/icons/linkedin.svg" alt="Linked In" />
@@ -51,10 +51,7 @@
                     <img src="/images/icons/x.svg" alt="Linked In" />
                   </a>
                   <a href="#">
-                    <img
-                      src="/images/icons/instagram-team.svg"
-                      alt="Linked In"
-                    />
+                    <img src="/images/icons/instagram.svg" alt="Linked In" />
                   </a>
                 </div>
               </div>
@@ -62,12 +59,12 @@
           </swiper-slide>
         </swiper>
 
-        <div class="flex justify-between items-center mb-[80px]">
+        <div class="mb-[80px] flex items-center justify-between">
           <div class="flex items-center gap-[8px]">
             <div
               v-for="(_, i) in 5"
               :key="i"
-              class="h-[8px] w-[8px] rounded-full cursor-pointer"
+              class="h-[8px] w-[8px] cursor-pointer rounded-full"
               :class="
                 swiperInstance?.activeIndex === i
                   ? 'bg-[#000000]'
@@ -80,13 +77,13 @@
             <img
               src="/images/icons/arrow-left-sm.svg"
               alt="Left"
-              class="h-[48px] w-[48px] rounded-full object-contain cursor-pointer"
+              class="h-[48px] w-[48px] cursor-pointer rounded-full object-contain"
               @click="swiperInstance?.slidePrev()"
             />
             <img
               src="/images/icons/arrow-right-sm.svg"
               alt="Right"
-              class="h-[48px] w-[48px] rounded-full object-contain cursor-pointer"
+              class="h-[48px] w-[48px] cursor-pointer rounded-full object-contain"
               @click="swiperInstance?.slideNext()"
             />
           </div>

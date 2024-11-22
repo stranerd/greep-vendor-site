@@ -3,8 +3,8 @@
     <div
       class="container flex flex-col justify-between gap-[30px] px-[20px] py-[48px] pt-[0px] md:px-[2rem] md:pt-[48px] lg:flex-row lg:gap-[0px]"
     >
-      <div class="grow">
-        <img src="/images/logos/greep-full.svg" alt="Greep" />
+      <div class="mr-10">
+        <img src="/images/logos/greep-full.svg" class="!max-h-10" alt="Greep" />
       </div>
       <div
         v-for="(footerItem, i) in footerLinks"
@@ -55,7 +55,8 @@
             v-for="link in footerItem.sublinks"
             :key="link.name"
             :to="link.to"
-            class="block py-2 text-[14px] text-[#001726]"
+            translate="no"
+            class="notranslate block py-2 text-[14px] text-[#001726]"
           >
             {{ link.name }}
           </nuxt-link>
@@ -66,13 +67,20 @@
       class="container flex flex-col items-center justify-between gap-[30px] px-[20px] md:px-[2rem] lg:flex-row"
     >
       <div class="align-center flex flex-wrap gap-6 text-[14px]">
-        <p>© {{ new Date().getFullYear() }} Greep. All rights reserved.</p>
+        <p>
+          © {{ new Date().getFullYear() }}
+          <span class="notranslate" translate="no">Greep</span>. All rights
+          reserved.
+        </p>
         <nuxt-link class="underline" to="/"> Privacy Policy </nuxt-link>
         <nuxt-link class="underline" to="/"> Terms of Service </nuxt-link>
         <p class="underline" to="/">Cookies Settings</p>
       </div>
       <div class="flex gap-[10px]">
-        <div
+        <nuxt-link
+          :to="link.link"
+          external
+          target="_blank"
           v-for="(link, i) in socialIcons"
           :key="i"
           class="flex h-[32px] w-[32px] items-center justify-center rounded-full bg-[#009260] md:h-[64px] md:w-[64px]"
@@ -82,7 +90,7 @@
             :alt="link.alt"
             class="h-[14px] w-[14px] md:h-[24px] md:w-[24px]"
           />
-        </div>
+        </nuxt-link>
       </div>
     </div>
   </footer>
@@ -150,18 +158,23 @@ const footerLinks = ref([
 const socialIcons = ref([
   {
     icon: "/images/icons/facebook-icon.svg",
-    link: "/",
+    link: "https://www.facebook.com/profile.php?id=100083314448786",
     alt: "Facebook",
   },
   {
     icon: "/images/icons/x-icon.svg",
-    link: "/",
+    link: "https://x.com/greephq",
     alt: "X",
   },
   {
     icon: "/images/icons/instagram.svg",
-    link: "/",
+    link: "https://www.instagram.com/greephq/",
     alt: "Instagram",
+  },
+  {
+    icon: "/images/icons/linkedin.svg",
+    link: "https://www.linkedin.com/company/greepapp/",
+    alt: "LinkedIn",
   },
 ]);
 </script>

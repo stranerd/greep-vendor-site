@@ -5,10 +5,10 @@
       <h2
         class="mb-[50px] mt-4 text-[24px] font-bold md:text-[32px] lg:text-[48px]"
       >
-        Greep Mobile App
+        <span class="notranslate" translate="no">Greep</span> Mobile App
       </h2>
       <p
-        class="mx-auto max-w-[581px] text-left text-[14px] leading-[24px] text-[#000E18] md:text-center md:text-[16px] lg:text-[20px]"
+        class="mx-auto max-w-[80%] text-left text-[14px] leading-[24px] text-[#000E18] md:text-center md:text-[16px] lg:text-[20px]"
       >
         <!-- <strong>{{ activeIndex + 1 }}.</strong> -->
         {{ productItems[activeIndex].description }}

@@ -12,7 +12,7 @@
       <div class="container bg-[#000E18] px-[20px] md:px-[2rem]">
         <CursiveTitle> Our Company </CursiveTitle>
         <h2 class="mt-4 text-4xl font-bold leading-[57.6px] lg:text-[48px]">
-          Greep Company
+          <span class="notranslate" translate="no">Greep</span> Company
         </h2>
         <p
           class="mx-auto mt-[10px] max-w-[1182px] text-sm lg:mb-[83px] lg:text-center lg:text-[18px]"

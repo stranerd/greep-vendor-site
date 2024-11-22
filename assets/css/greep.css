@@ -8,6 +8,11 @@
   &::-webkit-scrollbar {
     display: none;
   }
+  /* Firefox (use scrollbar-width property) */
+  scrollbar-width: none;
+
+  /* Optional fallback for older browsers */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
 * {

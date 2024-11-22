@@ -54,7 +54,7 @@
                   <div class="relative">
                     <Input
                       :type="showPassword ? 'text' : 'password'"
-                      placeholder="m@example.com"
+                      placeholder="*********"
                       class="rounded-[12px] py-[24px]"
                       v-bind="componentField"
                     />

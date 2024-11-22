@@ -14,11 +14,12 @@
           <p
             class="max-w-[758px] text-[16px] font-medium leading-[27px] text-[#000E18] md:text-[18px]"
           >
-            Greep is more than just a company; it's a movement driven by a
-            passion for connecting Africans in the diaspora with the vibrant
-            economies of their home continent. We believe that distance
-            shouldn't hinder the ability to support African businesses,
-            celebrate cultural heritage, and contribute to a thriving Africa.
+            <span class="notranslate" translate="no">Greep</span> is more than
+            just a company; it's a movement driven by a passion for connecting
+            Africans in the diaspora with the vibrant economies of their home
+            continent. We believe that distance shouldn't hinder the ability to
+            support African businesses, celebrate cultural heritage, and
+            contribute to a thriving Africa.
             <br />
             <br />
             Our story began with a simple observation: the challenges faced by
