@@ -9,7 +9,7 @@
             <FormItem>
               <FormLabel
                 >Customer Address
-                <span class="text-[#FF5656]">Required</span></FormLabel
+                <span class="text-sm text-[#FF5656]">Required</span></FormLabel
               >
               <FormControl>
                 <LocationPicker
@@ -33,7 +33,7 @@
             :key="index"
             class="mb-3"
           >
-            <div class="mb-3 flex items-center gap-[20px]">
+            <div class="mb-3 flex items-center gap-2 lg:gap-[20px]">
               <div>
                 <div class="min-h-1 min-w-1 rounded-full bg-[#000]"></div>
               </div>
@@ -43,7 +43,7 @@
                     variant="outline"
                     role="combobox"
                     :aria-expanded="cartItem.open"
-                    class="w-full justify-between"
+                    class="flex-1 justify-between lg:w-full"
                   >
                     {{
                       cartItem.productId
@@ -134,7 +134,7 @@
                     ? 'visible'
                     : 'invisible'
                 "
-                class="mr-4 h-8 w-8 text-primary"
+                class="mr-4 h-5 w-5 text-primary lg:h-8 lg:w-8"
                 @click="productsArray.splice(index, 1)"
               />
             </div>
@@ -143,7 +143,7 @@
 
             <div class="ml-10" v-if="vendorType === 'vendorFoods'">
               <div
-                class="mb-3 flex items-center gap-[20px]"
+                class="mb-3 flex items-center gap-2 lg:gap-[20px]"
                 v-for="(addOnItem, index) in cartItem.addOns"
               >
                 <div>
@@ -154,7 +154,7 @@
                     <Button
                       variant="outline"
                       role="combobox"
-                      class="w-full justify-between"
+                      class="flex-1 justify-between lg:w-full"
                     >
                       {{
                         addOnItem.itemName !== ""
@@ -251,7 +251,7 @@
                       ? 'visible'
                       : 'invisible'
                   "
-                  class="mr-4 h-8 w-8 text-destructive"
+                  class="mr-4 h-5 w-5 text-destructive lg:h-8 lg:w-8"
                   @click="cartItem.addOns.splice(index, 1)"
                 />
               </div>
@@ -551,19 +551,21 @@ const onSubmit = handleSubmit(async (values: any) => {
   const payload = {
     ...values,
     packs: [
-      productsArray.value.map((product) => {
-        return {
-          id: product.productId,
-          quantity: product.quantity,
-          addOns: product.addOns
-            .filter((item) => item.itemName)
-            .map(({ groupName, itemName, quantity }) => ({
-              groupName,
-              itemName,
-              quantity,
-            })),
-        };
-      }),
+      productsArray.value
+        .map((product) => {
+          return {
+            id: product.productId,
+            quantity: product.quantity,
+            addOns: product.addOns
+              .filter((item) => item.itemName)
+              .map(({ groupName, itemName, quantity }) => ({
+                groupName,
+                itemName,
+                quantity,
+              })),
+          };
+        })
+        .filter((product) => product.id !== ""),
     ],
   };
 

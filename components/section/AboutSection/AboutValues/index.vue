@@ -41,9 +41,8 @@
         <h4
           class="mx-auto mt-4 max-w-[768px] text-center text-[20px] font-bold leading-[33.6px] md:text-[24px]"
         >
-          Describe what your company is building towards in the future. This
-          vision statement should serve the purpose of selling the dream of the
-          company to hiring talent, investors and partners.
+          To become the go-to source for swift delivery of quality products in
+          Cyprus.
         </h4>
       </div>
       <div class="hidden bg-[#FCFCFD] py-[40px] md:py-[80px]">
@@ -86,27 +85,33 @@
 const items = [
   {
     title: "Trust",
-    details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    details:
+      "At Greep, we prioritize building strong, reliable relationships with our clients, ensuring transparency and accountability in all interactions.",
   },
   {
-    title: "Approchable",
-    details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    title: "Approachable",
+    details:
+      "We believe in fostering open communication and being approachable at all levels. Our team is always ready to collaborate and provide support.",
   },
   {
-    title: "Make it simple",
-    details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    title: "Make it Simple",
+    details:
+      "We focus on simplifying complex processes, offering easy-to-understand solutions that drive efficiency and improve user experience.",
   },
   {
-    title: "Delightful experiences",
-    details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    title: "Delightful Experiences",
+    details:
+      "Our goal is to create seamless, enjoyable experiences for users, ensuring that every interaction with our products exceeds expectations.",
   },
   {
-    title: "Work together",
-    details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    title: "Work Together",
+    details:
+      "Collaboration is at the heart of everything we do. We work closely with clients and partners to deliver innovative solutions that meet real-world needs.",
   },
   {
-    title: "Innovative mindset",
-    details: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    title: "Innovative Mindset",
+    details:
+      "Innovation drives us. We're committed to exploring new ideas, technologies, and approaches that push the boundaries of what's possible.",
   },
 ];
 

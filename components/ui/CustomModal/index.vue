@@ -14,7 +14,7 @@
           >
             <div
               v-if="showModal"
-              class="scroll modal-content relative max-h-screen rounded-lg bg-white px-4 pb-4 md:justify-normal md:rounded-lg md:px-4 lg:min-w-[40%] lg:max-w-[50%]"
+              class="hide-scrollbar relative max-h-screen w-[96vw] rounded-lg bg-white px-4 pb-4 md:justify-normal md:rounded-lg md:px-4 lg:min-w-[40%] lg:max-w-[50%]"
               :class="class"
             >
               <div
@@ -28,11 +28,13 @@
                 </h2>
 
                 <XIcon
-                  class="right-0 m-4 block h-6 w-6 cursor-pointer justify-self-end"
+                  class="right-0 m-4 block h-4 w-4 cursor-pointer justify-self-end"
                   @click="closeModal"
                 />
               </div>
-              <slot class="mx-4" />
+              <div class="">
+                <slot class="" />
+              </div>
             </div>
           </Transition>
         </div>

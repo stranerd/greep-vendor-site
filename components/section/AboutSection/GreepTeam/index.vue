@@ -10,7 +10,7 @@
         Our team
       </h2>
       <p class="mb-[80px] text-[16px] leading-[27px] md:text-[18px]">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Meet the resilient team behind GREEP.
       </p>
       <client-only>
         <swiper
@@ -44,14 +44,22 @@
                 <div
                   class="mt-[24px] flex items-center gap-4 md:mt-[32px] md:gap-6"
                 >
-                  <a href="#">
-                    <img src="/images/icons/linkedin.svg" alt="Linked In" />
+                  <a :href="member.socials.linkedin">
+                    <img
+                      src="/images/icons/linkedin-black.svg"
+                      alt="Linked In"
+                      class=""
+                    />
                   </a>
-                  <a href="#">
-                    <img src="/images/icons/x.svg" alt="Linked In" />
+                  <a :href="member.socials.x">
+                    <img src="/images/icons/x.svg" alt="X" />
                   </a>
-                  <a href="#">
-                    <img src="/images/icons/instagram.svg" alt="Linked In" />
+                  <a :href="member.socials.instagram">
+                    <img
+                      src="/images/icons/instagram-black.svg"
+                      alt="Instagram"
+                      class=""
+                    />
                   </a>
                 </div>
               </div>
@@ -120,28 +128,32 @@ export default {
       {
         img: "/images/team/jerry.jpg",
         name: "Jeremiah Godwin Nwachukwu",
-        position: "COO",
+        position: "CEO",
+        socials: { linkedin: "", x: "", instagram: "" },
       },
       {
         img: "/images/team/wisdom.jpg",
         name: "Wisdom Agunta",
         position: "COO",
+        socials: { linkedin: "", x: "", instagram: "" },
       },
       {
         img: "/images/team/david.jpg",
         name: "Abasifreke David",
         position: "CMO",
+        socials: { linkedin: "", x: "", instagram: "" },
       },
       {
         img: "/images/team/josiah.jpg",
         name: "Josiah Ayanfeoluwa Opaleke",
         position: "Product Designer",
+        socials: { linkedin: "", x: "", instagram: "" },
       },
-      {
-        img: "/images/team/jerry.jpg",
-        name: "Jeremiah Godwin Nwachukwu",
-        position: "COO",
-      },
+      // {
+      //   img: "/images/team/jerry.jpg",
+      //   name: "Jeremiah Godwin Nwachukwu",
+      //   position: "COO",
+      // },
     ];
 
     return {

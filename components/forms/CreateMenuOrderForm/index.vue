@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative z-50 mt-4 grid max-h-[78vh] gap-4 overflow-y-scroll text-gray-600"
+    class="relative z-50 mt-4 grid max-h-[78vh] w-[80vw] gap-4 overflow-y-scroll text-gray-600 md:w-full"
   >
     <form class="space-y-8" @submit="onSubmit">
       <div class="grid gap-4">
@@ -15,7 +15,7 @@
                 <LocationPicker
                   type="text"
                   placeholder="Lagos"
-                  class="text-sm"
+                  class="focus:ring-none text-sm"
                   v-bind="componentField"
                 />
               </FormControl>
@@ -291,7 +291,7 @@
             "
             @click="onSubmit"
           >
-            Submit Item
+            Submit Itemnddn
           </Button>
         </div>
       </div>
