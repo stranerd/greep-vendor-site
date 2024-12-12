@@ -55,10 +55,6 @@ watch(
   { immediate: true },
 );
 const emit = defineEmits(["close", "completedCreation"]);
-
-onBeforeMount(async () => {
-  await marketPlaceStore.getProductFoodsTags();
-});
 </script>
 
 <style></style>

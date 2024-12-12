@@ -386,8 +386,7 @@ const marketPlaceStore = useMarketPlaceStore();
 const { marketplaceLoadingStates, productFoodsTags } = storeToRefs(
   useMarketPlaceStore(),
 );
-const { createProduct, updateProduct, getProductFoodsTags, getAllProducts } =
-  marketPlaceStore;
+const { createProduct, updateProduct, getAllProducts } = marketPlaceStore;
 const file = ref<File | null>(null);
 const initialAddOnList = ref<any>({});
 
@@ -496,7 +495,6 @@ const createNewFoodProduct = handleSubmit(async (values: any) => {
 
   form.append("data", JSON.stringify({ type: "foods", prepTimeInMins }));
   form.append("addOns", JSON.stringify(addOns.value));
-  console.log({ banner: values.banner });
 
   if (props.mode === "edit") {
     await updateProduct(props.selectedProduct.id, form);
@@ -519,10 +517,6 @@ const createNewFoodProduct = handleSubmit(async (values: any) => {
 //   });
 
 // const createCategory = handleCreateCategory(async (values) => {});
-
-onMounted(async () => {
-  await getProductFoodsTags();
-});
 
 onMounted(async () => {
   if (props.mode === "edit" && props.selectedProduct) {
@@ -548,10 +542,6 @@ onMounted(async () => {
     // .map((tag) => tag.id);
     console.log({ selectedProduct: props.selectedProduct });
   }
-});
-
-onUpdated(async () => {
-  await getProductFoodsTags();
 });
 </script>
 

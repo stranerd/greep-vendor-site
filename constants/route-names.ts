@@ -39,6 +39,11 @@ export class GP_ROUTES {
       ORDERS: "items-orders",
       ORDER_DETAILS: "items-orders details",
       ITEMS_MANAGER: "items-manager",
+      ITEM_DETAILS: "items-manager details",
     },
+  };
+
+  static CUSTOMERS = {
+    DASHBOARD: "customers-dashboard",
   };
 }

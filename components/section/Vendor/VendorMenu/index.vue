@@ -62,6 +62,7 @@
       </div>
     </div>
     <div class="mt-6">
+      {{ vendorProductTags.map((x) => x.id) }}
       <div
         v-if="
           marketplaceLoadingStates.getProducts === API_STATES.LOADING ||
@@ -177,8 +178,7 @@ const { products, marketplaceLoadingStates, vendorProductTags } = storeToRefs(
   useMarketPlaceStore(),
 );
 
-const { getAllProducts, getSingleProduct, getVendorProductTags } =
-  useMarketPlaceStore();
+const { getAllProducts, getSingleProduct } = useMarketPlaceStore();
 
 const router = useRouter();
 const isDialogOpen = ref(false);

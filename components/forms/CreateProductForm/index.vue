@@ -388,6 +388,8 @@ const onSubmit = handleSubmit(async (values: any) => {
       form.append(item, values[item]);
     }
   });
+  form.append("data", JSON.stringify({ type: "items" }));
+  form.append("addOns", JSON.stringify({}));
   await createProduct(form);
   emits("completed");
 });

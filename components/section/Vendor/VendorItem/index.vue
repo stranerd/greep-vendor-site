@@ -62,13 +62,6 @@
       </div>
     </div>
     <div class="mt-6">
-      <!-- <div class="p-[10px] flex items-center gap-[10px] mb-1 cursor-pointer">
-      <img src="/images/icons/arrow-down.svg" alt="Arrow" />
-      <p class="text-[14px] text-[#999999]">
-        <strong class="mr-[10px] text-[#000]"> Grains </strong>
-        4 items
-      </p>
-    </div> -->
       <div
         v-if="marketplaceLoadingStates.getProducts === API_STATES.LOADING"
         class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4"
@@ -105,6 +98,14 @@
                 v-for="(item, i) in productsList"
                 :key="i"
                 :cardData="item"
+                class="min-w-56 max-w-60"
+                @view="
+                  getSingleProduct(item.id);
+                  router.push({
+                    name: GP_ROUTES.VENDOR.ITEMS.ITEM_DETAILS,
+                    params: { id: item.id },
+                  });
+                "
                 @triggerEdit="triggerEdit"
               />
             </div>
@@ -158,12 +159,14 @@ import { API_STATES } from "~/services/constants";
 import { useMarketPlaceStore } from "@/store/useMarketplace";
 import { SortIcon, Arrow3Icon } from "@placetopay/iconsax-vue/outline";
 import { LoaderCircle } from "lucide-vue-next";
+import { GP_ROUTES } from "~/constants/route-names";
 
 const marketplaceStore = useMarketPlaceStore();
-const { products, marketplaceLoadingStates, productsMeta } =
+const { products, marketplaceLoadingStates, vendorProductTags, productsMeta } =
   storeToRefs(marketplaceStore);
-const { getAllProducts } = marketplaceStore;
+const { getAllProducts, getSingleProduct } = marketplaceStore;
 
+const router = useRouter();
 const isDialogOpen = ref(false);
 
 const mode = ref("create");

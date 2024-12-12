@@ -44,7 +44,7 @@
             </h2>
             <h2 class="flex gap-2">
               <span class=""> Starting Price :</span>
-              <span class="font-bold text-black">
+              <span class="font-bold text-black" v-if="product">
                 {{
                   gpNumbers.formatCurrency(
                     product.price?.amount,
@@ -101,14 +101,14 @@
         </div>
       </div>
     </div>
-    <div class="">
+    <div class="mt-8">
       <div
         class=""
         v-if="marketplaceLoadingStates.getSingleProduct === API_STATES.LOADING"
       >
-        <h2 class="text-2xl font-bold">Reviews & Rating</h2>
+        <Skeleton class="h-8 w-4/12" />
         <div class="flex flex-col gap-6">
-          <div class="mt-4 flex flex-col gap-2" v-for="i in 6">
+          <div class="mt-4 flex flex-col gap-2" v-for="i in 4">
             <Skeleton class="h-6 w-2/12" />
             <Skeleton class="h-6 w-4/12" />
             <Skeleton class="h-12 w-11/12" />
@@ -125,7 +125,11 @@
         "
       >
         <h2 class="text-2xl font-bold">Reviews & Rating</h2>
-        <div class="flex flex-col gap-6">
+        <DisplayState
+          :message="'You haven`t received any review for this product yet. Keep an checking this space for new reviews on the product'"
+          hideButton
+        />
+        <div class="lflex hidden flex-col gap-6" v-if="reviews.length > 1">
           <!-- Reviews Table -->
           <div class="mt-4 flex flex-col gap-2" v-for="review in reviews">
             <h2 class="text-lg font-bold">{{ review.name }}</h2>

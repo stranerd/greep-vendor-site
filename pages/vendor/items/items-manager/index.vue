@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center">
-    <BreadCrumb :routes="routes"/>
+    <BreadCrumb :routes="routes" />
   </div>
   <VendorItem />
 </template>
