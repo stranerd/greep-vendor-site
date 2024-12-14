@@ -2,7 +2,7 @@
   <div class="flex items-center">
     <BreadCrumb :routes="routes" />
   </div>
-  <VendorItem />
+  <VendorProducts vendor-type="vendorItems" />
 </template>
 
 <script setup lang="ts">

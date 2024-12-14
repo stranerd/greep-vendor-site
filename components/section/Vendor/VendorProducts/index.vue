@@ -62,7 +62,6 @@
       </div>
     </div>
     <div class="mt-6">
-      {{ vendorProductTags.map((x) => x.id) }}
       <div
         v-if="
           marketplaceLoadingStates.getProducts === API_STATES.LOADING ||
@@ -133,7 +132,10 @@
                         @view="
                           getSingleProduct(item.id);
                           router.push({
-                            name: GP_ROUTES.VENDOR.FOOD.MENU_DETAILS,
+                            name:
+                              vendorType === 'vendorFoods'
+                                ? GP_ROUTES.VENDOR.FOOD.MENU_DETAILS
+                                : GP_ROUTES.VENDOR.ITEMS.ITEM_DETAILS,
                             params: { id: item.id },
                           });
                         "
@@ -154,8 +156,18 @@
         </div>
       </div>
     </div>
-    <client-only>
+    <client-only v-if="vendorType === 'vendorFoods'">
       <CreateMenuModal
+        :isOpen="isDialogOpen"
+        :mode="mode"
+        :selectedProduct="selectedProduct"
+        @close="closeModal"
+        @completedCreation="completeProductCreation"
+      />
+    </client-only>
+
+    <client-only v-else>
+      <CreateProductModal
         :isOpen="isDialogOpen"
         :mode="mode"
         :selectedProduct="selectedProduct"
@@ -178,6 +190,12 @@ const { products, marketplaceLoadingStates, vendorProductTags } = storeToRefs(
   useMarketPlaceStore(),
 );
 
+defineProps({
+  vendorType: {
+    type: String as PropType<"vendorFoods" | "vendorItems">,
+    required: true,
+  },
+});
 const { getAllProducts, getSingleProduct } = useMarketPlaceStore();
 
 const router = useRouter();

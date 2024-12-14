@@ -62,6 +62,7 @@
       </div>
     </div>
     <div class="mt-6">
+      {{ vendorProductTags.map((x) => x.id) }}
       <div
         v-if="marketplaceLoadingStates.getProducts === API_STATES.LOADING"
         class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4"
@@ -160,11 +161,14 @@ import { useMarketPlaceStore } from "@/store/useMarketplace";
 import { SortIcon, Arrow3Icon } from "@placetopay/iconsax-vue/outline";
 import { LoaderCircle } from "lucide-vue-next";
 import { GP_ROUTES } from "~/constants/route-names";
+import { useAuthStore } from "~/store/useAuthStore";
 
 const marketplaceStore = useMarketPlaceStore();
 const { products, marketplaceLoadingStates, vendorProductTags, productsMeta } =
   storeToRefs(marketplaceStore);
 const { getAllProducts, getSingleProduct } = marketplaceStore;
+
+const { userProfile } = useAuthStore();
 
 const router = useRouter();
 const isDialogOpen = ref(false);

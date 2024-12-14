@@ -231,9 +231,80 @@
             </FormItem>
           </FormField>
         </div>
-        <div class="grid gap-2">
-          <FormField v-slot="{ componentField }" name="price">
-            <FormItem>
+        <div class="grid grid-cols-3 gap-2">
+          <FormField name="currency" class="col-span-1">
+            <FormItem class="col-span-1 flex flex-col">
+              <FormLabel class="mb-[6px] block"
+                >Currency <span class="text-[#FF5656]">*</span></FormLabel
+              >
+              <Popover>
+                <PopoverTrigger as-child>
+                  <FormControl>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      :class="
+                        cn(
+                          'w-full justify-between',
+                          !values.currency && 'text-muted-foreground',
+                        )
+                      "
+                    >
+                      {{
+                        values.currency
+                          ? currencies.find(
+                              (currency) => currency.value === values.currency,
+                            )?.label
+                          : "Select currency..."
+                      }}
+                      <ChevronsUpDown
+                        class="ml-2 h-4 w-4 shrink-0 opacity-50"
+                      />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent class="w-full p-0">
+                  <Command>
+                    <CommandInput placeholder="Search language..." />
+                    <CommandEmpty>Nothing found.</CommandEmpty>
+                    <CommandList>
+                      <CommandGroup>
+                        <CommandItem
+                          v-for="currency in currencies"
+                          :key="currency.value"
+                          :value="currency.label"
+                          @select="
+                            () => {
+                              setFieldValue('currency', currency.value);
+                            }
+                          "
+                        >
+                          <Check
+                            :class="
+                              cn(
+                                'mr-2 h-4 w-4',
+                                currency.value === values.currency
+                                  ? 'opacity-100'
+                                  : 'opacity-0',
+                              )
+                            "
+                          />
+                          {{ currency.label }}
+                        </CommandItem>
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          </FormField>
+          <FormField
+            v-slot="{ componentField }"
+            name="price"
+            class="col-span-2"
+          >
+            <FormItem class="col-span-2">
               <FormLabel
                 >Price <span class="text-[#FF5656]">Required</span></FormLabel
               >
@@ -244,9 +315,6 @@
                   v-bind="componentField"
                 />
               </FormControl>
-              <!-- <FormDescription>
-                    This is your public display name.
-                  </FormDescription> -->
               <FormMessage />
             </FormItem>
           </FormField>
@@ -367,6 +435,8 @@ import { API_STATES } from "~/services/constants";
 import { useMarketPlaceStore } from "@/store/useMarketplace";
 import { ReserveIcon } from "@placetopay/iconsax-vue/outline";
 import { useToast } from "@/components/library/toast/use-toast";
+import { useAuthStore } from "~/store/useAuthStore";
+import { cn } from "@/lib/utils";
 
 const props = defineProps({
   mode: {
@@ -387,6 +457,7 @@ const { marketplaceLoadingStates, productFoodsTags } = storeToRefs(
   useMarketPlaceStore(),
 );
 const { createProduct, updateProduct, getAllProducts } = marketPlaceStore;
+const { getUserProfile } = useAuthStore();
 const file = ref<File | null>(null);
 const initialAddOnList = ref<any>({});
 
@@ -424,9 +495,9 @@ const schemaShape = ref({
   }),
   no_of_items: z.number().optional(),
   description: z.string().optional(),
-  price: z.number({
-    required_error: "Price cannot be empty",
-  }),
+  // price: z.number({
+  //   required_error: "Price cannot be empty",
+  // }),
   from_time: z.number({
     required_error: "Minimum time cannot be  empty",
   }),
@@ -434,7 +505,18 @@ const schemaShape = ref({
     required_error: "Maximum time cannot be empty",
   }),
   inStock: z.boolean(),
+  price: z.number({
+    required_error: "Price cannot be empty",
+  }),
+  currency: z.string({
+    required_error: "Required",
+  }),
 });
+
+const currencies = [
+  { label: "NGN", value: "NGN" },
+  { label: "TRY", value: "TRY" },
+];
 
 const toTimeRefinement = (data: any, ctx: any) => {
   if (data.to_time < data.from_time + 15) {
@@ -462,10 +544,11 @@ let formSchema =
           .superRefine(toTimeRefinement),
       );
 
-const { handleSubmit, resetForm, setFieldValue, errors } = useForm({
+const { handleSubmit, resetForm, setFieldValue, errors, values } = useForm({
   validationSchema: formSchema,
   initialValues: {
     inStock: true,
+    currency: "TRY",
   },
 });
 
@@ -480,7 +563,7 @@ const createNewFoodProduct = handleSubmit(async (values: any) => {
     if (item === "price") {
       form.append(
         item,
-        JSON.stringify({ amount: values[item], currency: "TRY" }),
+        JSON.stringify({ amount: values[item], currency: values.currency }),
       );
     } else if (item === "tagIds") {
       form.append(item, JSON.stringify(tagIds));
@@ -507,8 +590,9 @@ const createNewFoodProduct = handleSubmit(async (values: any) => {
       description: "Product added successfully!",
     });
   }
-  await getAllProducts();
   emits("completed");
+  await getAllProducts();
+  await getUserProfile();
 });
 
 // const { handleSubmit: handleCreateCategory, resetForm: resetCreateCategory } =
@@ -536,6 +620,7 @@ onMounted(async () => {
         from_time: data?.prepTimeInMins?.from,
         to_time: data?.prepTimeInMins?.to,
         price: price.amount,
+        currency: price.currency,
       },
     });
 

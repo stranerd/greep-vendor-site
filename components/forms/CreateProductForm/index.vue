@@ -283,13 +283,19 @@ import { useForm } from "vee-validate";
 import { API_STATES } from "~/services/constants";
 import { useMarketPlaceStore } from "@/store/useMarketplace";
 import { TicketIcon, TicketDiscountIcon } from "@placetopay/iconsax-vue/bold";
+import { useToast } from "@/components/library/toast/use-toast";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "~/store/useAuthStore";
 
+const { toast } = useToast();
 const marketPlaceStore = useMarketPlaceStore();
 const { marketplaceLoadingStates, productItemsTags } =
   storeToRefs(marketPlaceStore);
 
-const { createProduct, getProductItemsTags } = marketPlaceStore;
+const { createProduct, getProductItemsTags, updateProduct, getAllProducts } =
+  marketPlaceStore;
+
+const { getUserProfile } = useAuthStore();
 
 const openCombobox = ref<boolean>(false);
 const openDialog = ref<boolean>(false);
@@ -354,12 +360,6 @@ const currencies = [
 ];
 
 const file = ref(null);
-const categories = ref([
-  {
-    title: "Stuff",
-    value: "stuff",
-  },
-]);
 
 const toggleTags = (tag: any) => {
   if (!selectedValues.value.some((i) => i.id === tag.id)) {
@@ -376,22 +376,43 @@ const emits = defineEmits(["completed"]);
 const onSubmit = handleSubmit(async (values: any) => {
   console.log("Form submitted!", values);
   const form = new FormData();
-  Object.keys({ ...values, tagIds: [""] }).forEach((item) => {
+
+  const tagIds = selectedValues.value.map((tag) => tag.id);
+  console.log(tagIds);
+  Object.keys({ ...values, tagIds }).forEach((item) => {
     if (item === "price") {
       form.append(
         item,
         JSON.stringify({ amount: values[item], currency: values.currency }),
       );
     } else if (item === "tagIds") {
-      form.append(item, JSON.stringify([]));
+      form.append(item, JSON.stringify(tagIds));
+    } else if (item === "banner") {
+      if (!(values["banner"] instanceof File)) {
+      } else {
+        form.append(item, values[item]);
+      }
+      // form.append(item, JSON.stringify([]));
     } else {
       form.append(item, values[item]);
     }
   });
   form.append("data", JSON.stringify({ type: "items" }));
   form.append("addOns", JSON.stringify({}));
-  await createProduct(form);
+  if (props.mode === "edit") {
+    await updateProduct(props.selectedProduct.id, form);
+    toast({
+      description: "Product updated successfully!",
+    });
+  } else {
+    await createProduct(form);
+    toast({
+      description: "Product added successfully!",
+    });
+  }
   emits("completed");
+  await getAllProducts();
+  await getUserProfile();
 });
 
 onMounted(async () => {
