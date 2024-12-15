@@ -13,6 +13,7 @@
       </SelectContent>
     </Select>
   </div>
+
   <div
     v-if="marketplaceLoadingStates.dashBoardData === API_STATES.LOADING"
     class=""
@@ -26,7 +27,7 @@
     </div>
   </div>
   <div v-else class="">
-    <div class="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
+    <div class="grid gap-2 md:grid-cols-2 lg:grid-cols-4">
       <Card v-for="(card, i) in overview" :key="i" style="overflow: hidden">
         <CardHeader
           class="flex flex-row items-center justify-between space-y-0 pb-[10px]"
@@ -39,7 +40,7 @@
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div class="text-[28px] font-semibold text-[#000000]">
+          <div class="text-[24px] font-semibold text-[#000000]">
             {{ card.value }}
           </div>
           <!-- <p class="text-xs text-muted-foreground">+20.1% from last month</p> -->
@@ -138,7 +139,7 @@ const authStore = useAuthStore();
 const marketPlaceStore = useMarketPlaceStore();
 
 const { user } = storeToRefs(authStore);
-const { recentOrders, dashBoardData, marketplaceLoadingStates } =
+const { recentOrders, dashBoardData, products, marketplaceLoadingStates } =
   storeToRefs(marketPlaceStore);
 const { getRecentOrders, getDashboardData } = marketPlaceStore;
 
@@ -147,29 +148,27 @@ const overview = computed(() => [
     title: "Total Sales",
     value: currencyConverter(
       "TRY",
-      dashBoardData?.value?.stats?.reduce(function (
-        accumulator: any,
-        curValue: any,
-      ) {
-        return accumulator + curValue.fee.total;
-      }, 0) || 0,
+      recentOrders.value
+        .filter((order) => order.status.completed !== null)
+        .map((order) => order.fee.payable)
+        .reduce((accumulator, current) => accumulator + current, 0),
     ),
   },
   {
     title: "Total Orders",
-    value: dashBoardData.value?.stats?.length || 0,
-    titleColor: "text-[#249F5D]",
+    value: recentOrders.value.length,
+    titleColor: "text-primary",
   },
   {
-    title: "Total Visits",
-    value: "0",
-    titleColor: "text-[#FFB545]",
+    title: "Total Cancelled",
+    value: recentOrders.value.filter((order) => order.status.cancelled !== null)
+      .length,
+    titleColor: "text-orange-500",
   },
   {
-    title: "Total Canceled ",
-    value:
-      dashBoardData.value?.stats?.filter((order: any) => order.status.cancelled)
-        ?.length || 0,
+    title: "Total Products",
+    value: products.value.length,
+    // titleColor: "text-blue-600",
   },
 ]);
 
